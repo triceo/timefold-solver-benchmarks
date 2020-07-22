@@ -35,7 +35,30 @@
   <#list benchmarkDescriptor.getEntityClasses() as entityClass>
     <entityClass>${entityClass}</entityClass>
   </#list>
-  <#if benchmarkDescriptor.getExampleId() == "examination">
+  <#if benchmarkDescriptor.getExampleId() == "conferenceScheduling">
+        <constructionHeuristic/>
+        <localSearch>
+            <localSearchType>TABU_SEARCH</localSearchType>
+        </localSearch>
+  <#elseif benchmarkDescriptor.getExampleId() == "curriculumCourse">
+        <constructionHeuristic>
+          <constructionHeuristicType>FIRST_FIT_DECREASING</constructionHeuristicType>
+        </constructionHeuristic>
+        <localSearch>
+          <unionMoveSelector>
+            <changeMoveSelector/>
+            <swapMoveSelector>
+              <filterClass>org.optaplanner.examples.curriculumcourse.solver.move.DifferentCourseSwapMoveFilter</filterClass>
+            </swapMoveSelector>
+          </unionMoveSelector>
+          <acceptor>
+            <lateAcceptanceSize>600</lateAcceptanceSize>
+          </acceptor>
+          <forager>
+            <acceptedCountLimit>4</acceptedCountLimit>
+          </forager>
+        </localSearch>
+  <#elseif benchmarkDescriptor.getExampleId() == "examination">
       <constructionHeuristic>
         <queuedEntityPlacer>
           <entitySelector id="placerEntitySelector">
@@ -50,8 +73,6 @@
               <valueSelector variableName="period">
                 <downcastEntityClass>org.optaplanner.examples.examination.domain.LeadingExam</downcastEntityClass>
                 <cacheType>PHASE</cacheType>
-                <!--<selectionOrder>SORTED</selectionOrder>-->
-                <!--<sorterManner>INCREASING_STRENGTH</sorterManner>-->
               </valueSelector>
             </changeMoveSelector>
             <changeMoveSelector>
@@ -94,6 +115,20 @@
           <acceptedCountLimit>2000</acceptedCountLimit>
         </forager>
       </localSearch>
+  <#elseif benchmarkDescriptor.getExampleId() == "flightCrewScheduling">
+    <constructionHeuristic/>
+    <localSearch>
+      <unionMoveSelector>
+        <changeMoveSelector/>
+        <swapMoveSelector/>
+        <pillarChangeMoveSelector>
+          <subPillarType>SEQUENCE</subPillarType>
+        </pillarChangeMoveSelector>
+        <pillarSwapMoveSelector>
+          <subPillarType>SEQUENCE</subPillarType>
+        </pillarSwapMoveSelector>
+      </unionMoveSelector>
+    </localSearch>
   <#elseif benchmarkDescriptor.getExampleId() == "investment">
       <customPhase>
         <customPhaseCommandClass>org.optaplanner.examples.investment.solver.solution.initializer.InvestmentAllocationSolutionInitializer</customPhaseCommandClass>
@@ -114,7 +149,7 @@
           <acceptedCountLimit>1</acceptedCountLimit>
         </forager>
       </localSearch>
-  <#elseif benchmarkDescriptor.getExampleId() == "machinereassignment">
+  <#elseif benchmarkDescriptor.getExampleId() == "machineReassignment">
       <customPhase>
         <customPhaseCommandClass>org.optaplanner.examples.machinereassignment.solver.solution.initializer.ToOriginalMachineSolutionInitializer</customPhaseCommandClass>
       </customPhase>
@@ -125,11 +160,104 @@
         </unionMoveSelector>
         <acceptor>
           <entityTabuSize>7</entityTabuSize>
-          <!--<lateAcceptanceSize>2000</lateAcceptanceSize>-->
         </acceptor>
         <forager>
           <acceptedCountLimit>2000</acceptedCountLimit>
-          <!--<acceptedCountLimit>500</acceptedCountLimit>-->
+        </forager>
+      </localSearch>
+  <#elseif benchmarkDescriptor.getExampleId() == "nQueens">
+    <constructionHeuristic>
+      <constructionHeuristicType>FIRST_FIT_DECREASING</constructionHeuristicType>
+    </constructionHeuristic>
+    <localSearch>
+      <changeMoveSelector>
+        <selectionOrder>ORIGINAL</selectionOrder>
+      </changeMoveSelector>
+      <acceptor>
+        <entityTabuSize>5</entityTabuSize>
+      </acceptor>
+      <forager>
+        <!-- Real world problems require use of <acceptedCountLimit> -->
+      </forager>
+    </localSearch>
+  <#elseif benchmarkDescriptor.getExampleId() == "rockTour">
+    <constructionHeuristic/>
+    <localSearch>
+      <unionMoveSelector>
+        <changeMoveSelector/>
+        <swapMoveSelector/>
+        <tailChainSwapMoveSelector/>
+        <subChainChangeMoveSelector/>
+        <subChainSwapMoveSelector/>
+      </unionMoveSelector>
+    </localSearch>
+  <#elseif benchmarkDescriptor.getExampleId() == "travelingTournament">
+    <constructionHeuristic/>
+    <localSearch>
+      <unionMoveSelector>
+        <swapMoveSelector>
+          <cacheType>PHASE</cacheType>
+          <selectionOrder>SHUFFLED</selectionOrder>
+          <filterClass>org.optaplanner.examples.travelingtournament.solver.move.factory.InverseMatchSwapMoveFilter</filterClass>
+        </swapMoveSelector>
+        <moveListFactory>
+          <cacheType>STEP</cacheType>
+          <selectionOrder>SHUFFLED</selectionOrder>
+          <moveListFactoryClass>org.optaplanner.examples.travelingtournament.solver.move.factory.MatchChainRotationsMoveFactory</moveListFactoryClass>
+        </moveListFactory>
+      </unionMoveSelector>
+      <acceptor>
+        <simulatedAnnealingStartingTemperature>2hard/10000soft</simulatedAnnealingStartingTemperature>
+      </acceptor>
+      <forager>
+        <acceptedCountLimit>4</acceptedCountLimit>
+      </forager>
+    </localSearch>
+  <#elseif benchmarkDescriptor.getExampleId() == "tsp">
+      <constructionHeuristic>
+        <constructionHeuristicType>FIRST_FIT_DECREASING</constructionHeuristicType>
+      </constructionHeuristic>
+      <localSearch>
+        <unionMoveSelector>
+          <changeMoveSelector>
+            <cacheType>STEP</cacheType>
+            <selectionOrder>SHUFFLED</selectionOrder>
+          </changeMoveSelector>
+          <tailChainSwapMoveSelector/>
+          <subChainChangeMoveSelector>
+            <subChainSelector>
+              <maximumSubChainSize>50</maximumSubChainSize>
+            </subChainSelector>
+            <selectReversingMoveToo>true</selectReversingMoveToo>
+          </subChainChangeMoveSelector>
+        </unionMoveSelector>
+        <acceptor>
+          <lateAcceptanceSize>400</lateAcceptanceSize>
+        </acceptor>
+        <forager>
+          <acceptedCountLimit>1</acceptedCountLimit>
+        </forager>
+      </localSearch>
+  <#elseif benchmarkDescriptor.getExampleId() == "vehicleRouting">
+      <constructionHeuristic>
+        <constructionHeuristicType>FIRST_FIT_DECREASING</constructionHeuristicType>
+      </constructionHeuristic>
+      <localSearch>
+        <unionMoveSelector>
+          <changeMoveSelector/>
+          <swapMoveSelector/>
+          <subChainChangeMoveSelector>
+            <selectReversingMoveToo>true</selectReversingMoveToo>
+          </subChainChangeMoveSelector>
+          <subChainSwapMoveSelector>
+            <selectReversingMoveToo>true</selectReversingMoveToo>
+          </subChainSwapMoveSelector>
+        </unionMoveSelector>
+        <acceptor>
+          <lateAcceptanceSize>200</lateAcceptanceSize>
+        </acceptor>
+        <forager>
+          <acceptedCountLimit>1</acceptedCountLimit>
         </forager>
       </localSearch>
   <#else>
