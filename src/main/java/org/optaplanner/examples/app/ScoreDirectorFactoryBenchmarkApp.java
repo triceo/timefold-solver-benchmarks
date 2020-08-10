@@ -42,8 +42,8 @@ import org.optaplanner.examples.conferencescheduling.optional.score.ConferenceSc
 import org.optaplanner.examples.conferencescheduling.persistence.ConferenceSchedulingXlsxFileIO;
 import org.optaplanner.examples.curriculumcourse.domain.CourseSchedule;
 import org.optaplanner.examples.curriculumcourse.domain.Lecture;
-import org.optaplanner.examples.curriculumcourse.optional.score.CourseScheduleConstraintProvider;
-import org.optaplanner.examples.curriculumcourse.persistence.CourseScheduleXmlSolutionFileIO;
+import org.optaplanner.examples.curriculumcourse.optional.score.CurriculumCourseConstraintProvider;
+import org.optaplanner.examples.curriculumcourse.persistence.CurriculumCourseXmlSolutionFileIO;
 import org.optaplanner.examples.examination.domain.Exam;
 import org.optaplanner.examples.examination.domain.Examination;
 import org.optaplanner.examples.examination.domain.FollowingExam;
@@ -76,6 +76,10 @@ import org.optaplanner.examples.nqueens.persistence.NQueensXmlSolutionFileIO;
 import org.optaplanner.examples.nqueens.solver.score.NQueensAdvancedIncrementalScoreCalculator;
 import org.optaplanner.examples.nqueens.solver.score.NQueensConstraintProvider;
 import org.optaplanner.examples.nqueens.solver.score.NQueensMapBasedEasyScoreCalculator;
+import org.optaplanner.examples.pas.domain.BedDesignation;
+import org.optaplanner.examples.pas.domain.PatientAdmissionSchedule;
+import org.optaplanner.examples.pas.persistence.PatientAdmissionScheduleXmlSolutionFileIO;
+import org.optaplanner.examples.pas.solver.score.PatientAdmissionScheduleConstraintProvider;
 import org.optaplanner.examples.rocktour.domain.RockShow;
 import org.optaplanner.examples.rocktour.domain.RockStandstill;
 import org.optaplanner.examples.rocktour.domain.RockTourSolution;
@@ -114,7 +118,6 @@ import org.optaplanner.persistence.common.api.domain.solution.SolutionFileIO;
 // TODO include coachshuttlegathering
 // TODO include dinnerparty
 // TODO include nurserostering
-// TODO include pas
 // TODO include projectjobscheduling
 // TODO include tennis
 public class ScoreDirectorFactoryBenchmarkApp {
@@ -128,8 +131,8 @@ public class ScoreDirectorFactoryBenchmarkApp {
                 new ProblemDescriptor("conferenceScheduling", ConferenceSolution.class, ConferenceSchedulingXlsxFileIO.class,
                         "unsolved/216talks-18timeslots-20rooms.xlsx", null, null,
                         ConferenceSchedulingConstraintProvider.class, Talk.class),
-                new ProblemDescriptor("curriculumCourse", CourseSchedule.class, CourseScheduleXmlSolutionFileIO.class,
-                        "unsolved/comp07.xml", null, null, CourseScheduleConstraintProvider.class, Lecture.class),
+                new ProblemDescriptor("curriculumCourse", CourseSchedule.class, CurriculumCourseXmlSolutionFileIO.class,
+                        "unsolved/comp07.xml", null, null, CurriculumCourseConstraintProvider.class, Lecture.class),
                 new ProblemDescriptor("examination", Examination.class, ExaminationXmlSolutionFileIO.class,
                         "unsolved/exam_comp_set3.xml", null, null, ExaminationConstraintProvider.class, Exam.class,
                         LeadingExam.class, FollowingExam.class),
@@ -149,6 +152,9 @@ public class ScoreDirectorFactoryBenchmarkApp {
                 new ProblemDescriptor("nQueens", NQueens.class, NQueensXmlSolutionFileIO.class, "unsolved/256queens.xml",
                         NQueensMapBasedEasyScoreCalculator.class, NQueensAdvancedIncrementalScoreCalculator.class,
                         NQueensConstraintProvider.class, Queen.class),
+                new ProblemDescriptor("pas", PatientAdmissionSchedule.class, PatientAdmissionScheduleXmlSolutionFileIO.class,
+                        "unsolved/testdata12.xml", null, null, PatientAdmissionScheduleConstraintProvider.class,
+                        BedDesignation.class),
                 new ProblemDescriptor("rockTour", RockTourSolution.class, RockTourXlsxFileIO.class, "unsolved/47shows.xlsx",
                         null, null, RockTourConstraintProvider.class, RockShow.class, RockStandstill.class),
                 new ProblemDescriptor("scrabble", ScrabbleSolution.class, ScrabbleXmlSolutionFileIO.class,

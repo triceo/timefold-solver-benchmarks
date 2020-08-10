@@ -180,6 +180,24 @@
         <!-- Real world problems require use of <acceptedCountLimit> -->
       </forager>
     </localSearch>
+  <#elseif benchmarkDescriptor.getExampleId() == "pas">
+    <constructionHeuristic>
+        <constructionHeuristicType>WEAKEST_FIT_DECREASING</constructionHeuristicType>
+    </constructionHeuristic>
+    <localSearch>
+        <unionMoveSelector>
+          <changeMoveSelector/>
+          <moveListFactory>
+            <moveListFactoryClass>org.optaplanner.examples.pas.solver.move.factory.BedDesignationPillarPartSwapMoveFactory</moveListFactoryClass>
+          </moveListFactory>
+        </unionMoveSelector>
+        <acceptor>
+          <entityTabuSize>7</entityTabuSize>
+        </acceptor>
+        <forager>
+          <acceptedCountLimit>1000</acceptedCountLimit>
+        </forager>
+    </localSearch>
   <#elseif benchmarkDescriptor.getExampleId() == "rockTour">
     <constructionHeuristic/>
     <localSearch>
