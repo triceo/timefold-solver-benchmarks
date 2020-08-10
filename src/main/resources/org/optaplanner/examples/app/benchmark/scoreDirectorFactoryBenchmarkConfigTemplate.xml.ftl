@@ -180,7 +180,7 @@
         <!-- Real world problems require use of <acceptedCountLimit> -->
       </forager>
     </localSearch>
-  <#elseif benchmarkDescriptor.getExampleId() == "pas">
+  <#elseif benchmarkDescriptor.getExampleId() == "patientAdmissionSchedule">
     <constructionHeuristic>
         <constructionHeuristicType>WEAKEST_FIT_DECREASING</constructionHeuristicType>
     </constructionHeuristic>

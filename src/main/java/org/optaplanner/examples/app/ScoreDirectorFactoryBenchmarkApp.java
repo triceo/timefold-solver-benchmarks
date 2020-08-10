@@ -152,9 +152,9 @@ public class ScoreDirectorFactoryBenchmarkApp {
                 new ProblemDescriptor("nQueens", NQueens.class, NQueensXmlSolutionFileIO.class, "unsolved/256queens.xml",
                         NQueensMapBasedEasyScoreCalculator.class, NQueensAdvancedIncrementalScoreCalculator.class,
                         NQueensConstraintProvider.class, Queen.class),
-                new ProblemDescriptor("pas", PatientAdmissionSchedule.class, PatientAdmissionScheduleXmlSolutionFileIO.class,
-                        "unsolved/testdata12.xml", null, null, PatientAdmissionScheduleConstraintProvider.class,
-                        BedDesignation.class),
+                new ProblemDescriptor("patientAdmissionSchedule", PatientAdmissionSchedule.class,
+                        PatientAdmissionScheduleXmlSolutionFileIO.class, "unsolved/testdata12.xml", null, null,
+                        PatientAdmissionScheduleConstraintProvider.class, BedDesignation.class),
                 new ProblemDescriptor("rockTour", RockTourSolution.class, RockTourXlsxFileIO.class, "unsolved/47shows.xlsx",
                         null, null, RockTourConstraintProvider.class, RockShow.class, RockStandstill.class),
                 new ProblemDescriptor("scrabble", ScrabbleSolution.class, ScrabbleXmlSolutionFileIO.class,
@@ -202,7 +202,7 @@ public class ScoreDirectorFactoryBenchmarkApp {
                 Class<?>... entityClasses) {
             this.exampleId = exampleId;
             this.solutionFileIoClass = solutionFileIoClass == null ? null : solutionFileIoClass.getCanonicalName();
-            String parentFolder = exampleId.toLowerCase();
+            String parentFolder = exampleId.equals("patientAdmissionSchedule") ? "pas" : exampleId.toLowerCase();
             String fullInputSolutionPath = "data/" + parentFolder + "/" + inputSolutionFile;
             if (!new File(fullInputSolutionPath).exists()) {
                 throw new IllegalArgumentException(
