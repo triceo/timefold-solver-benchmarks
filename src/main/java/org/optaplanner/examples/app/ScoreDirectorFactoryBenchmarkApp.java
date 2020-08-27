@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2020 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package org.optaplanner.examples.app;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -175,7 +176,9 @@ public class ScoreDirectorFactoryBenchmarkApp {
                         Standstill.class, Customer.class, TimeWindowedCustomer.class)
         };
         Map<String, Object> model = new HashMap<>();
-        model.put("benchmarkDescriptors", descriptors);
+        ProblemDescriptor[] enabledProblems = Arrays.stream(descriptors) // All problems are enabled.
+                .toArray(ProblemDescriptor[]::new);
+        model.put("benchmarkDescriptors", enabledProblems);
         PlannerBenchmarkFactory benchmarkFactory = PlannerBenchmarkFactory.createFromFreemarkerXmlResource(
                 "org/optaplanner/examples/app/benchmark/scoreDirectorFactoryBenchmarkConfigTemplate.xml.ftl", model);
         PlannerBenchmark benchmark = benchmarkFactory.buildPlannerBenchmark();
