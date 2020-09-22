@@ -13,7 +13,9 @@
   </inheritedSolverBenchmark>
 
 <#macro scoreDirectorDetails exampleId>
-  <#if exampleId == "cloudBalancing">
+  <#if exampleId == "coachShuttleGathering">
+    <initializingScoreTrend>ONLY_DOWN</initializingScoreTrend>
+  <#elseif exampleId == "cloudBalancing">
     <initializingScoreTrend>ONLY_DOWN/ONLY_DOWN</initializingScoreTrend>
   <#elseif exampleId == "examination">
     <initializingScoreTrend>ONLY_DOWN</initializingScoreTrend>
@@ -22,6 +24,8 @@
   <#elseif exampleId == "nQueens">
     <initializingScoreTrend>ONLY_DOWN</initializingScoreTrend>
   <#elseif exampleId == "scrabble">
+    <initializingScoreTrend>ONLY_DOWN</initializingScoreTrend>
+  <#elseif exampleId == "tennis">
     <initializingScoreTrend>ONLY_DOWN</initializingScoreTrend>
   <#elseif exampleId == "tsp">
     <initializingScoreTrend>ONLY_DOWN</initializingScoreTrend>
@@ -35,7 +39,51 @@
   <#list benchmarkDescriptor.getEntityClasses() as entityClass>
     <entityClass>${entityClass}</entityClass>
   </#list>
-  <#if benchmarkDescriptor.getExampleId() == "conferenceScheduling">
+  <#if benchmarkDescriptor.getExampleId() == "coachShuttleGathering">
+    <constructionHeuristic>
+      <queuedEntityPlacer>
+        <entitySelector id="placerEntitySelector">
+          <entityClass>org.optaplanner.examples.coachshuttlegathering.domain.BusStop</entityClass>
+          <cacheType>PHASE</cacheType>
+          <selectionOrder>SORTED</selectionOrder>
+          <sorterManner>DECREASING_DIFFICULTY</sorterManner>
+        </entitySelector>
+        <changeMoveSelector>
+          <entitySelector mimicSelectorRef="placerEntitySelector"/>
+        </changeMoveSelector>
+      </queuedEntityPlacer>
+    </constructionHeuristic>
+    <localSearch>
+      <unionMoveSelector>
+        <changeMoveSelector>
+          <entitySelector>
+            <entityClass>org.optaplanner.examples.coachshuttlegathering.domain.BusStop</entityClass>
+          </entitySelector>
+        </changeMoveSelector>
+        <swapMoveSelector>
+          <entitySelector>
+            <entityClass>org.optaplanner.examples.coachshuttlegathering.domain.BusStop</entityClass>
+          </entitySelector>
+        </swapMoveSelector>
+        <tailChainSwapMoveSelector>
+          <entitySelector>
+            <entityClass>org.optaplanner.examples.coachshuttlegathering.domain.BusStop</entityClass>
+          </entitySelector>
+        </tailChainSwapMoveSelector>
+        <changeMoveSelector>
+          <entitySelector>
+            <entityClass>org.optaplanner.examples.coachshuttlegathering.domain.Shuttle</entityClass>
+          </entitySelector>
+        </changeMoveSelector>
+      </unionMoveSelector>
+      <acceptor>
+        <lateAcceptanceSize>200</lateAcceptanceSize>
+      </acceptor>
+      <forager>
+        <acceptedCountLimit>1</acceptedCountLimit>
+      </forager>
+    </localSearch>
+  <#elseif benchmarkDescriptor.getExampleId() == "conferenceScheduling">
         <constructionHeuristic/>
         <localSearch>
             <localSearchType>TABU_SEARCH</localSearchType>
@@ -208,6 +256,18 @@
         <subChainChangeMoveSelector/>
         <subChainSwapMoveSelector/>
       </unionMoveSelector>
+    </localSearch>
+  <#elseif benchmarkDescriptor.getExampleId() == "tennis">
+    <constructionHeuristic>
+      <constructionHeuristicType>FIRST_FIT</constructionHeuristicType>
+    </constructionHeuristic>
+    <localSearch>
+      <acceptor>
+        <lateAcceptanceSize>500</lateAcceptanceSize>
+      </acceptor>
+      <forager>
+        <acceptedCountLimit>1</acceptedCountLimit>
+      </forager>
     </localSearch>
   <#elseif benchmarkDescriptor.getExampleId() == "travelingTournament">
     <constructionHeuristic/>

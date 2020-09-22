@@ -37,6 +37,15 @@ import org.optaplanner.examples.cloudbalancing.optional.score.CloudBalancingCons
 import org.optaplanner.examples.cloudbalancing.optional.score.CloudBalancingIncrementalScoreCalculator;
 import org.optaplanner.examples.cloudbalancing.optional.score.CloudBalancingMapBasedEasyScoreCalculator;
 import org.optaplanner.examples.cloudbalancing.persistence.CloudBalanceXmlSolutionFileIO;
+import org.optaplanner.examples.coachshuttlegathering.domain.BusOrStop;
+import org.optaplanner.examples.coachshuttlegathering.domain.BusStop;
+import org.optaplanner.examples.coachshuttlegathering.domain.Coach;
+import org.optaplanner.examples.coachshuttlegathering.domain.CoachShuttleGatheringSolution;
+import org.optaplanner.examples.coachshuttlegathering.domain.Shuttle;
+import org.optaplanner.examples.coachshuttlegathering.domain.StopOrHub;
+import org.optaplanner.examples.coachshuttlegathering.persistence.CoachShuttleGatheringXmlSolutionFileIO;
+import org.optaplanner.examples.coachshuttlegathering.solver.CoachShuttleGatheringConstraintProvider;
+import org.optaplanner.examples.coachshuttlegathering.solver.CoachShuttleGatheringEasyScoreCalculator;
 import org.optaplanner.examples.conferencescheduling.domain.ConferenceSolution;
 import org.optaplanner.examples.conferencescheduling.domain.Talk;
 import org.optaplanner.examples.conferencescheduling.optional.score.ConferenceSchedulingConstraintProvider;
@@ -95,6 +104,10 @@ import org.optaplanner.examples.taskassigning.domain.TaskAssigningSolution;
 import org.optaplanner.examples.taskassigning.domain.TaskOrEmployee;
 import org.optaplanner.examples.taskassigning.persistence.TaskAssigningXmlSolutionFileIO;
 import org.optaplanner.examples.taskassigning.solver.score.TaskAssigningConstraintProvider;
+import org.optaplanner.examples.tennis.domain.TeamAssignment;
+import org.optaplanner.examples.tennis.domain.TennisSolution;
+import org.optaplanner.examples.tennis.optional.score.TennisConstraintProvider;
+import org.optaplanner.examples.tennis.persistence.TennisXmlSolutionFileIO;
 import org.optaplanner.examples.travelingtournament.domain.Match;
 import org.optaplanner.examples.travelingtournament.domain.TravelingTournament;
 import org.optaplanner.examples.travelingtournament.optional.score.TravelingTournamentConstraintProvider;
@@ -116,11 +129,9 @@ import org.optaplanner.examples.vehiclerouting.solver.score.VehicleRoutingIncrem
 import org.optaplanner.persistence.common.api.domain.solution.SolutionFileIO;
 
 // TODO include cheaptime
-// TODO include coachshuttlegathering
 // TODO include dinnerparty
 // TODO include nurserostering
 // TODO include projectjobscheduling
-// TODO include tennis
 public class ScoreDirectorFactoryBenchmarkApp {
 
     public static void main(String... args) {
@@ -129,6 +140,9 @@ public class ScoreDirectorFactoryBenchmarkApp {
                         "unsolved/1600computers-4800processes.xml", CloudBalancingMapBasedEasyScoreCalculator.class,
                         CloudBalancingIncrementalScoreCalculator.class, CloudBalancingConstraintProvider.class,
                         CloudProcess.class),
+                new ProblemDescriptor("coachShuttleGathering", CoachShuttleGatheringSolution.class, CoachShuttleGatheringXmlSolutionFileIO.class,
+                        "unsolved/demo01.xml", CoachShuttleGatheringEasyScoreCalculator.class, null,
+                        CoachShuttleGatheringConstraintProvider.class, Coach.class, Shuttle.class, BusStop.class, StopOrHub.class, BusOrStop.class),
                 new ProblemDescriptor("conferenceScheduling", ConferenceSolution.class, ConferenceSchedulingXlsxFileIO.class,
                         "unsolved/216talks-18timeslots-20rooms.xlsx", null, null,
                         ConferenceSchedulingConstraintProvider.class, Talk.class),
@@ -164,6 +178,9 @@ public class ScoreDirectorFactoryBenchmarkApp {
                 new ProblemDescriptor("taskAssigning", TaskAssigningSolution.class, TaskAssigningXmlSolutionFileIO.class,
                         "unsolved/500tasks-20employees.xml", null, null, TaskAssigningConstraintProvider.class,
                         TaskOrEmployee.class, Task.class),
+                new ProblemDescriptor("tennis", TennisSolution.class, TennisXmlSolutionFileIO.class,
+                        "unsolved/munich-7teams.xml", null, null, TennisConstraintProvider.class,
+                        TeamAssignment.class),
                 new ProblemDescriptor("travelingTournament", TravelingTournament.class,
                         TravelingTournamentXmlSolutionFileIO.class,
                         "unsolved/1-nl14.xml", null, null, TravelingTournamentConstraintProvider.class, Match.class),
