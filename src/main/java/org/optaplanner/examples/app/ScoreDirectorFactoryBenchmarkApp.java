@@ -28,9 +28,10 @@ import java.util.stream.Stream;
 
 import org.optaplanner.benchmark.api.PlannerBenchmark;
 import org.optaplanner.benchmark.api.PlannerBenchmarkFactory;
+import org.optaplanner.core.api.score.Score;
+import org.optaplanner.core.api.score.calculator.EasyScoreCalculator;
+import org.optaplanner.core.api.score.calculator.IncrementalScoreCalculator;
 import org.optaplanner.core.api.score.stream.ConstraintProvider;
-import org.optaplanner.core.impl.score.director.easy.EasyScoreCalculator;
-import org.optaplanner.core.impl.score.director.incremental.IncrementalScoreCalculator;
 import org.optaplanner.examples.cloudbalancing.domain.CloudBalance;
 import org.optaplanner.examples.cloudbalancing.domain.CloudProcess;
 import org.optaplanner.examples.cloudbalancing.optional.score.CloudBalancingConstraintProvider;
@@ -95,10 +96,6 @@ import org.optaplanner.examples.rocktour.domain.RockStandstill;
 import org.optaplanner.examples.rocktour.domain.RockTourSolution;
 import org.optaplanner.examples.rocktour.optional.score.RockTourConstraintProvider;
 import org.optaplanner.examples.rocktour.persistence.RockTourXlsxFileIO;
-import org.optaplanner.examples.scrabble.domain.ScrabbleSolution;
-import org.optaplanner.examples.scrabble.domain.ScrabbleWordAssignment;
-import org.optaplanner.examples.scrabble.optional.score.ScrabbleConstraintProvider;
-import org.optaplanner.examples.scrabble.persistence.ScrabbleXmlSolutionFileIO;
 import org.optaplanner.examples.taskassigning.domain.Task;
 import org.optaplanner.examples.taskassigning.domain.TaskAssigningSolution;
 import org.optaplanner.examples.taskassigning.domain.TaskOrEmployee;
@@ -172,9 +169,6 @@ public class ScoreDirectorFactoryBenchmarkApp {
                         PatientAdmissionScheduleConstraintProvider.class, BedDesignation.class),
                 new ProblemDescriptor("rockTour", RockTourSolution.class, RockTourXlsxFileIO.class, "unsolved/47shows.xlsx",
                         null, null, RockTourConstraintProvider.class, RockShow.class, RockStandstill.class),
-                new ProblemDescriptor("scrabble", ScrabbleSolution.class, ScrabbleXmlSolutionFileIO.class,
-                        "unsolved/jbossProjects.xml", null, null, ScrabbleConstraintProvider.class,
-                        ScrabbleWordAssignment.class),
                 new ProblemDescriptor("taskAssigning", TaskAssigningSolution.class, TaskAssigningXmlSolutionFileIO.class,
                         "unsolved/500tasks-20employees.xml", null, null, TaskAssigningConstraintProvider.class,
                         TaskOrEmployee.class, Task.class),
@@ -214,10 +208,11 @@ public class ScoreDirectorFactoryBenchmarkApp {
         private final String solutionClass;
         private final Set<String> entityClasses;
 
-        public <Solution_> ProblemDescriptor(String exampleId, Class<Solution_> solutionClass,
-                Class<? extends SolutionFileIO<Solution_>> solutionFileIoClass, String inputSolutionFile,
-                Class<? extends EasyScoreCalculator<Solution_>> easyScoreCalculatorClass,
-                Class<? extends IncrementalScoreCalculator<Solution_>> incrementalScoreCalculatorClass,
+        public <Solution_, Score_ extends Score<Score_>> ProblemDescriptor(String exampleId,
+                Class<Solution_> solutionClass, Class<? extends SolutionFileIO<Solution_>> solutionFileIoClass,
+                String inputSolutionFile,
+                Class<? extends EasyScoreCalculator<Solution_, Score_>> easyScoreCalculatorClass,
+                Class<? extends IncrementalScoreCalculator<Solution_, Score_>> incrementalScoreCalculatorClass,
                 Class<? extends ConstraintProvider> constraintProviderClass,
                 Class<?>... entityClasses) {
             this.exampleId = exampleId;
