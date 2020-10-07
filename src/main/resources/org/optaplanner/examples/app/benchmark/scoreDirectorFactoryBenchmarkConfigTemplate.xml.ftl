@@ -1,6 +1,7 @@
 <plannerBenchmark>
   <benchmarkDirectory>local/data/scoreDirectorFactory</benchmarkDirectory>
   <parallelBenchmarkCount>AUTO</parallelBenchmarkCount>
+  <warmUpSecondsSpentLimit>60</warmUpSecondsSpentLimit>
 
   <inheritedSolverBenchmark>
     <subSingleCount>10</subSingleCount>
