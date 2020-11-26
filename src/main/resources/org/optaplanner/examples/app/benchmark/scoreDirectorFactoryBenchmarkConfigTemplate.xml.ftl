@@ -1,10 +1,10 @@
 <plannerBenchmark>
   <benchmarkDirectory>local/data/scoreDirectorFactory</benchmarkDirectory>
-  <parallelBenchmarkCount>AUTO</parallelBenchmarkCount>
+  <parallelBenchmarkCount>10</parallelBenchmarkCount>
   <warmUpSecondsSpentLimit>60</warmUpSecondsSpentLimit>
 
   <inheritedSolverBenchmark>
-    <subSingleCount>10</subSingleCount>
+    <subSingleCount>3</subSingleCount>
     <solver>
       <environmentMode>NON_REPRODUCIBLE</environmentMode>
       <termination>
@@ -390,6 +390,18 @@
       <solver>
         <scoreDirectorFactory>
           <constraintStreamImplType>DROOLS</constraintStreamImplType>
+          <constraintProviderClass>${benchmarkDescriptor.getConstraintProvider()}</constraintProviderClass>
+          <@scoreDirectorDetails benchmarkDescriptor.getExampleId()/>
+        </scoreDirectorFactory>
+        <@solverDetails benchmarkDescriptor/>
+      </solver>
+    </solverBenchmark>
+    <solverBenchmark>
+      <@problemDetails benchmarkDescriptor/>
+      <name>${benchmarkDescriptor.getExampleId()} Constraint Streams (Bavet)</name>
+      <solver>
+        <scoreDirectorFactory>
+          <constraintStreamImplType>BAVET</constraintStreamImplType>
           <constraintProviderClass>${benchmarkDescriptor.getConstraintProvider()}</constraintProviderClass>
           <@scoreDirectorDetails benchmarkDescriptor.getExampleId()/>
         </scoreDirectorFactory>
