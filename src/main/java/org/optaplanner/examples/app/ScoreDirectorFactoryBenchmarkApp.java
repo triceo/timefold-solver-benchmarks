@@ -72,11 +72,6 @@ import org.optaplanner.examples.investment.optional.score.InvestmentConstraintPr
 import org.optaplanner.examples.investment.persistence.InvestmentXmlSolutionFileIO;
 import org.optaplanner.examples.investment.solver.score.InvestmentEasyScoreCalculator;
 import org.optaplanner.examples.investment.solver.score.InvestmentIncrementalScoreCalculator;
-import org.optaplanner.examples.machinereassignment.domain.MachineReassignment;
-import org.optaplanner.examples.machinereassignment.domain.MrProcessAssignment;
-import org.optaplanner.examples.machinereassignment.persistence.MachineReassignmentFileIO;
-import org.optaplanner.examples.machinereassignment.solver.score.MachineReassignmentConstraintProvider;
-import org.optaplanner.examples.machinereassignment.solver.score.MachineReassignmentIncrementalScoreCalculator;
 import org.optaplanner.examples.meetingscheduling.domain.MeetingAssignment;
 import org.optaplanner.examples.meetingscheduling.domain.MeetingSchedule;
 import org.optaplanner.examples.meetingscheduling.optional.score.MeetingSchedulingConstraintProvider;
@@ -155,9 +150,12 @@ public class ScoreDirectorFactoryBenchmarkApp {
                         "unsolved/de_smet_1.xml", InvestmentEasyScoreCalculator.class,
                         InvestmentIncrementalScoreCalculator.class, InvestmentConstraintProvider.class,
                         AssetClassAllocation.class),
+                /*
                 new ProblemDescriptor("machineReassignment", MachineReassignment.class, MachineReassignmentFileIO.class,
                         "import/model_b_9.txt", null, MachineReassignmentIncrementalScoreCalculator.class,
                         MachineReassignmentConstraintProvider.class, MrProcessAssignment.class),
+
+                 */
                 new ProblemDescriptor("meetingScheduling", MeetingSchedule.class, MeetingSchedulingXlsxFileIO.class,
                         "unsolved/400meetings-1280timegrains-5rooms.xlsx", null, null,
                         MeetingSchedulingConstraintProvider.class, MeetingAssignment.class),
