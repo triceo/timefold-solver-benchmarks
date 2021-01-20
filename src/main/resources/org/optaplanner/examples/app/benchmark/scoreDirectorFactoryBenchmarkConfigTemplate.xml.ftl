@@ -4,7 +4,7 @@
   <warmUpSecondsSpentLimit>60</warmUpSecondsSpentLimit>
 
   <inheritedSolverBenchmark>
-    <subSingleCount>3</subSingleCount>
+    <subSingleCount>5</subSingleCount>
     <solver>
       <environmentMode>NON_REPRODUCIBLE</environmentMode>
       <termination>
@@ -386,10 +386,10 @@
   <#if benchmarkDescriptor.getConstraintProvider()??>
     <solverBenchmark>
       <@problemDetails benchmarkDescriptor/>
-      <name>${benchmarkDescriptor.getExampleId()} Constraint Streams (Drools)</name>
+      <name>${benchmarkDescriptor.getExampleId()} Constraint Streams (Bavet)</name>
       <solver>
         <scoreDirectorFactory>
-          <constraintStreamImplType>DROOLS</constraintStreamImplType>
+          <constraintStreamImplType>BAVET</constraintStreamImplType>
           <constraintProviderClass>${benchmarkDescriptor.getConstraintProvider()}</constraintProviderClass>
           <@scoreDirectorDetails benchmarkDescriptor.getExampleId()/>
         </scoreDirectorFactory>
@@ -398,10 +398,10 @@
     </solverBenchmark>
     <solverBenchmark>
       <@problemDetails benchmarkDescriptor/>
-      <name>${benchmarkDescriptor.getExampleId()} Constraint Streams (Bavet)</name>
+      <name>${benchmarkDescriptor.getExampleId()} Constraint Streams (Drools)</name>
       <solver>
         <scoreDirectorFactory>
-          <constraintStreamImplType>BAVET</constraintStreamImplType>
+          <constraintStreamImplType>DROOLS</constraintStreamImplType>
           <constraintProviderClass>${benchmarkDescriptor.getConstraintProvider()}</constraintProviderClass>
           <@scoreDirectorDetails benchmarkDescriptor.getExampleId()/>
         </scoreDirectorFactory>
