@@ -16,16 +16,6 @@
 
 package org.optaplanner.examples.app;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import org.optaplanner.benchmark.api.PlannerBenchmark;
 import org.optaplanner.benchmark.api.PlannerBenchmarkFactory;
 import org.optaplanner.core.api.score.Score;
@@ -38,12 +28,7 @@ import org.optaplanner.examples.cloudbalancing.optional.score.CloudBalancingCons
 import org.optaplanner.examples.cloudbalancing.optional.score.CloudBalancingIncrementalScoreCalculator;
 import org.optaplanner.examples.cloudbalancing.optional.score.CloudBalancingMapBasedEasyScoreCalculator;
 import org.optaplanner.examples.cloudbalancing.persistence.CloudBalanceXmlSolutionFileIO;
-import org.optaplanner.examples.coachshuttlegathering.domain.BusOrStop;
-import org.optaplanner.examples.coachshuttlegathering.domain.BusStop;
-import org.optaplanner.examples.coachshuttlegathering.domain.Coach;
-import org.optaplanner.examples.coachshuttlegathering.domain.CoachShuttleGatheringSolution;
-import org.optaplanner.examples.coachshuttlegathering.domain.Shuttle;
-import org.optaplanner.examples.coachshuttlegathering.domain.StopOrHub;
+import org.optaplanner.examples.coachshuttlegathering.domain.*;
 import org.optaplanner.examples.coachshuttlegathering.optional.score.CoachShuttleGatheringConstraintProvider;
 import org.optaplanner.examples.coachshuttlegathering.optional.score.CoachShuttleGatheringEasyScoreCalculator;
 import org.optaplanner.examples.coachshuttlegathering.persistence.CoachShuttleGatheringXmlSolutionFileIO;
@@ -72,6 +57,11 @@ import org.optaplanner.examples.investment.optional.score.InvestmentConstraintPr
 import org.optaplanner.examples.investment.optional.score.InvestmentEasyScoreCalculator;
 import org.optaplanner.examples.investment.optional.score.InvestmentIncrementalScoreCalculator;
 import org.optaplanner.examples.investment.persistence.InvestmentXmlSolutionFileIO;
+import org.optaplanner.examples.machinereassignment.domain.MachineReassignment;
+import org.optaplanner.examples.machinereassignment.domain.MrProcessAssignment;
+import org.optaplanner.examples.machinereassignment.optional.score.MachineReassignmentConstraintProvider;
+import org.optaplanner.examples.machinereassignment.persistence.MachineReassignmentFileIO;
+import org.optaplanner.examples.machinereassignment.score.MachineReassignmentIncrementalScoreCalculator;
 import org.optaplanner.examples.meetingscheduling.domain.MeetingAssignment;
 import org.optaplanner.examples.meetingscheduling.domain.MeetingSchedule;
 import org.optaplanner.examples.meetingscheduling.optional.score.MeetingSchedulingConstraintProvider;
@@ -120,8 +110,17 @@ import org.optaplanner.examples.vehiclerouting.optional.score.VehicleRoutingIncr
 import org.optaplanner.examples.vehiclerouting.persistence.VehicleRoutingFileIO;
 import org.optaplanner.persistence.common.api.domain.solution.SolutionFileIO;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 // TODO include cheaptime
-// TODO include dinnerparty
 // TODO include nurserostering
 // TODO include projectjobscheduling
 public class ScoreDirectorFactoryBenchmarkApp {
@@ -150,12 +149,9 @@ public class ScoreDirectorFactoryBenchmarkApp {
                         "unsolved/de_smet_1.xml", InvestmentEasyScoreCalculator.class,
                         InvestmentIncrementalScoreCalculator.class, InvestmentConstraintProvider.class,
                         AssetClassAllocation.class),
-                /*
                 new ProblemDescriptor("machineReassignment", MachineReassignment.class, MachineReassignmentFileIO.class,
-                        "import/model_b_9.txt", null, MachineReassignmentIncrementalScoreCalculator.class,
+                        "import/model_b_4.txt", null, MachineReassignmentIncrementalScoreCalculator.class,
                         MachineReassignmentConstraintProvider.class, MrProcessAssignment.class),
-
-                 */
                 new ProblemDescriptor("meetingScheduling", MeetingSchedule.class, MeetingSchedulingXlsxFileIO.class,
                         "unsolved/400meetings-1280timegrains-5rooms.xlsx", null, null,
                         MeetingSchedulingConstraintProvider.class, MeetingAssignment.class),
