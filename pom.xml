@@ -6,23 +6,24 @@
   <parent>
     <groupId>org.optaplanner</groupId>
     <artifactId>optaplanner-build-parent</artifactId>
-    <version>8.2.0-SNAPSHOT</version>
+    <version>8.4.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>optaplanner-score-director-factory-benchmark</artifactId>
-
-  <name>OptaPlanner examples</name>
+  
+  <name>OptaPlanner ScoreDirector benchmark</name>
   <description>
     OptaPlanner solves planning problems.
     This lightweight, embeddable planning engine implements powerful and scalable algorithms
     to optimize business resource scheduling and planning.
 
-    This module contains the examples which demonstrate how to use it in a normal Java application.
+    This module builds a benchmark of all the various score directors over various examples.
   </description>
   <url>https://www.optaplanner.org</url>
 
   <properties>
     <formatter.skip>true</formatter.skip>
+    <java.module.name>org.optaplanner.examples.benchmark</java.module.name>
   </properties>
 
   <dependencies>
