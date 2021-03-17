@@ -6,33 +6,17 @@
   <inheritedSolverBenchmark>
     <subSingleCount>5</subSingleCount>
     <solver>
-      <environmentMode>NON_REPRODUCIBLE</environmentMode>
-      <termination>
-        <minutesSpentLimit>10</minutesSpentLimit>
-      </termination>
+      <environmentMode>REPRODUCIBLE</environmentMode>
     </solver>
   </inheritedSolverBenchmark>
 
-<#macro scoreDirectorDetails exampleId>
-  <#if exampleId == "coachShuttleGathering">
-    <initializingScoreTrend>ONLY_DOWN</initializingScoreTrend>
-  <#elseif exampleId == "cloudBalancing">
-    <initializingScoreTrend>ONLY_DOWN/ONLY_DOWN</initializingScoreTrend>
-  <#elseif exampleId == "examination">
-    <initializingScoreTrend>ONLY_DOWN</initializingScoreTrend>
-  <#elseif exampleId == "investment">
-    <initializingScoreTrend>ONLY_DOWN/ANY</initializingScoreTrend>
-  <#elseif exampleId == "nQueens">
-    <initializingScoreTrend>ONLY_DOWN</initializingScoreTrend>
-  <#elseif exampleId == "scrabble">
-    <initializingScoreTrend>ONLY_DOWN</initializingScoreTrend>
-  <#elseif exampleId == "tennis">
-    <initializingScoreTrend>ONLY_DOWN</initializingScoreTrend>
-  <#elseif exampleId == "tsp">
-    <initializingScoreTrend>ONLY_DOWN</initializingScoreTrend>
-  <#elseif exampleId == "vehicleRouting">
-    <initializingScoreTrend>ONLY_DOWN</initializingScoreTrend>
-  </#if>
+<#macro terminationDetails>
+  <termination>
+    <terminationCompositionStyle>OR</terminationCompositionStyle>
+    <stepCountLimit>100000</stepCountLimit>
+    <unimprovedStepCountLimit>1000</unimprovedStepCountLimit>
+    <minutesSpentLimit>10</minutesSpentLimit>
+  </termination>
 </#macro>
 
 <#macro solverDetails benchmarkDescriptor>
@@ -41,20 +25,8 @@
     <entityClass>${entityClass}</entityClass>
   </#list>
   <#if benchmarkDescriptor.getExampleId() == "coachShuttleGathering">
-    <constructionHeuristic>
-      <queuedEntityPlacer>
-        <entitySelector id="placerEntitySelector">
-          <entityClass>org.optaplanner.examples.coachshuttlegathering.domain.BusStop</entityClass>
-          <cacheType>PHASE</cacheType>
-          <selectionOrder>SORTED</selectionOrder>
-          <sorterManner>DECREASING_DIFFICULTY</sorterManner>
-        </entitySelector>
-        <changeMoveSelector>
-          <entitySelector mimicSelectorRef="placerEntitySelector"/>
-        </changeMoveSelector>
-      </queuedEntityPlacer>
-    </constructionHeuristic>
     <localSearch>
+      <@terminationDetails />
       <unionMoveSelector>
         <changeMoveSelector>
           <entitySelector>
@@ -85,57 +57,29 @@
       </forager>
     </localSearch>
   <#elseif benchmarkDescriptor.getExampleId() == "conferenceScheduling">
-        <constructionHeuristic/>
-        <localSearch>
-            <localSearchType>TABU_SEARCH</localSearchType>
-        </localSearch>
+    <localSearch>
+        <@terminationDetails />
+        <localSearchType>TABU_SEARCH</localSearchType>
+    </localSearch>
   <#elseif benchmarkDescriptor.getExampleId() == "curriculumCourse">
-        <constructionHeuristic>
-          <constructionHeuristicType>FIRST_FIT_DECREASING</constructionHeuristicType>
-        </constructionHeuristic>
-        <localSearch>
-          <unionMoveSelector>
-            <changeMoveSelector/>
-            <swapMoveSelector>
-              <filterClass>org.optaplanner.examples.curriculumcourse.solver.move.DifferentCourseSwapMoveFilter</filterClass>
-            </swapMoveSelector>
-          </unionMoveSelector>
-          <acceptor>
-            <lateAcceptanceSize>600</lateAcceptanceSize>
-          </acceptor>
-          <forager>
-            <acceptedCountLimit>4</acceptedCountLimit>
-          </forager>
-        </localSearch>
+    <localSearch>
+      <@terminationDetails />
+      <unionMoveSelector>
+        <changeMoveSelector/>
+        <swapMoveSelector>
+          <filterClass>org.optaplanner.examples.curriculumcourse.solver.move.DifferentCourseSwapMoveFilter</filterClass>
+        </swapMoveSelector>
+      </unionMoveSelector>
+      <acceptor>
+        <lateAcceptanceSize>600</lateAcceptanceSize>
+      </acceptor>
+      <forager>
+        <acceptedCountLimit>4</acceptedCountLimit>
+      </forager>
+    </localSearch>
   <#elseif benchmarkDescriptor.getExampleId() == "examination">
-      <constructionHeuristic>
-        <queuedEntityPlacer>
-          <entitySelector id="placerEntitySelector">
-            <entityClass>org.optaplanner.examples.examination.domain.Exam</entityClass>
-            <cacheType>PHASE</cacheType>
-            <selectionOrder>SORTED</selectionOrder>
-            <sorterManner>DECREASING_DIFFICULTY</sorterManner>
-          </entitySelector>
-          <cartesianProductMoveSelector>
-            <changeMoveSelector>
-              <entitySelector mimicSelectorRef="placerEntitySelector"/>
-              <valueSelector variableName="period">
-                <downcastEntityClass>org.optaplanner.examples.examination.domain.LeadingExam</downcastEntityClass>
-                <cacheType>PHASE</cacheType>
-              </valueSelector>
-            </changeMoveSelector>
-            <changeMoveSelector>
-              <entitySelector mimicSelectorRef="placerEntitySelector"/>
-              <valueSelector variableName="room">
-                <cacheType>PHASE</cacheType>
-                <selectionOrder>SORTED</selectionOrder>
-                <sorterManner>INCREASING_STRENGTH</sorterManner>
-              </valueSelector>
-            </changeMoveSelector>
-          </cartesianProductMoveSelector>
-        </queuedEntityPlacer>
-      </constructionHeuristic>
-      <localSearch>
+    <localSearch>
+        <@terminationDetails />
         <unionMoveSelector>
           <cartesianProductMoveSelector>
             <changeMoveSelector>
@@ -163,10 +107,10 @@
         <forager>
           <acceptedCountLimit>2000</acceptedCountLimit>
         </forager>
-      </localSearch>
+    </localSearch>
   <#elseif benchmarkDescriptor.getExampleId() == "flightCrewScheduling">
-    <constructionHeuristic/>
     <localSearch>
+      <@terminationDetails />
       <unionMoveSelector>
         <changeMoveSelector/>
         <swapMoveSelector/>
@@ -179,10 +123,8 @@
       </unionMoveSelector>
     </localSearch>
   <#elseif benchmarkDescriptor.getExampleId() == "investment">
-      <customPhase>
-        <customPhaseCommandClass>org.optaplanner.examples.investment.solver.solution.initializer.InvestmentAllocationSolutionInitializer</customPhaseCommandClass>
-      </customPhase>
-      <localSearch>
+    <localSearch>
+        <@terminationDetails />
         <unionMoveSelector>
           <moveIteratorFactory>
             <moveIteratorFactoryClass>org.optaplanner.examples.investment.solver.move.factory.InvestmentQuantityTransferMoveIteratorFactory</moveIteratorFactoryClass>
@@ -197,12 +139,10 @@
         <forager>
           <acceptedCountLimit>1</acceptedCountLimit>
         </forager>
-      </localSearch>
+    </localSearch>
   <#elseif benchmarkDescriptor.getExampleId() == "machineReassignment">
-      <customPhase>
-        <customPhaseCommandClass>org.optaplanner.examples.machinereassignment.solver.solution.initializer.ToOriginalMachineSolutionInitializer</customPhaseCommandClass>
-      </customPhase>
-      <localSearch>
+    <localSearch>
+        <@terminationDetails />
         <unionMoveSelector>
           <changeMoveSelector/>
           <swapMoveSelector/>
@@ -213,12 +153,10 @@
         <forager>
           <acceptedCountLimit>2000</acceptedCountLimit>
         </forager>
-      </localSearch>
+    </localSearch>
   <#elseif benchmarkDescriptor.getExampleId() == "nQueens">
-    <constructionHeuristic>
-      <constructionHeuristicType>FIRST_FIT_DECREASING</constructionHeuristicType>
-    </constructionHeuristic>
     <localSearch>
+      <@terminationDetails />
       <changeMoveSelector>
         <selectionOrder>ORIGINAL</selectionOrder>
       </changeMoveSelector>
@@ -230,10 +168,8 @@
       </forager>
     </localSearch>
   <#elseif benchmarkDescriptor.getExampleId() == "patientAdmissionSchedule">
-    <constructionHeuristic>
-        <constructionHeuristicType>WEAKEST_FIT_DECREASING</constructionHeuristicType>
-    </constructionHeuristic>
     <localSearch>
+        <@terminationDetails />
         <unionMoveSelector>
           <changeMoveSelector/>
           <moveListFactory>
@@ -248,8 +184,8 @@
         </forager>
     </localSearch>
   <#elseif benchmarkDescriptor.getExampleId() == "rockTour">
-    <constructionHeuristic/>
     <localSearch>
+      <@terminationDetails />
       <unionMoveSelector>
         <changeMoveSelector/>
         <swapMoveSelector/>
@@ -259,10 +195,8 @@
       </unionMoveSelector>
     </localSearch>
   <#elseif benchmarkDescriptor.getExampleId() == "tennis">
-    <constructionHeuristic>
-      <constructionHeuristicType>FIRST_FIT</constructionHeuristicType>
-    </constructionHeuristic>
     <localSearch>
+      <@terminationDetails />
       <acceptor>
         <lateAcceptanceSize>500</lateAcceptanceSize>
       </acceptor>
@@ -271,8 +205,8 @@
       </forager>
     </localSearch>
   <#elseif benchmarkDescriptor.getExampleId() == "travelingTournament">
-    <constructionHeuristic/>
     <localSearch>
+      <@terminationDetails />
       <unionMoveSelector>
         <swapMoveSelector>
           <cacheType>PHASE</cacheType>
@@ -293,10 +227,8 @@
       </forager>
     </localSearch>
   <#elseif benchmarkDescriptor.getExampleId() == "tsp">
-      <constructionHeuristic>
-        <constructionHeuristicType>FIRST_FIT_DECREASING</constructionHeuristicType>
-      </constructionHeuristic>
-      <localSearch>
+    <localSearch>
+        <@terminationDetails />
         <unionMoveSelector>
           <changeMoveSelector>
             <cacheType>STEP</cacheType>
@@ -316,12 +248,10 @@
         <forager>
           <acceptedCountLimit>1</acceptedCountLimit>
         </forager>
-      </localSearch>
+    </localSearch>
   <#elseif benchmarkDescriptor.getExampleId() == "vehicleRouting">
-      <constructionHeuristic>
-        <constructionHeuristicType>FIRST_FIT_DECREASING</constructionHeuristicType>
-      </constructionHeuristic>
-      <localSearch>
+    <localSearch>
+        <@terminationDetails />
         <unionMoveSelector>
           <changeMoveSelector/>
           <swapMoveSelector/>
@@ -338,10 +268,11 @@
         <forager>
           <acceptedCountLimit>1</acceptedCountLimit>
         </forager>
-      </localSearch>
+    </localSearch>
   <#else>
-      <constructionHeuristic/>
-      <localSearch />
+      <localSearch>
+        <@terminationDetails />
+      </localSearch>
   </#if>
 </#macro>
 
@@ -364,7 +295,6 @@
       <solver>
         <scoreDirectorFactory>
           <easyScoreCalculatorClass>${benchmarkDescriptor.getEasyScoreCalculator()}</easyScoreCalculatorClass>
-          <@scoreDirectorDetails benchmarkDescriptor.getExampleId()/>
         </scoreDirectorFactory>
         <@solverDetails benchmarkDescriptor/>
       </solver>
@@ -377,7 +307,6 @@
       <solver>
         <scoreDirectorFactory>
           <incrementalScoreCalculatorClass>${benchmarkDescriptor.getIncrementalScoreCalculator()}</incrementalScoreCalculatorClass>
-          <@scoreDirectorDetails benchmarkDescriptor.getExampleId()/>
         </scoreDirectorFactory>
         <@solverDetails benchmarkDescriptor/>
       </solver>
@@ -391,7 +320,6 @@
         <scoreDirectorFactory>
           <constraintStreamImplType>BAVET</constraintStreamImplType>
           <constraintProviderClass>${benchmarkDescriptor.getConstraintProvider()}</constraintProviderClass>
-          <@scoreDirectorDetails benchmarkDescriptor.getExampleId()/>
         </scoreDirectorFactory>
         <@solverDetails benchmarkDescriptor/>
       </solver>
@@ -403,7 +331,6 @@
         <scoreDirectorFactory>
           <constraintStreamImplType>DROOLS</constraintStreamImplType>
           <constraintProviderClass>${benchmarkDescriptor.getConstraintProvider()}</constraintProviderClass>
-          <@scoreDirectorDetails benchmarkDescriptor.getExampleId()/>
         </scoreDirectorFactory>
         <@solverDetails benchmarkDescriptor/>
       </solver>
@@ -416,7 +343,6 @@
       <solver>
         <scoreDirectorFactory>
           <scoreDrl>${benchmarkDescriptor.getDrlFile()}</scoreDrl>
-          <@scoreDirectorDetails benchmarkDescriptor.getExampleId()/>
         </scoreDirectorFactory>
         <@solverDetails benchmarkDescriptor/>
       </solver>

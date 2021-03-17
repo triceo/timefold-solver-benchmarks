@@ -1,0 +1,3 @@
+Contains initialized solutions that will jump straight into local search.
+This is done so that a slow scoring function doesn't skew the benchmark results
+by staying in CH while others are already in LS.

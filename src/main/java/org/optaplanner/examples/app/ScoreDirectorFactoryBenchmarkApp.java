@@ -60,7 +60,7 @@ import org.optaplanner.examples.investment.persistence.InvestmentXmlSolutionFile
 import org.optaplanner.examples.machinereassignment.domain.MachineReassignment;
 import org.optaplanner.examples.machinereassignment.domain.MrProcessAssignment;
 import org.optaplanner.examples.machinereassignment.optional.score.MachineReassignmentConstraintProvider;
-import org.optaplanner.examples.machinereassignment.persistence.MachineReassignmentFileIO;
+import org.optaplanner.examples.machinereassignment.persistence.MachineReassignmentXmlSolutionFileIO;
 import org.optaplanner.examples.machinereassignment.score.MachineReassignmentIncrementalScoreCalculator;
 import org.optaplanner.examples.meetingscheduling.domain.MeetingAssignment;
 import org.optaplanner.examples.meetingscheduling.domain.MeetingSchedule;
@@ -99,7 +99,7 @@ import org.optaplanner.examples.tsp.domain.Visit;
 import org.optaplanner.examples.tsp.optional.score.TspConstraintProvider;
 import org.optaplanner.examples.tsp.optional.score.TspEasyScoreCalculator;
 import org.optaplanner.examples.tsp.optional.score.TspIncrementalScoreCalculator;
-import org.optaplanner.examples.tsp.persistence.TspFileIO;
+import org.optaplanner.examples.tsp.persistence.TspXmlSolutionFileIO;
 import org.optaplanner.examples.vehiclerouting.domain.Customer;
 import org.optaplanner.examples.vehiclerouting.domain.Standstill;
 import org.optaplanner.examples.vehiclerouting.domain.VehicleRoutingSolution;
@@ -107,7 +107,7 @@ import org.optaplanner.examples.vehiclerouting.domain.timewindowed.TimeWindowedC
 import org.optaplanner.examples.vehiclerouting.optional.score.VehicleRoutingConstraintProvider;
 import org.optaplanner.examples.vehiclerouting.optional.score.VehicleRoutingEasyScoreCalculator;
 import org.optaplanner.examples.vehiclerouting.optional.score.VehicleRoutingIncrementalScoreCalculator;
-import org.optaplanner.examples.vehiclerouting.persistence.VehicleRoutingFileIO;
+import org.optaplanner.examples.vehiclerouting.persistence.VehicleRoutingXmlSolutionFileIO;
 import org.optaplanner.persistence.common.api.domain.solution.SolutionFileIO;
 
 import java.io.File;
@@ -128,55 +128,55 @@ public class ScoreDirectorFactoryBenchmarkApp {
     public static void main(String... args) {
         ProblemDescriptor[] descriptors = {
                 new ProblemDescriptor("cloudBalancing", CloudBalance.class, CloudBalanceXmlSolutionFileIO.class,
-                        "unsolved/1600computers-4800processes.xml", CloudBalancingMapBasedEasyScoreCalculator.class,
+                        "1600-4800.xml", CloudBalancingMapBasedEasyScoreCalculator.class,
                         CloudBalancingIncrementalScoreCalculator.class, CloudBalancingConstraintProvider.class,
                         CloudProcess.class),
                 new ProblemDescriptor("coachShuttleGathering", CoachShuttleGatheringSolution.class, CoachShuttleGatheringXmlSolutionFileIO.class,
-                        "unsolved/demo01.xml", CoachShuttleGatheringEasyScoreCalculator.class, null,
+                        "demo1.xml", CoachShuttleGatheringEasyScoreCalculator.class, null,
                         CoachShuttleGatheringConstraintProvider.class, Coach.class, Shuttle.class, BusStop.class, StopOrHub.class, BusOrStop.class),
                 new ProblemDescriptor("conferenceScheduling", ConferenceSolution.class, ConferenceSchedulingXlsxFileIO.class,
-                        "unsolved/216talks-18timeslots-20rooms.xlsx", null, null,
+                        "216-18-20.xlsx", null, null,
                         ConferenceSchedulingConstraintProvider.class, Talk.class),
                 new ProblemDescriptor("curriculumCourse", CourseSchedule.class, CurriculumCourseXmlSolutionFileIO.class,
-                        "unsolved/comp07.xml", null, null, CurriculumCourseConstraintProvider.class, Lecture.class),
+                        "comp07.xml", null, null, CurriculumCourseConstraintProvider.class, Lecture.class),
                 new ProblemDescriptor("examination", Examination.class, ExaminationXmlSolutionFileIO.class,
-                        "unsolved/exam_comp_set3.xml", null, null, ExaminationConstraintProvider.class, Exam.class,
+                        "comp_set8.xml", null, null, ExaminationConstraintProvider.class, Exam.class,
                         LeadingExam.class, FollowingExam.class),
                 new ProblemDescriptor("flightCrewScheduling", FlightCrewSolution.class, FlightCrewSchedulingXlsxFileIO.class,
-                        "unsolved/875flights-7days-Europe.xlsx", null, null,
+                        "875-7-Europe.xlsx", null, null,
                         FlightCrewSchedulingConstraintProvider.class, FlightAssignment.class, Employee.class),
                 new ProblemDescriptor("investment", InvestmentSolution.class, InvestmentXmlSolutionFileIO.class,
-                        "unsolved/de_smet_1.xml", InvestmentEasyScoreCalculator.class,
+                        "de_smet_1.xml", InvestmentEasyScoreCalculator.class,
                         InvestmentIncrementalScoreCalculator.class, InvestmentConstraintProvider.class,
                         AssetClassAllocation.class),
-                new ProblemDescriptor("machineReassignment", MachineReassignment.class, MachineReassignmentFileIO.class,
-                        "import/model_b_4.txt", null, MachineReassignmentIncrementalScoreCalculator.class,
+                new ProblemDescriptor("machineReassignment", MachineReassignment.class, MachineReassignmentXmlSolutionFileIO.class,
+                        "a23.xml", null, MachineReassignmentIncrementalScoreCalculator.class,
                         MachineReassignmentConstraintProvider.class, MrProcessAssignment.class),
                 new ProblemDescriptor("meetingScheduling", MeetingSchedule.class, MeetingSchedulingXlsxFileIO.class,
-                        "unsolved/400meetings-1280timegrains-5rooms.xlsx", null, null,
+                        "100-320-5.xlsx", null, null,
                         MeetingSchedulingConstraintProvider.class, MeetingAssignment.class),
-                new ProblemDescriptor("nQueens", NQueens.class, NQueensXmlSolutionFileIO.class, "unsolved/256queens.xml",
+                new ProblemDescriptor("nQueens", NQueens.class, NQueensXmlSolutionFileIO.class, "256.xml",
                         NQueensMapBasedEasyScoreCalculator.class, NQueensAdvancedIncrementalScoreCalculator.class,
                         NQueensConstraintProvider.class, Queen.class),
                 new ProblemDescriptor("patientAdmissionSchedule", PatientAdmissionSchedule.class,
-                        PatientAdmissionScheduleXmlSolutionFileIO.class, "unsolved/testdata12.xml", null, null,
+                        PatientAdmissionScheduleXmlSolutionFileIO.class, "12.xml", null, null,
                         PatientAdmissionScheduleConstraintProvider.class, BedDesignation.class),
-                new ProblemDescriptor("rockTour", RockTourSolution.class, RockTourXlsxFileIO.class, "unsolved/47shows.xlsx",
+                new ProblemDescriptor("rockTour", RockTourSolution.class, RockTourXlsxFileIO.class, "47shows.xlsx",
                         null, null, RockTourConstraintProvider.class, RockShow.class, RockStandstill.class),
                 new ProblemDescriptor("taskAssigning", TaskAssigningSolution.class, TaskAssigningXmlSolutionFileIO.class,
-                        "unsolved/500tasks-20employees.xml", null, null, TaskAssigningConstraintProvider.class,
+                        "500-20.xml", null, null, TaskAssigningConstraintProvider.class,
                         TaskOrEmployee.class, Task.class),
                 new ProblemDescriptor("tennis", TennisSolution.class, TennisXmlSolutionFileIO.class,
-                        "unsolved/munich-7teams.xml", null, null, TennisConstraintProvider.class,
+                        "munich-7teams.xml", null, null, TennisConstraintProvider.class,
                         TeamAssignment.class),
                 new ProblemDescriptor("travelingTournament", TravelingTournament.class,
                         TravelingTournamentXmlSolutionFileIO.class,
-                        "unsolved/1-nl14.xml", null, null, TravelingTournamentConstraintProvider.class, Match.class),
-                new ProblemDescriptor("tsp", TspSolution.class, TspFileIO.class, "import/cook/air/lu980.tsp",
+                        "4-super14.xml", null, null, TravelingTournamentConstraintProvider.class, Match.class),
+                new ProblemDescriptor("tsp", TspSolution.class, TspXmlSolutionFileIO.class, "lu980.xml",
                         TspEasyScoreCalculator.class, TspIncrementalScoreCalculator.class, TspConstraintProvider.class,
                         Visit.class),
-                new ProblemDescriptor("vehicleRouting", VehicleRoutingSolution.class, VehicleRoutingFileIO.class,
-                        "import/belgium/basic/air/belgium-n2750-k55.vrp", VehicleRoutingEasyScoreCalculator.class,
+                new ProblemDescriptor("vehicleRouting", VehicleRoutingSolution.class, VehicleRoutingXmlSolutionFileIO.class,
+                        "belgium-tw-n2750-k55.xml", VehicleRoutingEasyScoreCalculator.class,
                         VehicleRoutingIncrementalScoreCalculator.class, VehicleRoutingConstraintProvider.class,
                         Standstill.class, Customer.class, TimeWindowedCustomer.class)
         };
@@ -204,7 +204,7 @@ public class ScoreDirectorFactoryBenchmarkApp {
 
         public <Solution_, Score_ extends Score<Score_>> ProblemDescriptor(String exampleId,
                 Class<Solution_> solutionClass, Class<? extends SolutionFileIO<Solution_>> solutionFileIoClass,
-                String inputSolutionFile,
+                String initializedInputSolutionFile,
                 Class<? extends EasyScoreCalculator<Solution_, Score_>> easyScoreCalculatorClass,
                 Class<? extends IncrementalScoreCalculator<Solution_, Score_>> incrementalScoreCalculatorClass,
                 Class<? extends ConstraintProvider> constraintProviderClass,
@@ -212,10 +212,10 @@ public class ScoreDirectorFactoryBenchmarkApp {
             this.exampleId = exampleId;
             this.solutionFileIoClass = solutionFileIoClass == null ? null : solutionFileIoClass.getCanonicalName();
             String parentFolder = exampleId.equals("patientAdmissionSchedule") ? "pas" : exampleId.toLowerCase();
-            String fullInputSolutionPath = "data/" + parentFolder + "/" + inputSolutionFile;
+            String fullInputSolutionPath = "data/" + parentFolder + "-" + initializedInputSolutionFile;
             if (!new File(fullInputSolutionPath).exists()) {
                 throw new IllegalArgumentException(
-                        "No input solution (" + inputSolutionFile + ") for example (" + exampleId + ").");
+                        "No input solution (" + initializedInputSolutionFile + ") for example (" + exampleId + ").");
             }
             this.inputSolutionFile = fullInputSolutionPath;
             String fullDrlPath = "org/optaplanner/examples/" + parentFolder + "/solver/" + exampleId + "Constraints.drl";
