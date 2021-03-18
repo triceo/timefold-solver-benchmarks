@@ -14,11 +14,16 @@
   <termination>
     <terminationCompositionStyle>OR</terminationCompositionStyle>
     <stepCountLimit>100000</stepCountLimit>
-    <unimprovedStepCountLimit>1000</unimprovedStepCountLimit>
+    <unimprovedStepCountLimit>10000</unimprovedStepCountLimit>
     <minutesSpentLimit>10</minutesSpentLimit>
   </termination>
 </#macro>
 
+<!--
+    Run all the examples on the same local search algorithm.
+    We do not care about the final score, we care about score speed.
+    Only selector configs are allowed as that is often problem-specific.
+-->
 <#macro solverDetails benchmarkDescriptor>
   <solutionClass>${benchmarkDescriptor.getSolutionClass()}</solutionClass>
   <#list benchmarkDescriptor.getEntityClasses() as entityClass>
@@ -49,17 +54,6 @@
           </entitySelector>
         </changeMoveSelector>
       </unionMoveSelector>
-      <acceptor>
-        <lateAcceptanceSize>200</lateAcceptanceSize>
-      </acceptor>
-      <forager>
-        <acceptedCountLimit>1</acceptedCountLimit>
-      </forager>
-    </localSearch>
-  <#elseif benchmarkDescriptor.getExampleId() == "conferenceScheduling">
-    <localSearch>
-        <@terminationDetails />
-        <localSearchType>TABU_SEARCH</localSearchType>
     </localSearch>
   <#elseif benchmarkDescriptor.getExampleId() == "curriculumCourse">
     <localSearch>
@@ -70,12 +64,6 @@
           <filterClass>org.optaplanner.examples.curriculumcourse.solver.move.DifferentCourseSwapMoveFilter</filterClass>
         </swapMoveSelector>
       </unionMoveSelector>
-      <acceptor>
-        <lateAcceptanceSize>600</lateAcceptanceSize>
-      </acceptor>
-      <forager>
-        <acceptedCountLimit>4</acceptedCountLimit>
-      </forager>
     </localSearch>
   <#elseif benchmarkDescriptor.getExampleId() == "examination">
     <localSearch>
@@ -101,12 +89,6 @@
             </entitySelector>
           </swapMoveSelector>
         </unionMoveSelector>
-        <acceptor>
-          <entityTabuSize>10</entityTabuSize>
-        </acceptor>
-        <forager>
-          <acceptedCountLimit>2000</acceptedCountLimit>
-        </forager>
     </localSearch>
   <#elseif benchmarkDescriptor.getExampleId() == "flightCrewScheduling">
     <localSearch>
@@ -133,12 +115,6 @@
             <moveIteratorFactoryClass>org.optaplanner.examples.investment.solver.move.factory.InvestmentBiQuantityTransferMoveIteratorFactory</moveIteratorFactoryClass>
           </moveIteratorFactory>
         </unionMoveSelector>
-        <acceptor>
-          <lateAcceptanceSize>400</lateAcceptanceSize>
-        </acceptor>
-        <forager>
-          <acceptedCountLimit>1</acceptedCountLimit>
-        </forager>
     </localSearch>
   <#elseif benchmarkDescriptor.getExampleId() == "machineReassignment">
     <localSearch>
@@ -147,12 +123,6 @@
           <changeMoveSelector/>
           <swapMoveSelector/>
         </unionMoveSelector>
-        <acceptor>
-          <entityTabuSize>7</entityTabuSize>
-        </acceptor>
-        <forager>
-          <acceptedCountLimit>2000</acceptedCountLimit>
-        </forager>
     </localSearch>
   <#elseif benchmarkDescriptor.getExampleId() == "nQueens">
     <localSearch>
@@ -160,12 +130,6 @@
       <changeMoveSelector>
         <selectionOrder>ORIGINAL</selectionOrder>
       </changeMoveSelector>
-      <acceptor>
-        <entityTabuSize>5</entityTabuSize>
-      </acceptor>
-      <forager>
-        <!-- Real world problems require use of <acceptedCountLimit> -->
-      </forager>
     </localSearch>
   <#elseif benchmarkDescriptor.getExampleId() == "patientAdmissionSchedule">
     <localSearch>
@@ -176,12 +140,6 @@
             <moveListFactoryClass>org.optaplanner.examples.pas.solver.move.factory.BedDesignationPillarPartSwapMoveFactory</moveListFactoryClass>
           </moveListFactory>
         </unionMoveSelector>
-        <acceptor>
-          <entityTabuSize>7</entityTabuSize>
-        </acceptor>
-        <forager>
-          <acceptedCountLimit>1000</acceptedCountLimit>
-        </forager>
     </localSearch>
   <#elseif benchmarkDescriptor.getExampleId() == "rockTour">
     <localSearch>
@@ -193,16 +151,6 @@
         <subChainChangeMoveSelector/>
         <subChainSwapMoveSelector/>
       </unionMoveSelector>
-    </localSearch>
-  <#elseif benchmarkDescriptor.getExampleId() == "tennis">
-    <localSearch>
-      <@terminationDetails />
-      <acceptor>
-        <lateAcceptanceSize>500</lateAcceptanceSize>
-      </acceptor>
-      <forager>
-        <acceptedCountLimit>1</acceptedCountLimit>
-      </forager>
     </localSearch>
   <#elseif benchmarkDescriptor.getExampleId() == "travelingTournament">
     <localSearch>
@@ -219,12 +167,6 @@
           <moveListFactoryClass>org.optaplanner.examples.travelingtournament.solver.move.factory.MatchChainRotationsMoveFactory</moveListFactoryClass>
         </moveListFactory>
       </unionMoveSelector>
-      <acceptor>
-        <simulatedAnnealingStartingTemperature>2hard/10000soft</simulatedAnnealingStartingTemperature>
-      </acceptor>
-      <forager>
-        <acceptedCountLimit>4</acceptedCountLimit>
-      </forager>
     </localSearch>
   <#elseif benchmarkDescriptor.getExampleId() == "tsp">
     <localSearch>
@@ -242,12 +184,6 @@
             <selectReversingMoveToo>true</selectReversingMoveToo>
           </subChainChangeMoveSelector>
         </unionMoveSelector>
-        <acceptor>
-          <lateAcceptanceSize>400</lateAcceptanceSize>
-        </acceptor>
-        <forager>
-          <acceptedCountLimit>1</acceptedCountLimit>
-        </forager>
     </localSearch>
   <#elseif benchmarkDescriptor.getExampleId() == "vehicleRouting">
     <localSearch>
@@ -262,12 +198,6 @@
             <selectReversingMoveToo>true</selectReversingMoveToo>
           </subChainSwapMoveSelector>
         </unionMoveSelector>
-        <acceptor>
-          <lateAcceptanceSize>200</lateAcceptanceSize>
-        </acceptor>
-        <forager>
-          <acceptedCountLimit>1</acceptedCountLimit>
-        </forager>
     </localSearch>
   <#else>
       <localSearch>
