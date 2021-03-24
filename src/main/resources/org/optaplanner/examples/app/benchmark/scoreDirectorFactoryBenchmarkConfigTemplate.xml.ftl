@@ -91,6 +91,7 @@
         </unionMoveSelector>
     </localSearch>
   <#elseif benchmarkDescriptor.getExampleId() == "flightCrewScheduling">
+    <constructionHeuristic /> <!-- The XLS can not read initialized solutions. -->
     <localSearch>
       <@terminationDetails />
       <unionMoveSelector>
@@ -142,6 +143,7 @@
         </unionMoveSelector>
     </localSearch>
   <#elseif benchmarkDescriptor.getExampleId() == "rockTour">
+    <constructionHeuristic /> <!-- The XLS can not read initialized solutions. -->
     <localSearch>
       <@terminationDetails />
       <unionMoveSelector>
