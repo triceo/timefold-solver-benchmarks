@@ -12,9 +12,15 @@
 
 <#macro terminationDetails>
   <termination>
-    <terminationCompositionStyle>OR</terminationCompositionStyle>
-    <stepCountLimit>100000</stepCountLimit>
-    <unimprovedStepCountLimit>10000</unimprovedStepCountLimit>
+    <!--
+        Each SDF will do the same amount of work, with the same moves.
+    -->
+    <stepCountLimit>10000</stepCountLimit>
+    <!--
+        Some of the SDFs could only do ~500 steps in 10 minutes.
+        Others will be done with 1000 steps in seconds.
+        Therefore we set the 10-minute limit, otherwise we'd never reach the desired step count.
+    -->
     <minutesSpentLimit>10</minutesSpentLimit>
   </termination>
 </#macro>
