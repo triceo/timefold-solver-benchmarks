@@ -3,7 +3,8 @@ package org.optaplanner.examples.app.problems;
 import org.optaplanner.core.api.score.stream.ConstraintStreamImplType;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
-import org.optaplanner.examples.app.directors.ScoreDirector;
+import org.optaplanner.examples.app.params.ScoreDirector;
+import org.optaplanner.examples.app.params.Example;
 import org.optaplanner.examples.curriculumcourse.domain.CourseSchedule;
 import org.optaplanner.examples.curriculumcourse.domain.Lecture;
 import org.optaplanner.examples.curriculumcourse.domain.Room;
@@ -11,12 +12,11 @@ import org.optaplanner.examples.curriculumcourse.optional.score.CurriculumCourse
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 
 import java.io.File;
-import java.util.List;
 
 public final class CurriculumCourseProblem extends AbstractProblem<CourseSchedule, Lecture, Room> {
 
     public CurriculumCourseProblem(ScoreDirector scoreDirector) {
-        super(scoreDirector);
+        super(Example.CURRICULUM_COURSE, scoreDirector);
     }
 
     @Override
@@ -49,15 +49,15 @@ public final class CurriculumCourseProblem extends AbstractProblem<CourseSchedul
     }
 
     @Override
-    protected CourseSchedule readAndInitializeSolution() {
+    protected CourseSchedule readOriginalSolution() {
         final XStreamSolutionFileIO<CourseSchedule> solutionFileIO =
                 new XStreamSolutionFileIO<>(CourseSchedule.class);
         return solutionFileIO.read(new File("data/curriculumcourse-comp07.xml"));
     }
 
     @Override
-    protected List<Lecture> getEntities(CourseSchedule courseSchedule) {
-        return courseSchedule.getLectureList();
+    protected Class<Lecture> getEntityClass() {
+        return null;
     }
 
 }

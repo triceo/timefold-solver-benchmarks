@@ -1,6 +1,5 @@
 package org.optaplanner.examples.app.params;
 
-import org.optaplanner.examples.app.directors.ScoreDirector;
 import org.optaplanner.examples.app.problems.*;
 
 import java.util.Arrays;
@@ -9,7 +8,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 
-import static org.optaplanner.examples.app.directors.ScoreDirector.*;
+import static org.optaplanner.examples.app.params.ScoreDirector.*;
 
 public enum Example {
 

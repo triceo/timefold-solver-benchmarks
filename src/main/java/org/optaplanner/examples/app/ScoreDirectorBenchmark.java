@@ -31,9 +31,7 @@
 
 package org.optaplanner.examples.app;
 
-import org.openjdk.jmh.annotations.Benchmark;
-import org.openjdk.jmh.annotations.Scope;
-import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
@@ -41,6 +39,8 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.optaplanner.examples.app.params.*;
 
 @State(Scope.Benchmark)
+@Warmup(batchSize = 1, iterations = 1)
+@Measurement(batchSize = 1, iterations = 1)
 public class ScoreDirectorBenchmark {
 
     @Benchmark

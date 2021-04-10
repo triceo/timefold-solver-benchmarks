@@ -1,14 +1,26 @@
 package org.optaplanner.examples.app.problems;
 
-import org.optaplanner.core.api.score.Score;
+import org.optaplanner.core.config.heuristic.selector.common.SelectionCacheType;
+import org.optaplanner.core.config.heuristic.selector.common.SelectionOrder;
+import org.optaplanner.core.config.heuristic.selector.entity.EntitySelectorConfig;
+import org.optaplanner.core.config.heuristic.selector.move.generic.ChangeMoveSelectorConfig;
+import org.optaplanner.core.config.heuristic.selector.value.ValueSelectorConfig;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
+import org.optaplanner.core.config.solver.EnvironmentMode;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
-import org.optaplanner.core.impl.domain.variable.descriptor.VariableDescriptor;
+import org.optaplanner.core.impl.heuristic.HeuristicConfigPolicy;
+import org.optaplanner.core.impl.heuristic.move.Move;
+import org.optaplanner.core.impl.heuristic.selector.move.MoveSelector;
+import org.optaplanner.core.impl.heuristic.selector.move.MoveSelectorFactory;
+import org.optaplanner.core.impl.localsearch.scope.LocalSearchPhaseScope;
+import org.optaplanner.core.impl.localsearch.scope.LocalSearchStepScope;
 import org.optaplanner.core.impl.score.director.InnerScoreDirector;
 import org.optaplanner.core.impl.score.director.InnerScoreDirectorFactory;
-import org.optaplanner.examples.app.directors.ScoreDirector;
+import org.optaplanner.core.impl.solver.scope.SolverScope;
+import org.optaplanner.examples.app.params.Example;
+import org.optaplanner.examples.app.params.ScoreDirector;
 
-import java.util.List;
+import java.util.Iterator;
 import java.util.Objects;
 import java.util.Random;
 
@@ -16,18 +28,24 @@ abstract class AbstractProblem<Solution_, Entity_, Value_> implements Problem {
 
     private final InnerScoreDirectorFactory<Solution_, ?> scoreDirectorFactory;
     private final Solution_ originalSolution;
+    private final MoveSelectorFactory<Solution_> moveSelectorFactory;
 
     private InnerScoreDirector<Solution_, ?> scoreDirector;
-    private Random random;
     private Solution_ solution;
-    private List<Entity_> entityList;
+    private MoveSelector<Solution_> moveSelector;
+    private Iterator<Move<Solution_>> moveIterator;
+    private SolverScope<Solution_> solverScope;
+    private LocalSearchPhaseScope<Solution_> phaseScope;
+    private LocalSearchStepScope<Solution_> stepScope;
 
-    protected AbstractProblem(final ScoreDirector scoreDirector) {
+    protected AbstractProblem(final Example example, final ScoreDirector scoreDirector) {
         final ScoreDirectorFactoryConfig scoreDirectorFactoryConfig =
                 buildScoreDirectorFactoryConfig(Objects.requireNonNull(scoreDirector));
         scoreDirectorFactory =
                 ScoreDirector.buildScoreDirectorFactory(scoreDirectorFactoryConfig, buildSolutionDescriptor());
-        originalSolution = readAndInitializeSolution(); // Expensive; cache this.
+        originalSolution = ProblemInitializer.getSolution(example, scoreDirectorFactory.getSolutionDescriptor(),
+                this::buildScoreDirectorFactoryConfig, this::readOriginalSolution); // Expensive.
+        moveSelectorFactory = buildMoveSelectorFactory();
     }
 
     abstract protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirector scoreDirector);
@@ -36,46 +54,55 @@ abstract class AbstractProblem<Solution_, Entity_, Value_> implements Problem {
 
     abstract protected String getEntityVariableName();
 
-    abstract protected Solution_ readAndInitializeSolution();
+    abstract protected Solution_ readOriginalSolution();
 
-    abstract protected List<Entity_> getEntities(Solution_ solution);
+    abstract protected Class<Entity_> getEntityClass();
 
-    private static <Entity_> Entity_ pickRandomEntity(final Random random, final List<Entity_> entities) {
-        final int entityCount = entities.size();
-        final int randomEntityId = random.nextInt(entityCount);
-        return entities.get(randomEntityId);
+    protected MoveSelectorFactory<Solution_> buildMoveSelectorFactory() {
+        EntitySelectorConfig entitySelectorConfig = new EntitySelectorConfig(getEntityClass());
+        ValueSelectorConfig valueSelectorConfig = new ValueSelectorConfig(getEntityVariableName());
+
+        ChangeMoveSelectorConfig moveSelectorConfig = new ChangeMoveSelectorConfig();
+        moveSelectorConfig.setEntitySelectorConfig(entitySelectorConfig);
+        moveSelectorConfig.setValueSelectorConfig(valueSelectorConfig);
+        return MoveSelectorFactory.create(moveSelectorConfig);
     }
 
     @Override
     public final void setupTrial() {
-        solution = readAndInitializeSolution();
+        solution = readOriginalSolution();
     }
 
     @Override
     public final void setupIteration() {
-        random = new Random(0); // Always measure the same thing.
         scoreDirector = scoreDirectorFactory.buildScoreDirector(false, false);
         solution = scoreDirector.cloneSolution(originalSolution); // Start with the fresh solution again.
-        entityList = getEntities(solution);
         // We only care about incremental performance; therefore calculate the entire solution outside of invocation.
         scoreDirector.setWorkingSolution(solution);
         scoreDirector.triggerVariableListeners();
-        final Score<?> score = scoreDirector.calculateScore();
-        if (!score.isSolutionInitialized()) { // Construction heuristics are not in scope.
-            throw new IllegalStateException("Solution not initialized (" + score + ").");
-        }
+        scoreDirector.calculateScore();
+        // Prepare the move selector that will pick different move for each invocation.
+        solverScope = new SolverScope<>();
+        solverScope.setScoreDirector(scoreDirector);
+        solverScope.setWorkingRandom(new Random(0)); // Always measure the same thing.
+        phaseScope = new LocalSearchPhaseScope<>(solverScope);
+        HeuristicConfigPolicy<Solution_> policy = new HeuristicConfigPolicy<>(EnvironmentMode.REPRODUCIBLE, null,
+                null, null, scoreDirectorFactory);
+        moveSelector = moveSelectorFactory.buildMoveSelector(policy, SelectionCacheType.PHASE, SelectionOrder.RANDOM);
+        moveSelector.solvingStarted(solverScope);
+        moveSelector.phaseStarted(phaseScope);
+        moveIterator = moveSelector.iterator();
     }
 
     @Override
     public final void setupInvocation() {
-        final Entity_ entity = pickRandomEntity(random, entityList);
-        final VariableDescriptor<Solution_> variableDescriptor = scoreDirectorFactory.getSolutionDescriptor()
-                .findVariableDescriptor(entity, getEntityVariableName());
-        final Value_ value = (Value_) variableDescriptor.getValue(entity);
-        scoreDirector.beforeVariableChanged(variableDescriptor, entity);
-        variableDescriptor.setValue(entity, value); // TODO read some new random value
-        scoreDirector.afterVariableChanged(variableDescriptor, entity);
-        scoreDirector.triggerVariableListeners();
+        stepScope = new LocalSearchStepScope<>(phaseScope);
+        moveSelector.stepStarted(stepScope);
+        Move<Solution_> move;
+        do {
+            move = moveIterator.next();
+        } while (!move.isMoveDoable(scoreDirector));
+        move.doMove(scoreDirector);
     }
 
     @Override
@@ -85,18 +112,25 @@ abstract class AbstractProblem<Solution_, Entity_, Value_> implements Problem {
 
     @Override
     public final void tearDownInvocation() {
+        moveSelector.stepEnded(stepScope);
+        stepScope = null;
     }
 
     @Override
     public final void tearDownIteration() {
-        random = null;
         scoreDirector.close();
         scoreDirector = null;
         solution = null;
-        entityList = null;
+        moveIterator = null;
+        moveSelector.phaseEnded(phaseScope);
+        phaseScope = null;
+        moveSelector.solvingEnded(solverScope);
+        solverScope = null;
+        moveSelector = null;
     }
 
     @Override
     public final void teardownTrial() {
     }
+
 }

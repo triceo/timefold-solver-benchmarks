@@ -3,7 +3,8 @@ package org.optaplanner.examples.app.problems;
 import org.optaplanner.core.api.score.stream.ConstraintStreamImplType;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
-import org.optaplanner.examples.app.directors.ScoreDirector;
+import org.optaplanner.examples.app.params.ScoreDirector;
+import org.optaplanner.examples.app.params.Example;
 import org.optaplanner.examples.vehiclerouting.domain.Customer;
 import org.optaplanner.examples.vehiclerouting.domain.Standstill;
 import org.optaplanner.examples.vehiclerouting.domain.VehicleRoutingSolution;
@@ -14,12 +15,11 @@ import org.optaplanner.examples.vehiclerouting.optional.score.VehicleRoutingIncr
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 
 import java.io.File;
-import java.util.List;
 
 public final class VehicleRoutingProblem extends AbstractProblem<VehicleRoutingSolution, Customer, Standstill> {
 
     public VehicleRoutingProblem(ScoreDirector scoreDirector) {
-        super(scoreDirector);
+        super(Example.VEHICLE_ROUTING, scoreDirector);
     }
 
     @Override
@@ -60,15 +60,15 @@ public final class VehicleRoutingProblem extends AbstractProblem<VehicleRoutingS
     }
 
     @Override
-    protected VehicleRoutingSolution readAndInitializeSolution() {
+    protected VehicleRoutingSolution readOriginalSolution() {
         final XStreamSolutionFileIO<VehicleRoutingSolution> solutionFileIO =
                 new XStreamSolutionFileIO<>(VehicleRoutingSolution.class);
         return solutionFileIO.read(new File("data/vehiclerouting-belgium-tw-n2750-k55.xml"));
     }
 
     @Override
-    protected List<Customer> getEntities(VehicleRoutingSolution vehicleRoutingSolution) {
-        return vehicleRoutingSolution.getCustomerList();
+    protected Class<Customer> getEntityClass() {
+        return Customer.class;
     }
 
 }

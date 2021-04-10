@@ -3,7 +3,8 @@ package org.optaplanner.examples.app.problems;
 import org.optaplanner.core.api.score.stream.ConstraintStreamImplType;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
-import org.optaplanner.examples.app.directors.ScoreDirector;
+import org.optaplanner.examples.app.params.ScoreDirector;
+import org.optaplanner.examples.app.params.Example;
 import org.optaplanner.examples.taskassigning.domain.Task;
 import org.optaplanner.examples.taskassigning.domain.TaskAssigningSolution;
 import org.optaplanner.examples.taskassigning.domain.TaskOrEmployee;
@@ -11,12 +12,11 @@ import org.optaplanner.examples.taskassigning.optional.score.TaskAssigningConstr
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 
 import java.io.File;
-import java.util.List;
 
 public final class TaskAssigningProblem extends AbstractProblem<TaskAssigningSolution, Task, TaskOrEmployee> {
 
     public TaskAssigningProblem(ScoreDirector scoreDirector) {
-        super(scoreDirector);
+        super(Example.TASK_ASSIGNING, scoreDirector);
     }
 
     @Override
@@ -53,15 +53,15 @@ public final class TaskAssigningProblem extends AbstractProblem<TaskAssigningSol
     }
 
     @Override
-    protected TaskAssigningSolution readAndInitializeSolution() {
+    protected TaskAssigningSolution readOriginalSolution() {
         final XStreamSolutionFileIO<TaskAssigningSolution> solutionFileIO =
                 new XStreamSolutionFileIO<>(TaskAssigningSolution.class);
         return solutionFileIO.read(new File("data/taskassigning-500-20.xml"));
     }
 
     @Override
-    protected List<Task> getEntities(TaskAssigningSolution taskAssigningSolution) {
-        return taskAssigningSolution.getTaskList();
+    protected Class<Task> getEntityClass() {
+        return Task.class;
     }
 
 }

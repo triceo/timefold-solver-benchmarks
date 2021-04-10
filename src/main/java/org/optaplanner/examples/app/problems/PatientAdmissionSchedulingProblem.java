@@ -3,7 +3,8 @@ package org.optaplanner.examples.app.problems;
 import org.optaplanner.core.api.score.stream.ConstraintStreamImplType;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
-import org.optaplanner.examples.app.directors.ScoreDirector;
+import org.optaplanner.examples.app.params.ScoreDirector;
+import org.optaplanner.examples.app.params.Example;
 import org.optaplanner.examples.pas.domain.Bed;
 import org.optaplanner.examples.pas.domain.BedDesignation;
 import org.optaplanner.examples.pas.domain.PatientAdmissionSchedule;
@@ -11,13 +12,12 @@ import org.optaplanner.examples.pas.optional.score.PatientAdmissionScheduleConst
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 
 import java.io.File;
-import java.util.List;
 
 public final class PatientAdmissionSchedulingProblem
         extends AbstractProblem<PatientAdmissionSchedule, BedDesignation, Bed> {
 
     public PatientAdmissionSchedulingProblem(ScoreDirector scoreDirector) {
-        super(scoreDirector);
+        super(Example.PATIENT_ADMISSION_SCHEDULING, scoreDirector);
     }
 
     @Override
@@ -50,15 +50,15 @@ public final class PatientAdmissionSchedulingProblem
     }
 
     @Override
-    protected PatientAdmissionSchedule readAndInitializeSolution() {
+    protected PatientAdmissionSchedule readOriginalSolution() {
         final XStreamSolutionFileIO<PatientAdmissionSchedule> solutionFileIO =
                 new XStreamSolutionFileIO<>(PatientAdmissionSchedule.class);
         return solutionFileIO.read(new File("data/pas-12.xml"));
     }
 
     @Override
-    protected List<BedDesignation> getEntities(PatientAdmissionSchedule patientAdmissionSchedule) {
-        return patientAdmissionSchedule.getBedDesignationList();
+    protected Class<BedDesignation> getEntityClass() {
+        return BedDesignation.class;
     }
 
 }

@@ -3,7 +3,8 @@ package org.optaplanner.examples.app.problems;
 import org.optaplanner.core.api.score.stream.ConstraintStreamImplType;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
-import org.optaplanner.examples.app.directors.ScoreDirector;
+import org.optaplanner.examples.app.params.ScoreDirector;
+import org.optaplanner.examples.app.params.Example;
 import org.optaplanner.examples.flightcrewscheduling.domain.Employee;
 import org.optaplanner.examples.flightcrewscheduling.domain.FlightAssignment;
 import org.optaplanner.examples.flightcrewscheduling.domain.FlightCrewSolution;
@@ -11,12 +12,11 @@ import org.optaplanner.examples.flightcrewscheduling.optional.score.FlightCrewSc
 import org.optaplanner.examples.flightcrewscheduling.persistence.FlightCrewSchedulingXlsxFileIO;
 
 import java.io.File;
-import java.util.List;
 
 public final class FlightCrewSchedulingProblem extends AbstractProblem<FlightCrewSolution, FlightAssignment, Employee> {
 
     public FlightCrewSchedulingProblem(ScoreDirector scoreDirector) {
-        super(scoreDirector);
+        super(Example.FLIGHT_CREW_SCHEDULING, scoreDirector);
     }
 
     @Override
@@ -50,14 +50,14 @@ public final class FlightCrewSchedulingProblem extends AbstractProblem<FlightCre
     }
 
     @Override
-    protected FlightCrewSolution readAndInitializeSolution() {
+    protected FlightCrewSolution readOriginalSolution() {
         return new FlightCrewSchedulingXlsxFileIO()
                 .read(new File("data/flightcrewscheduling-875-7-Europe.xlsx"));
     }
 
     @Override
-    protected List<FlightAssignment> getEntities(FlightCrewSolution flightCrewSolution) {
-        return flightCrewSolution.getFlightAssignmentList();
+    protected Class<FlightAssignment> getEntityClass() {
+        return FlightAssignment.class;
     }
 
 }

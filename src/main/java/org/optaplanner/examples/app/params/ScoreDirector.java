@@ -1,4 +1,4 @@
-package org.optaplanner.examples.app.directors;
+package org.optaplanner.examples.app.params;
 
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.config.solver.EnvironmentMode;
@@ -6,12 +6,15 @@ import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
 import org.optaplanner.core.impl.score.director.InnerScoreDirectorFactory;
 import org.optaplanner.core.impl.score.director.ScoreDirectorFactoryFactory;
 
-public enum ScoreDirector {
+/**
+ * Order by expected speed increase.
+ */
+public enum ScoreDirector implements Comparable<ScoreDirector> {
 
-    DRL,
-    CONSTRAINT_STREAMS_BAVET,
-    CONSTRAINT_STREAMS_DROOLS,
     JAVA_EASY,
+    DRL,
+    CONSTRAINT_STREAMS_DROOLS,
+    CONSTRAINT_STREAMS_BAVET,
     JAVA_INCREMENTAL;
 
     public static <Solution_> InnerScoreDirectorFactory<Solution_, ?> buildScoreDirectorFactory(
@@ -21,5 +24,7 @@ public enum ScoreDirector {
         return scoreDirectorFactoryFactory.buildScoreDirectorFactory(ScoreDirector.class.getClassLoader(),
                 EnvironmentMode.REPRODUCIBLE, solutionDescriptor);
     }
+
+
 
 }

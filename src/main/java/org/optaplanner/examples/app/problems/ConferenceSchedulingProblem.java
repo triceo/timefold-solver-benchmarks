@@ -3,7 +3,8 @@ package org.optaplanner.examples.app.problems;
 import org.optaplanner.core.api.score.stream.ConstraintStreamImplType;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
-import org.optaplanner.examples.app.directors.ScoreDirector;
+import org.optaplanner.examples.app.params.ScoreDirector;
+import org.optaplanner.examples.app.params.Example;
 import org.optaplanner.examples.conferencescheduling.domain.ConferenceSolution;
 import org.optaplanner.examples.conferencescheduling.domain.Room;
 import org.optaplanner.examples.conferencescheduling.domain.Talk;
@@ -11,12 +12,11 @@ import org.optaplanner.examples.conferencescheduling.optional.score.ConferenceSc
 import org.optaplanner.examples.conferencescheduling.persistence.ConferenceSchedulingXlsxFileIO;
 
 import java.io.File;
-import java.util.List;
 
 public final class ConferenceSchedulingProblem extends AbstractProblem<ConferenceSolution, Talk, Room> {
 
     public ConferenceSchedulingProblem(ScoreDirector scoreDirector) {
-        super(scoreDirector);
+        super(Example.CONFERENCE_SCHEDULING, scoreDirector);
     }
 
     @Override
@@ -49,14 +49,14 @@ public final class ConferenceSchedulingProblem extends AbstractProblem<Conferenc
     }
 
     @Override
-    protected ConferenceSolution readAndInitializeSolution() {
+    protected ConferenceSolution readOriginalSolution() {
         return new ConferenceSchedulingXlsxFileIO()
                 .read(new File("data/conferencescheduling-216-18-20.xlsx"));
     }
 
     @Override
-    protected List<Talk> getEntities(ConferenceSolution conferenceSolution) {
-        return conferenceSolution.getTalkList();
+    protected Class<Talk> getEntityClass() {
+        return Talk.class;
     }
 
 }

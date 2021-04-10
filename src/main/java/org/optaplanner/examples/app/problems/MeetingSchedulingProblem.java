@@ -3,7 +3,8 @@ package org.optaplanner.examples.app.problems;
 import org.optaplanner.core.api.score.stream.ConstraintStreamImplType;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
-import org.optaplanner.examples.app.directors.ScoreDirector;
+import org.optaplanner.examples.app.params.ScoreDirector;
+import org.optaplanner.examples.app.params.Example;
 import org.optaplanner.examples.meetingscheduling.domain.MeetingAssignment;
 import org.optaplanner.examples.meetingscheduling.domain.MeetingSchedule;
 import org.optaplanner.examples.meetingscheduling.domain.Room;
@@ -11,12 +12,11 @@ import org.optaplanner.examples.meetingscheduling.optional.score.MeetingScheduli
 import org.optaplanner.examples.meetingscheduling.persistence.MeetingSchedulingXlsxFileIO;
 
 import java.io.File;
-import java.util.List;
 
 public final class MeetingSchedulingProblem extends AbstractProblem<MeetingSchedule, MeetingAssignment, Room> {
 
     public MeetingSchedulingProblem(ScoreDirector scoreDirector) {
-        super(scoreDirector);
+        super(Example.MEETING_SCHEDULING, scoreDirector);
     }
 
     @Override
@@ -49,14 +49,14 @@ public final class MeetingSchedulingProblem extends AbstractProblem<MeetingSched
     }
 
     @Override
-    protected MeetingSchedule readAndInitializeSolution() {
+    protected MeetingSchedule readOriginalSolution() {
         return new MeetingSchedulingXlsxFileIO()
                 .read(new File("data/meetingscheduling-100-320-5.xlsx"));
     }
 
     @Override
-    protected List<MeetingAssignment> getEntities(MeetingSchedule meetingSchedule) {
-        return meetingSchedule.getMeetingAssignmentList();
+    protected Class<MeetingAssignment> getEntityClass() {
+        return MeetingAssignment.class;
     }
 
 }

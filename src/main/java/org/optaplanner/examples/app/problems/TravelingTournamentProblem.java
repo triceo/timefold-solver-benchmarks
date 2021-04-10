@@ -3,7 +3,8 @@ package org.optaplanner.examples.app.problems;
 import org.optaplanner.core.api.score.stream.ConstraintStreamImplType;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
-import org.optaplanner.examples.app.directors.ScoreDirector;
+import org.optaplanner.examples.app.params.ScoreDirector;
+import org.optaplanner.examples.app.params.Example;
 import org.optaplanner.examples.travelingtournament.domain.Day;
 import org.optaplanner.examples.travelingtournament.domain.Match;
 import org.optaplanner.examples.travelingtournament.domain.TravelingTournament;
@@ -11,12 +12,11 @@ import org.optaplanner.examples.travelingtournament.optional.score.TravelingTour
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 
 import java.io.File;
-import java.util.List;
 
 public final class TravelingTournamentProblem extends AbstractProblem<TravelingTournament, Match, Day> {
 
     public TravelingTournamentProblem(ScoreDirector scoreDirector) {
-        super(scoreDirector);
+        super(Example.TRAVELING_TOURNAMENT, scoreDirector);
     }
 
     @Override
@@ -49,15 +49,15 @@ public final class TravelingTournamentProblem extends AbstractProblem<TravelingT
     }
 
     @Override
-    protected TravelingTournament readAndInitializeSolution() {
+    protected TravelingTournament readOriginalSolution() {
         final XStreamSolutionFileIO<TravelingTournament> solutionFileIO =
                 new XStreamSolutionFileIO<>(TravelingTournament.class);
         return solutionFileIO.read(new File("data/travelingtournament-4-super14.xml"));
     }
 
     @Override
-    protected List<Match> getEntities(TravelingTournament travelingTournament) {
-        return travelingTournament.getMatchList();
+    protected Class<Match> getEntityClass() {
+        return Match.class;
     }
 
 }

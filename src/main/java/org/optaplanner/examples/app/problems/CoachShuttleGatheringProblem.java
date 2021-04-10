@@ -3,19 +3,19 @@ package org.optaplanner.examples.app.problems;
 import org.optaplanner.core.api.score.stream.ConstraintStreamImplType;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
-import org.optaplanner.examples.app.directors.ScoreDirector;
+import org.optaplanner.examples.app.params.ScoreDirector;
+import org.optaplanner.examples.app.params.Example;
 import org.optaplanner.examples.coachshuttlegathering.domain.*;
 import org.optaplanner.examples.coachshuttlegathering.optional.score.CoachShuttleGatheringConstraintProvider;
 import org.optaplanner.examples.coachshuttlegathering.optional.score.CoachShuttleGatheringEasyScoreCalculator;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 
 import java.io.File;
-import java.util.List;
 
 public final class CoachShuttleGatheringProblem extends AbstractProblem<CoachShuttleGatheringSolution, Shuttle, StopOrHub> {
 
     public CoachShuttleGatheringProblem(ScoreDirector scoreDirector) {
-        super(scoreDirector);
+        super(Example.COACH_SHUTTLE_GATHERING, scoreDirector);
     }
 
     @Override
@@ -51,15 +51,15 @@ public final class CoachShuttleGatheringProblem extends AbstractProblem<CoachShu
     }
 
     @Override
-    protected CoachShuttleGatheringSolution readAndInitializeSolution() {
+    protected CoachShuttleGatheringSolution readOriginalSolution() {
         final XStreamSolutionFileIO<CoachShuttleGatheringSolution> solutionFileIO =
                 new XStreamSolutionFileIO<>(CoachShuttleGatheringSolution.class);
         return solutionFileIO.read(new File("data/coachshuttlegathering-demo1.xml"));
     }
 
     @Override
-    protected List<Shuttle> getEntities(CoachShuttleGatheringSolution coachShuttleGatheringSolution) {
-        return coachShuttleGatheringSolution.getShuttleList();
+    protected Class<Shuttle> getEntityClass() {
+        return Shuttle.class;
     }
 
 }

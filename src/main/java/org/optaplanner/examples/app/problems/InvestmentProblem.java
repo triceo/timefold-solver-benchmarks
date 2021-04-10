@@ -3,7 +3,8 @@ package org.optaplanner.examples.app.problems;
 import org.optaplanner.core.api.score.stream.ConstraintStreamImplType;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
-import org.optaplanner.examples.app.directors.ScoreDirector;
+import org.optaplanner.examples.app.params.ScoreDirector;
+import org.optaplanner.examples.app.params.Example;
 import org.optaplanner.examples.investment.domain.AssetClassAllocation;
 import org.optaplanner.examples.investment.domain.InvestmentSolution;
 import org.optaplanner.examples.investment.optional.score.InvestmentConstraintProvider;
@@ -12,12 +13,11 @@ import org.optaplanner.examples.investment.optional.score.InvestmentIncrementalS
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 
 import java.io.File;
-import java.util.List;
 
 public final class InvestmentProblem extends AbstractProblem<InvestmentSolution, AssetClassAllocation, Long> {
 
     public InvestmentProblem(ScoreDirector scoreDirector) {
-        super(scoreDirector);
+        super(Example.INVESTMENT, scoreDirector);
     }
 
     @Override
@@ -54,15 +54,15 @@ public final class InvestmentProblem extends AbstractProblem<InvestmentSolution,
     }
 
     @Override
-    protected InvestmentSolution readAndInitializeSolution() {
+    protected InvestmentSolution readOriginalSolution() {
         final XStreamSolutionFileIO<InvestmentSolution> solutionFileIO =
                 new XStreamSolutionFileIO<>(InvestmentSolution.class);
         return solutionFileIO.read(new File("data/investment-de_smet_1.xml"));
     }
 
     @Override
-    protected List<AssetClassAllocation> getEntities(InvestmentSolution investmentSolution) {
-        return investmentSolution.getAssetClassAllocationList();
+    protected Class<AssetClassAllocation> getEntityClass() {
+        return AssetClassAllocation.class;
     }
 
 }

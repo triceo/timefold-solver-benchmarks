@@ -3,7 +3,8 @@ package org.optaplanner.examples.app.problems;
 import org.optaplanner.core.api.score.stream.ConstraintStreamImplType;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
-import org.optaplanner.examples.app.directors.ScoreDirector;
+import org.optaplanner.examples.app.params.ScoreDirector;
+import org.optaplanner.examples.app.params.Example;
 import org.optaplanner.examples.nqueens.domain.NQueens;
 import org.optaplanner.examples.nqueens.domain.Queen;
 import org.optaplanner.examples.nqueens.domain.Row;
@@ -13,12 +14,11 @@ import org.optaplanner.examples.nqueens.optional.score.NQueensMapBasedEasyScoreC
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 
 import java.io.File;
-import java.util.List;
 
 public final class NQueensProblem extends AbstractProblem<NQueens, Queen, Row> {
 
     public NQueensProblem(ScoreDirector scoreDirector) {
-        super(scoreDirector);
+        super(Example.NQUEENS, scoreDirector);
     }
 
     @Override
@@ -58,15 +58,15 @@ public final class NQueensProblem extends AbstractProblem<NQueens, Queen, Row> {
     }
 
     @Override
-    protected NQueens readAndInitializeSolution() {
+    protected NQueens readOriginalSolution() {
         final XStreamSolutionFileIO<NQueens> solutionFileIO =
                 new XStreamSolutionFileIO<>(NQueens.class);
         return solutionFileIO.read(new File("data/nqueens-256.xml"));
     }
 
     @Override
-    protected List<Queen> getEntities(NQueens nQueens) {
-        return nQueens.getQueenList();
+    protected Class<Queen> getEntityClass() {
+        return Queen.class;
     }
 
 }
