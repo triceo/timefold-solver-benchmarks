@@ -46,10 +46,6 @@ abstract class AbstractProblem<Solution_, Entity_, Value_> implements Problem {
         return entities.get(randomEntityId);
     }
 
-    abstract protected Value_ readValue(Entity_ entity);
-
-    abstract protected void writeValue(Entity_ entity, Value_ value_);
-
     @Override
     public final void setupTrial() {
         solution = readAndInitializeSolution();
@@ -61,28 +57,25 @@ abstract class AbstractProblem<Solution_, Entity_, Value_> implements Problem {
         scoreDirector = scoreDirectorFactory.buildScoreDirector(false, false);
         solution = scoreDirector.cloneSolution(originalSolution); // Start with the fresh solution again.
         entityList = getEntities(solution);
+        // We only care about incremental performance; therefore calculate the entire solution outside of invocation.
         scoreDirector.setWorkingSolution(solution);
-        final Score<?> score = scoreDirector.calculateScore(); // We only care about incremental performance.
-        if (!score.isSolutionInitialized()) {
-            throw new AssertionError("Solution not initialized.");
+        scoreDirector.triggerVariableListeners();
+        final Score<?> score = scoreDirector.calculateScore();
+        if (!score.isSolutionInitialized()) { // Construction heuristics are not in scope.
+            throw new IllegalStateException("Solution not initialized (" + score + ").");
         }
     }
 
     @Override
     public final void setupInvocation() {
-        final Entity_ leftEntity = pickRandomEntity(random, entityList);
-        final Entity_ rightEntity = pickRandomEntity(random, entityList);
-        // We don't want to run any variable listeners inside the invocation.
-        final Value_ leftValue = readValue(leftEntity);
-        final Value_ rightValue = readValue(rightEntity);
+        final Entity_ entity = pickRandomEntity(random, entityList);
         final VariableDescriptor<Solution_> variableDescriptor = scoreDirectorFactory.getSolutionDescriptor()
-                .findVariableDescriptor(leftEntity, getEntityVariableName());
-        scoreDirector.beforeVariableChanged(variableDescriptor, leftEntity);
-        writeValue(leftEntity, rightValue);
-        scoreDirector.afterVariableChanged(variableDescriptor, leftEntity);
-        scoreDirector.beforeVariableChanged(variableDescriptor, rightEntity);
-        writeValue(rightEntity, leftValue);
-        scoreDirector.afterVariableChanged(variableDescriptor, rightEntity);
+                .findVariableDescriptor(entity, getEntityVariableName());
+        final Value_ value = (Value_) variableDescriptor.getValue(entity);
+        scoreDirector.beforeVariableChanged(variableDescriptor, entity);
+        variableDescriptor.setValue(entity, value); // TODO read some new random value
+        scoreDirector.afterVariableChanged(variableDescriptor, entity);
+        scoreDirector.triggerVariableListeners();
     }
 
     @Override
@@ -97,6 +90,7 @@ abstract class AbstractProblem<Solution_, Entity_, Value_> implements Problem {
     @Override
     public final void tearDownIteration() {
         random = null;
+        scoreDirector.close();
         scoreDirector = null;
         solution = null;
         entityList = null;
@@ -104,7 +98,5 @@ abstract class AbstractProblem<Solution_, Entity_, Value_> implements Problem {
 
     @Override
     public final void teardownTrial() {
-        scoreDirector.close();
-        scoreDirector = null;
     }
 }

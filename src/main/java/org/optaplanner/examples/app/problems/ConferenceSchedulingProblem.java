@@ -29,7 +29,7 @@ public final class ConferenceSchedulingProblem extends AbstractProblem<Conferenc
                         .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
             case DRL:
                 return scoreDirectorFactoryConfig
-                        .withScoreDrls("/org/optaplanner/examples/conferencescheduling/solver/conferenceSchedulingConstraints.drl");
+                        .withScoreDrls("org/optaplanner/examples/conferencescheduling/solver/conferenceSchedulingConstraints.drl");
             case CONSTRAINT_STREAMS_BAVET:
             case JAVA_EASY:
             case JAVA_INCREMENTAL:
@@ -40,7 +40,7 @@ public final class ConferenceSchedulingProblem extends AbstractProblem<Conferenc
 
     @Override
     protected SolutionDescriptor<ConferenceSolution> buildSolutionDescriptor() {
-        return new SolutionDescriptor<>(ConferenceSolution.class);
+        return SolutionDescriptor.buildSolutionDescriptor(ConferenceSolution.class, Talk.class);
     }
 
     @Override
@@ -57,16 +57,6 @@ public final class ConferenceSchedulingProblem extends AbstractProblem<Conferenc
     @Override
     protected List<Talk> getEntities(ConferenceSolution conferenceSolution) {
         return conferenceSolution.getTalkList();
-    }
-
-    @Override
-    protected Room readValue(Talk talk) {
-        return talk.getRoom();
-    }
-
-    @Override
-    protected void writeValue(Talk talk, Room room) {
-        talk.setRoom(room);
     }
 
 }

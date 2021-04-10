@@ -29,7 +29,7 @@ public final class FlightCrewSchedulingProblem extends AbstractProblem<FlightCre
                         .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
             case DRL:
                 return scoreDirectorFactoryConfig
-                        .withScoreDrls("/org/optaplanner/examples/flightcrewscheduling/solver/flightCrewSchedulingConstraints.drl");
+                        .withScoreDrls("org/optaplanner/examples/flightcrewscheduling/solver/flightCrewSchedulingConstraints.drl");
             case CONSTRAINT_STREAMS_BAVET:
             case JAVA_EASY:
             case JAVA_INCREMENTAL:
@@ -40,7 +40,8 @@ public final class FlightCrewSchedulingProblem extends AbstractProblem<FlightCre
 
     @Override
     protected SolutionDescriptor<FlightCrewSolution> buildSolutionDescriptor() {
-        return new SolutionDescriptor<>(FlightCrewSolution.class);
+        return SolutionDescriptor.buildSolutionDescriptor(FlightCrewSolution.class, FlightAssignment.class,
+                Employee.class);
     }
 
     @Override
@@ -57,16 +58,6 @@ public final class FlightCrewSchedulingProblem extends AbstractProblem<FlightCre
     @Override
     protected List<FlightAssignment> getEntities(FlightCrewSolution flightCrewSolution) {
         return flightCrewSolution.getFlightAssignmentList();
-    }
-
-    @Override
-    protected Employee readValue(FlightAssignment flightAssignment) {
-        return flightAssignment.getEmployee();
-    }
-
-    @Override
-    protected void writeValue(FlightAssignment flightAssignment, Employee employee) {
-        flightAssignment.setEmployee(employee);
     }
 
 }

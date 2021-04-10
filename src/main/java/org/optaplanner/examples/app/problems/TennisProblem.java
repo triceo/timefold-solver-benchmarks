@@ -29,7 +29,7 @@ public final class TennisProblem extends AbstractProblem<TennisSolution, TeamAss
                         .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
             case DRL:
                 return scoreDirectorFactoryConfig
-                        .withScoreDrls("/org/optaplanner/examples/tennis/solver/tennisConstraints.drl");
+                        .withScoreDrls("org/optaplanner/examples/tennis/solver/tennisConstraints.drl");
             case CONSTRAINT_STREAMS_BAVET:
             case JAVA_EASY:
             case JAVA_INCREMENTAL:
@@ -40,7 +40,7 @@ public final class TennisProblem extends AbstractProblem<TennisSolution, TeamAss
 
     @Override
     protected SolutionDescriptor<TennisSolution> buildSolutionDescriptor() {
-        return new SolutionDescriptor<>(TennisSolution.class);
+        return SolutionDescriptor.buildSolutionDescriptor(TennisSolution.class, TeamAssignment.class);
     }
 
     @Override
@@ -58,16 +58,6 @@ public final class TennisProblem extends AbstractProblem<TennisSolution, TeamAss
     @Override
     protected List<TeamAssignment> getEntities(TennisSolution tennisSolution) {
         return tennisSolution.getTeamAssignmentList();
-    }
-
-    @Override
-    protected Team readValue(TeamAssignment teamAssignment) {
-        return teamAssignment.getTeam();
-    }
-
-    @Override
-    protected void writeValue(TeamAssignment teamAssignment, Team team) {
-        teamAssignment.setTeam(team);
     }
 
 }

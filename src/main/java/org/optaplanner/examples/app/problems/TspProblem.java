@@ -31,7 +31,7 @@ public final class TspProblem extends AbstractProblem<TspSolution, Visit, Stands
                         .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
             case DRL:
                 return scoreDirectorFactoryConfig
-                        .withScoreDrls("/org/optaplanner/examples/tsp/solver/tspConstraints.drl");
+                        .withScoreDrls("org/optaplanner/examples/tsp/solver/tspConstraints.drl");
             case JAVA_EASY:
                 return scoreDirectorFactoryConfig
                         .withEasyScoreCalculatorClass(TspEasyScoreCalculator.class);
@@ -46,7 +46,7 @@ public final class TspProblem extends AbstractProblem<TspSolution, Visit, Stands
 
     @Override
     protected SolutionDescriptor<TspSolution> buildSolutionDescriptor() {
-        return new SolutionDescriptor<>(TspSolution.class);
+        return SolutionDescriptor.buildSolutionDescriptor(TspSolution.class, Visit.class);
     }
 
     @Override
@@ -64,16 +64,6 @@ public final class TspProblem extends AbstractProblem<TspSolution, Visit, Stands
     @Override
     protected List<Visit> getEntities(TspSolution tspSolution) {
         return tspSolution.getVisitList();
-    }
-
-    @Override
-    protected Standstill readValue(Visit visit) {
-        return visit.getPreviousStandstill();
-    }
-
-    @Override
-    protected void writeValue(Visit visit, Standstill standstill) {
-        visit.setPreviousStandstill(standstill);
     }
 
 }

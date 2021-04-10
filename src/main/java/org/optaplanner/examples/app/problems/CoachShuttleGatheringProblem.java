@@ -4,11 +4,9 @@ import org.optaplanner.core.api.score.stream.ConstraintStreamImplType;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
 import org.optaplanner.examples.app.directors.ScoreDirector;
-import org.optaplanner.examples.cloudbalancing.optional.score.CloudBalancingMapBasedEasyScoreCalculator;
-import org.optaplanner.examples.coachshuttlegathering.domain.CoachShuttleGatheringSolution;
-import org.optaplanner.examples.coachshuttlegathering.domain.Shuttle;
-import org.optaplanner.examples.coachshuttlegathering.domain.StopOrHub;
+import org.optaplanner.examples.coachshuttlegathering.domain.*;
 import org.optaplanner.examples.coachshuttlegathering.optional.score.CoachShuttleGatheringConstraintProvider;
+import org.optaplanner.examples.coachshuttlegathering.optional.score.CoachShuttleGatheringEasyScoreCalculator;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 
 import java.io.File;
@@ -30,10 +28,10 @@ public final class CoachShuttleGatheringProblem extends AbstractProblem<CoachShu
                         .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
             case DRL:
                 return scoreDirectorFactoryConfig
-                        .withScoreDrls("/org/optaplanner/examples/coachshuttlegathering/solver/coachShuttleGatheringConstraints.drl");
+                        .withScoreDrls("org/optaplanner/examples/coachshuttlegathering/solver/coachShuttleGatheringConstraints.drl");
             case JAVA_EASY:
                 return scoreDirectorFactoryConfig
-                        .withEasyScoreCalculatorClass(CloudBalancingMapBasedEasyScoreCalculator.class);
+                        .withEasyScoreCalculatorClass(CoachShuttleGatheringEasyScoreCalculator.class);
             case CONSTRAINT_STREAMS_BAVET:
             case JAVA_INCREMENTAL:
             default:
@@ -43,7 +41,8 @@ public final class CoachShuttleGatheringProblem extends AbstractProblem<CoachShu
 
     @Override
     protected SolutionDescriptor<CoachShuttleGatheringSolution> buildSolutionDescriptor() {
-        return new SolutionDescriptor<>(CoachShuttleGatheringSolution.class);
+        return SolutionDescriptor.buildSolutionDescriptor(CoachShuttleGatheringSolution.class, Coach.class,
+                Shuttle.class, BusStop.class, StopOrHub.class, BusOrStop.class);
     }
 
     @Override
@@ -61,16 +60,6 @@ public final class CoachShuttleGatheringProblem extends AbstractProblem<CoachShu
     @Override
     protected List<Shuttle> getEntities(CoachShuttleGatheringSolution coachShuttleGatheringSolution) {
         return coachShuttleGatheringSolution.getShuttleList();
-    }
-
-    @Override
-    protected StopOrHub readValue(Shuttle shuttle) {
-        return shuttle.getDestination();
-    }
-
-    @Override
-    protected void writeValue(Shuttle shuttle, StopOrHub stopOrHub) {
-        shuttle.setDestination(stopOrHub);
     }
 
 }

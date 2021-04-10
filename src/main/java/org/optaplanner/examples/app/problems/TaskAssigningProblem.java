@@ -33,7 +33,7 @@ public final class TaskAssigningProblem extends AbstractProblem<TaskAssigningSol
                         .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
             case DRL:
                 return scoreDirectorFactoryConfig
-                        .withScoreDrls("/org/optaplanner/examples/taskassigning/solver/taskAssigningConstraints.drl");
+                        .withScoreDrls("org/optaplanner/examples/taskassigning/solver/taskAssigningConstraints.drl");
             case JAVA_EASY:
             case JAVA_INCREMENTAL:
             default:
@@ -43,7 +43,8 @@ public final class TaskAssigningProblem extends AbstractProblem<TaskAssigningSol
 
     @Override
     protected SolutionDescriptor<TaskAssigningSolution> buildSolutionDescriptor() {
-        return new SolutionDescriptor<>(TaskAssigningSolution.class);
+        return SolutionDescriptor.buildSolutionDescriptor(TaskAssigningSolution.class, TaskOrEmployee.class,
+                Task.class);
     }
 
     @Override
@@ -61,16 +62,6 @@ public final class TaskAssigningProblem extends AbstractProblem<TaskAssigningSol
     @Override
     protected List<Task> getEntities(TaskAssigningSolution taskAssigningSolution) {
         return taskAssigningSolution.getTaskList();
-    }
-
-    @Override
-    protected TaskOrEmployee readValue(Task task) {
-        return task.getPreviousTaskOrEmployee();
-    }
-
-    @Override
-    protected void writeValue(Task task, TaskOrEmployee taskOrEmployee) {
-        task.setPreviousTaskOrEmployee(taskOrEmployee);
     }
 
 }

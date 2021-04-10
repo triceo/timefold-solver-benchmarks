@@ -7,6 +7,7 @@ import org.optaplanner.examples.app.directors.ScoreDirector;
 import org.optaplanner.examples.vehiclerouting.domain.Customer;
 import org.optaplanner.examples.vehiclerouting.domain.Standstill;
 import org.optaplanner.examples.vehiclerouting.domain.VehicleRoutingSolution;
+import org.optaplanner.examples.vehiclerouting.domain.timewindowed.TimeWindowedCustomer;
 import org.optaplanner.examples.vehiclerouting.optional.score.VehicleRoutingConstraintProvider;
 import org.optaplanner.examples.vehiclerouting.optional.score.VehicleRoutingEasyScoreCalculator;
 import org.optaplanner.examples.vehiclerouting.optional.score.VehicleRoutingIncrementalScoreCalculator;
@@ -35,7 +36,7 @@ public final class VehicleRoutingProblem extends AbstractProblem<VehicleRoutingS
                         .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
             case DRL:
                 return scoreDirectorFactoryConfig
-                        .withScoreDrls("/org/optaplanner/examples/vehiclerouting/solver/vehicleRoutingConstraints.drl");
+                        .withScoreDrls("org/optaplanner/examples/vehiclerouting/solver/vehicleRoutingConstraints.drl");
             case JAVA_EASY:
                 return scoreDirectorFactoryConfig
                         .withEasyScoreCalculatorClass(VehicleRoutingEasyScoreCalculator.class);
@@ -49,7 +50,8 @@ public final class VehicleRoutingProblem extends AbstractProblem<VehicleRoutingS
 
     @Override
     protected SolutionDescriptor<VehicleRoutingSolution> buildSolutionDescriptor() {
-        return new SolutionDescriptor<>(VehicleRoutingSolution.class);
+        return SolutionDescriptor.buildSolutionDescriptor(VehicleRoutingSolution.class, Standstill.class,
+                Customer.class, TimeWindowedCustomer.class);
     }
 
     @Override
@@ -67,16 +69,6 @@ public final class VehicleRoutingProblem extends AbstractProblem<VehicleRoutingS
     @Override
     protected List<Customer> getEntities(VehicleRoutingSolution vehicleRoutingSolution) {
         return vehicleRoutingSolution.getCustomerList();
-    }
-
-    @Override
-    protected Standstill readValue(Customer customer) {
-        return customer.getPreviousStandstill();
-    }
-
-    @Override
-    protected void writeValue(Customer customer, Standstill standstill) {
-        customer.setPreviousStandstill(standstill);
     }
 
 }

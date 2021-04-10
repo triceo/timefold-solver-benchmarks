@@ -30,7 +30,7 @@ public final class InvestmentProblem extends AbstractProblem<InvestmentSolution,
                         .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
             case DRL:
                 return scoreDirectorFactoryConfig
-                        .withScoreDrls("/org/optaplanner/examples/investment/solver/investmentConstraints.drl");
+                        .withScoreDrls("org/optaplanner/examples/investment/solver/investmentConstraints.drl");
             case JAVA_EASY:
                 return scoreDirectorFactoryConfig
                         .withEasyScoreCalculatorClass(InvestmentEasyScoreCalculator.class);
@@ -45,7 +45,7 @@ public final class InvestmentProblem extends AbstractProblem<InvestmentSolution,
 
     @Override
     protected SolutionDescriptor<InvestmentSolution> buildSolutionDescriptor() {
-        return new SolutionDescriptor<>(InvestmentSolution.class);
+        return SolutionDescriptor.buildSolutionDescriptor(InvestmentSolution.class, AssetClassAllocation.class);
     }
 
     @Override
@@ -63,16 +63,6 @@ public final class InvestmentProblem extends AbstractProblem<InvestmentSolution,
     @Override
     protected List<AssetClassAllocation> getEntities(InvestmentSolution investmentSolution) {
         return investmentSolution.getAssetClassAllocationList();
-    }
-
-    @Override
-    protected Long readValue(AssetClassAllocation assetClassAllocation) {
-        return assetClassAllocation.getQuantityMillis();
-    }
-
-    @Override
-    protected void writeValue(AssetClassAllocation assetClassAllocation, Long aLong) {
-        assetClassAllocation.setQuantityMillis(aLong);
     }
 
 }

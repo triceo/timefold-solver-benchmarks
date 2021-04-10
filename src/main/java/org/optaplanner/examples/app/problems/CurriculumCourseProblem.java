@@ -29,7 +29,7 @@ public final class CurriculumCourseProblem extends AbstractProblem<CourseSchedul
                         .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
             case DRL:
                 return scoreDirectorFactoryConfig
-                        .withScoreDrls("/org/optaplanner/examples/curriculumcourse/solver/curriculumCourseConstraints.drl");
+                        .withScoreDrls("org/optaplanner/examples/curriculumcourse/solver/curriculumCourseConstraints.drl");
             case CONSTRAINT_STREAMS_BAVET:
             case JAVA_EASY:
             case JAVA_INCREMENTAL:
@@ -40,7 +40,7 @@ public final class CurriculumCourseProblem extends AbstractProblem<CourseSchedul
 
     @Override
     protected SolutionDescriptor<CourseSchedule> buildSolutionDescriptor() {
-        return new SolutionDescriptor<>(CourseSchedule.class);
+        return SolutionDescriptor.buildSolutionDescriptor(CourseSchedule.class, Lecture.class);
     }
 
     @Override
@@ -58,16 +58,6 @@ public final class CurriculumCourseProblem extends AbstractProblem<CourseSchedul
     @Override
     protected List<Lecture> getEntities(CourseSchedule courseSchedule) {
         return courseSchedule.getLectureList();
-    }
-
-    @Override
-    protected Room readValue(Lecture lecture) {
-        return lecture.getRoom();
-    }
-
-    @Override
-    protected void writeValue(Lecture lecture, Room room) {
-        lecture.setRoom(room);
     }
 
 }

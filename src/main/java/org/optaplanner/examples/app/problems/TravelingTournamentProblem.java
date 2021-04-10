@@ -29,7 +29,7 @@ public final class TravelingTournamentProblem extends AbstractProblem<TravelingT
                         .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
             case DRL:
                 return scoreDirectorFactoryConfig
-                        .withScoreDrls("/org/optaplanner/examples/travelingtournament/solver/travelingTournamentConstraints.drl");
+                        .withScoreDrls("org/optaplanner/examples/travelingtournament/solver/travelingTournamentConstraints.drl");
             case CONSTRAINT_STREAMS_BAVET:
             case JAVA_EASY:
             case JAVA_INCREMENTAL:
@@ -40,7 +40,7 @@ public final class TravelingTournamentProblem extends AbstractProblem<TravelingT
 
     @Override
     protected SolutionDescriptor<TravelingTournament> buildSolutionDescriptor() {
-        return new SolutionDescriptor<>(TravelingTournament.class);
+        return SolutionDescriptor.buildSolutionDescriptor(TravelingTournament.class, Match.class);
     }
 
     @Override
@@ -58,16 +58,6 @@ public final class TravelingTournamentProblem extends AbstractProblem<TravelingT
     @Override
     protected List<Match> getEntities(TravelingTournament travelingTournament) {
         return travelingTournament.getMatchList();
-    }
-
-    @Override
-    protected Day readValue(Match match) {
-        return match.getDay();
-    }
-
-    @Override
-    protected void writeValue(Match match, Day day) {
-        match.setDay(day);
     }
 
 }

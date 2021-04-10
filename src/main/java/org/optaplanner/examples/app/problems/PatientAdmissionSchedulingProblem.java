@@ -30,7 +30,7 @@ public final class PatientAdmissionSchedulingProblem
                         .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
             case DRL:
                 return scoreDirectorFactoryConfig
-                        .withScoreDrls("/org/optaplanner/examples/pas/solver/patientAdmissionScheduleConstraints.drl");
+                        .withScoreDrls("org/optaplanner/examples/pas/solver/patientAdmissionScheduleConstraints.drl");
             case CONSTRAINT_STREAMS_BAVET:
             case JAVA_EASY:
             case JAVA_INCREMENTAL:
@@ -41,7 +41,7 @@ public final class PatientAdmissionSchedulingProblem
 
     @Override
     protected SolutionDescriptor<PatientAdmissionSchedule> buildSolutionDescriptor() {
-        return new SolutionDescriptor<>(PatientAdmissionSchedule.class);
+        return SolutionDescriptor.buildSolutionDescriptor(PatientAdmissionSchedule.class, BedDesignation.class);
     }
 
     @Override
@@ -59,16 +59,6 @@ public final class PatientAdmissionSchedulingProblem
     @Override
     protected List<BedDesignation> getEntities(PatientAdmissionSchedule patientAdmissionSchedule) {
         return patientAdmissionSchedule.getBedDesignationList();
-    }
-
-    @Override
-    protected Bed readValue(BedDesignation bedDesignation) {
-        return bedDesignation.getBed();
-    }
-
-    @Override
-    protected void writeValue(BedDesignation bedDesignation, Bed bed) {
-        bedDesignation.setBed(bed);
     }
 
 }

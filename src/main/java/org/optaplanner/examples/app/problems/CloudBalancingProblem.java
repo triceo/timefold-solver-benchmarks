@@ -31,7 +31,7 @@ public final class CloudBalancingProblem extends AbstractProblem<CloudBalance, C
                         .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
             case DRL:
                 return scoreDirectorFactoryConfig
-                        .withScoreDrls("/org/optaplanner/examples/cloudBalancing/solver/cloudBalancingConstraints.drl");
+                        .withScoreDrls("org/optaplanner/examples/cloudbalancing/solver/cloudBalancingConstraints.drl");
             case JAVA_EASY:
                 return scoreDirectorFactoryConfig
                         .withEasyScoreCalculatorClass(CloudBalancingMapBasedEasyScoreCalculator.class);
@@ -46,7 +46,7 @@ public final class CloudBalancingProblem extends AbstractProblem<CloudBalance, C
 
     @Override
     protected SolutionDescriptor<CloudBalance> buildSolutionDescriptor() {
-        return new SolutionDescriptor<>(CloudBalance.class);
+        return SolutionDescriptor.buildSolutionDescriptor(CloudBalance.class, CloudProcess.class);
     }
 
     @Override
@@ -63,16 +63,6 @@ public final class CloudBalancingProblem extends AbstractProblem<CloudBalance, C
     @Override
     protected List<CloudProcess> getEntities(CloudBalance cloudBalance) {
         return cloudBalance.getProcessList();
-    }
-
-    @Override
-    protected CloudComputer readValue(CloudProcess cloudProcess) {
-        return cloudProcess.getComputer();
-    }
-
-    @Override
-    protected void writeValue(CloudProcess cloudProcess, CloudComputer cloudComputer) {
-        cloudProcess.setComputer(cloudComputer);
     }
 
 }

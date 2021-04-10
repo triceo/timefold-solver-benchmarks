@@ -33,7 +33,7 @@ public final class RockTourProblem extends AbstractProblem<RockTourSolution, Roc
                         .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
             case DRL:
                 return scoreDirectorFactoryConfig
-                        .withScoreDrls("/org/optaplanner/examples/rocktour/solver/rockTourConstraints.drl");
+                        .withScoreDrls("org/optaplanner/examples/rocktour/solver/rockTourConstraints.drl");
             case JAVA_EASY:
             case JAVA_INCREMENTAL:
             default:
@@ -43,7 +43,7 @@ public final class RockTourProblem extends AbstractProblem<RockTourSolution, Roc
 
     @Override
     protected SolutionDescriptor<RockTourSolution> buildSolutionDescriptor() {
-        return new SolutionDescriptor<>(RockTourSolution.class);
+        return SolutionDescriptor.buildSolutionDescriptor(RockTourSolution.class, RockShow.class, RockStandstill.class);
     }
 
     @Override
@@ -60,16 +60,6 @@ public final class RockTourProblem extends AbstractProblem<RockTourSolution, Roc
     @Override
     protected List<RockShow> getEntities(RockTourSolution rockTourSolution) {
         return rockTourSolution.getShowList();
-    }
-
-    @Override
-    protected RockStandstill readValue(RockShow rockShow) {
-        return rockShow.getPreviousStandstill();
-    }
-
-    @Override
-    protected void writeValue(RockShow rockShow, RockStandstill rockStandstill) {
-        rockShow.setPreviousStandstill(rockStandstill);
     }
 
 }

@@ -31,7 +31,7 @@ public final class MachineReassignmentProblem
                         .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
             case DRL:
                 return scoreDirectorFactoryConfig
-                        .withScoreDrls("/org/optaplanner/examples/machinereassignment/solver/machineReassignmentConstraints.drl");
+                        .withScoreDrls("org/optaplanner/examples/machinereassignment/solver/machineReassignmentConstraints.drl");
             case JAVA_INCREMENTAL:
                 return scoreDirectorFactoryConfig
                         .withIncrementalScoreCalculatorClass(MachineReassignmentIncrementalScoreCalculator.class);
@@ -44,7 +44,7 @@ public final class MachineReassignmentProblem
 
     @Override
     protected SolutionDescriptor<MachineReassignment> buildSolutionDescriptor() {
-        return new SolutionDescriptor<>(MachineReassignment.class);
+        return SolutionDescriptor.buildSolutionDescriptor(MachineReassignment.class, MrProcessAssignment.class);
     }
 
     @Override
@@ -62,16 +62,6 @@ public final class MachineReassignmentProblem
     @Override
     protected List<MrProcessAssignment> getEntities(MachineReassignment machineReassignment) {
         return machineReassignment.getProcessAssignmentList();
-    }
-
-    @Override
-    protected MrMachine readValue(MrProcessAssignment mrProcessAssignment) {
-        return mrProcessAssignment.getMachine();
-    }
-
-    @Override
-    protected void writeValue(MrProcessAssignment mrProcessAssignment, MrMachine mrMachine) {
-        mrProcessAssignment.setMachine(mrMachine);
     }
 
 }

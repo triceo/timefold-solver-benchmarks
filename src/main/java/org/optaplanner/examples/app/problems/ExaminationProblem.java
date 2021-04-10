@@ -4,9 +4,7 @@ import org.optaplanner.core.api.score.stream.ConstraintStreamImplType;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
 import org.optaplanner.examples.app.directors.ScoreDirector;
-import org.optaplanner.examples.examination.domain.Exam;
-import org.optaplanner.examples.examination.domain.Examination;
-import org.optaplanner.examples.examination.domain.Room;
+import org.optaplanner.examples.examination.domain.*;
 import org.optaplanner.examples.examination.optional.score.ExaminationConstraintProvider;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 
@@ -29,7 +27,7 @@ public final class ExaminationProblem extends AbstractProblem<Examination, Exam,
                         .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
             case DRL:
                 return scoreDirectorFactoryConfig
-                        .withScoreDrls("/org/optaplanner/examples/examination/solver/examinationConstraints.drl");
+                        .withScoreDrls("org/optaplanner/examples/examination/solver/examinationConstraints.drl");
             case CONSTRAINT_STREAMS_BAVET:
             case JAVA_EASY:
             case JAVA_INCREMENTAL:
@@ -40,7 +38,8 @@ public final class ExaminationProblem extends AbstractProblem<Examination, Exam,
 
     @Override
     protected SolutionDescriptor<Examination> buildSolutionDescriptor() {
-        return new SolutionDescriptor<>(Examination.class);
+        return SolutionDescriptor.buildSolutionDescriptor(Examination.class, Exam.class, LeadingExam.class,
+                FollowingExam.class);
     }
 
     @Override
@@ -58,16 +57,6 @@ public final class ExaminationProblem extends AbstractProblem<Examination, Exam,
     @Override
     protected List<Exam> getEntities(Examination examination) {
         return examination.getExamList();
-    }
-
-    @Override
-    protected Room readValue(Exam exam) {
-        return exam.getRoom();
-    }
-
-    @Override
-    protected void writeValue(Exam exam, Room room) {
-        exam.setRoom(room);
     }
 
 }
