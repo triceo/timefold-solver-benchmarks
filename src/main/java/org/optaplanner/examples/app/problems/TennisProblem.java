@@ -5,7 +5,6 @@ import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
 import org.optaplanner.examples.app.params.ScoreDirector;
 import org.optaplanner.examples.app.params.Example;
-import org.optaplanner.examples.tennis.domain.Team;
 import org.optaplanner.examples.tennis.domain.TeamAssignment;
 import org.optaplanner.examples.tennis.domain.TennisSolution;
 import org.optaplanner.examples.tennis.optional.score.TennisConstraintProvider;
@@ -13,7 +12,7 @@ import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionF
 
 import java.io.File;
 
-public final class TennisProblem extends AbstractProblem<TennisSolution, TeamAssignment, Team> {
+public final class TennisProblem extends AbstractProblem<TennisSolution, TeamAssignment> {
 
     public TennisProblem(ScoreDirector scoreDirector) {
         super(Example.TENNIS, scoreDirector);

@@ -5,7 +5,6 @@ import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
 import org.optaplanner.examples.app.params.ScoreDirector;
 import org.optaplanner.examples.app.params.Example;
-import org.optaplanner.examples.travelingtournament.domain.Day;
 import org.optaplanner.examples.travelingtournament.domain.Match;
 import org.optaplanner.examples.travelingtournament.domain.TravelingTournament;
 import org.optaplanner.examples.travelingtournament.optional.score.TravelingTournamentConstraintProvider;
@@ -13,7 +12,7 @@ import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionF
 
 import java.io.File;
 
-public final class TravelingTournamentProblem extends AbstractProblem<TravelingTournament, Match, Day> {
+public final class TravelingTournamentProblem extends AbstractProblem<TravelingTournament, Match> {
 
     public TravelingTournamentProblem(ScoreDirector scoreDirector) {
         super(Example.TRAVELING_TOURNAMENT, scoreDirector);

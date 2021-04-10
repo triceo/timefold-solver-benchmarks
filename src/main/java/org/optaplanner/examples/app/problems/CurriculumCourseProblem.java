@@ -7,13 +7,12 @@ import org.optaplanner.examples.app.params.ScoreDirector;
 import org.optaplanner.examples.app.params.Example;
 import org.optaplanner.examples.curriculumcourse.domain.CourseSchedule;
 import org.optaplanner.examples.curriculumcourse.domain.Lecture;
-import org.optaplanner.examples.curriculumcourse.domain.Room;
 import org.optaplanner.examples.curriculumcourse.optional.score.CurriculumCourseConstraintProvider;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 
 import java.io.File;
 
-public final class CurriculumCourseProblem extends AbstractProblem<CourseSchedule, Lecture, Room> {
+public final class CurriculumCourseProblem extends AbstractProblem<CourseSchedule, Lecture> {
 
     public CurriculumCourseProblem(ScoreDirector scoreDirector) {
         super(Example.CURRICULUM_COURSE, scoreDirector);

@@ -6,7 +6,6 @@ import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
 import org.optaplanner.examples.app.params.ScoreDirector;
 import org.optaplanner.examples.app.params.Example;
 import org.optaplanner.examples.machinereassignment.domain.MachineReassignment;
-import org.optaplanner.examples.machinereassignment.domain.MrMachine;
 import org.optaplanner.examples.machinereassignment.domain.MrProcessAssignment;
 import org.optaplanner.examples.machinereassignment.optional.score.MachineReassignmentConstraintProvider;
 import org.optaplanner.examples.machinereassignment.score.MachineReassignmentIncrementalScoreCalculator;
@@ -15,7 +14,7 @@ import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionF
 import java.io.File;
 
 public final class MachineReassignmentProblem
-        extends AbstractProblem<MachineReassignment, MrProcessAssignment, MrMachine> {
+        extends AbstractProblem<MachineReassignment, MrProcessAssignment> {
 
     public MachineReassignmentProblem(ScoreDirector scoreDirector) {
         super(Example.MACHINE_REASSIGNMENT, scoreDirector);

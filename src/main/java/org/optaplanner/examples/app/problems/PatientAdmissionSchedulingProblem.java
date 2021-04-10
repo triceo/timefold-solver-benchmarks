@@ -5,7 +5,6 @@ import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
 import org.optaplanner.examples.app.params.ScoreDirector;
 import org.optaplanner.examples.app.params.Example;
-import org.optaplanner.examples.pas.domain.Bed;
 import org.optaplanner.examples.pas.domain.BedDesignation;
 import org.optaplanner.examples.pas.domain.PatientAdmissionSchedule;
 import org.optaplanner.examples.pas.optional.score.PatientAdmissionScheduleConstraintProvider;
@@ -14,7 +13,7 @@ import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionF
 import java.io.File;
 
 public final class PatientAdmissionSchedulingProblem
-        extends AbstractProblem<PatientAdmissionSchedule, BedDesignation, Bed> {
+        extends AbstractProblem<PatientAdmissionSchedule, BedDesignation> {
 
     public PatientAdmissionSchedulingProblem(ScoreDirector scoreDirector) {
         super(Example.PATIENT_ADMISSION_SCHEDULING, scoreDirector);

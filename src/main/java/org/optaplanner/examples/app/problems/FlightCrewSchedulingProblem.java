@@ -13,7 +13,7 @@ import org.optaplanner.examples.flightcrewscheduling.persistence.FlightCrewSched
 
 import java.io.File;
 
-public final class FlightCrewSchedulingProblem extends AbstractProblem<FlightCrewSolution, FlightAssignment, Employee> {
+public final class FlightCrewSchedulingProblem extends AbstractProblem<FlightCrewSolution, FlightAssignment> {
 
     public FlightCrewSchedulingProblem(ScoreDirector scoreDirector) {
         super(Example.FLIGHT_CREW_SCHEDULING, scoreDirector);

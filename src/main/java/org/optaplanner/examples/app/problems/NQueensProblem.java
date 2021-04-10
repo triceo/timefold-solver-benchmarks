@@ -7,7 +7,6 @@ import org.optaplanner.examples.app.params.ScoreDirector;
 import org.optaplanner.examples.app.params.Example;
 import org.optaplanner.examples.nqueens.domain.NQueens;
 import org.optaplanner.examples.nqueens.domain.Queen;
-import org.optaplanner.examples.nqueens.domain.Row;
 import org.optaplanner.examples.nqueens.optional.score.NQueensAdvancedIncrementalScoreCalculator;
 import org.optaplanner.examples.nqueens.optional.score.NQueensConstraintProvider;
 import org.optaplanner.examples.nqueens.optional.score.NQueensMapBasedEasyScoreCalculator;
@@ -15,7 +14,7 @@ import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionF
 
 import java.io.File;
 
-public final class NQueensProblem extends AbstractProblem<NQueens, Queen, Row> {
+public final class NQueensProblem extends AbstractProblem<NQueens, Queen> {
 
     public NQueensProblem(ScoreDirector scoreDirector) {
         super(Example.NQUEENS, scoreDirector);

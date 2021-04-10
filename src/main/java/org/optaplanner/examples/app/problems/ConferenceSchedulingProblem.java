@@ -6,14 +6,13 @@ import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
 import org.optaplanner.examples.app.params.ScoreDirector;
 import org.optaplanner.examples.app.params.Example;
 import org.optaplanner.examples.conferencescheduling.domain.ConferenceSolution;
-import org.optaplanner.examples.conferencescheduling.domain.Room;
 import org.optaplanner.examples.conferencescheduling.domain.Talk;
 import org.optaplanner.examples.conferencescheduling.optional.score.ConferenceSchedulingConstraintProvider;
 import org.optaplanner.examples.conferencescheduling.persistence.ConferenceSchedulingXlsxFileIO;
 
 import java.io.File;
 
-public final class ConferenceSchedulingProblem extends AbstractProblem<ConferenceSolution, Talk, Room> {
+public final class ConferenceSchedulingProblem extends AbstractProblem<ConferenceSolution, Talk> {
 
     public ConferenceSchedulingProblem(ScoreDirector scoreDirector) {
         super(Example.CONFERENCE_SCHEDULING, scoreDirector);

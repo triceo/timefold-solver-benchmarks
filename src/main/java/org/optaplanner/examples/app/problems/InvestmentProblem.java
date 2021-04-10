@@ -14,7 +14,7 @@ import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionF
 
 import java.io.File;
 
-public final class InvestmentProblem extends AbstractProblem<InvestmentSolution, AssetClassAllocation, Long> {
+public final class InvestmentProblem extends AbstractProblem<InvestmentSolution, AssetClassAllocation> {
 
     public InvestmentProblem(ScoreDirector scoreDirector) {
         super(Example.INVESTMENT, scoreDirector);

@@ -39,8 +39,8 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.optaplanner.examples.app.params.*;
 
 @State(Scope.Benchmark)
-@Warmup(batchSize = 1, iterations = 1)
-@Measurement(batchSize = 1, iterations = 1)
+@Fork(jvmArgs = {"-Xms4G", "-Xmx4G"})
+@BenchmarkMode(Mode.Throughput)
 public class ScoreDirectorBenchmark {
 
     @Benchmark
@@ -71,7 +71,6 @@ public class ScoreDirectorBenchmark {
     public static void main(String[] args) throws RunnerException {
         Options options = new OptionsBuilder()
                 .include(ScoreDirectorBenchmark.class.getSimpleName())
-                .forks(1)
                 .build();
         new Runner(options).run();
     }

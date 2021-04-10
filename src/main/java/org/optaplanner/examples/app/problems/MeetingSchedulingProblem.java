@@ -7,13 +7,12 @@ import org.optaplanner.examples.app.params.ScoreDirector;
 import org.optaplanner.examples.app.params.Example;
 import org.optaplanner.examples.meetingscheduling.domain.MeetingAssignment;
 import org.optaplanner.examples.meetingscheduling.domain.MeetingSchedule;
-import org.optaplanner.examples.meetingscheduling.domain.Room;
 import org.optaplanner.examples.meetingscheduling.optional.score.MeetingSchedulingConstraintProvider;
 import org.optaplanner.examples.meetingscheduling.persistence.MeetingSchedulingXlsxFileIO;
 
 import java.io.File;
 
-public final class MeetingSchedulingProblem extends AbstractProblem<MeetingSchedule, MeetingAssignment, Room> {
+public final class MeetingSchedulingProblem extends AbstractProblem<MeetingSchedule, MeetingAssignment> {
 
     public MeetingSchedulingProblem(ScoreDirector scoreDirector) {
         super(Example.MEETING_SCHEDULING, scoreDirector);

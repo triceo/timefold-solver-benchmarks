@@ -6,7 +6,6 @@ import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
 import org.optaplanner.examples.app.params.Example;
 import org.optaplanner.examples.app.params.ScoreDirector;
 import org.optaplanner.examples.cloudbalancing.domain.CloudBalance;
-import org.optaplanner.examples.cloudbalancing.domain.CloudComputer;
 import org.optaplanner.examples.cloudbalancing.domain.CloudProcess;
 import org.optaplanner.examples.cloudbalancing.optional.score.CloudBalancingConstraintProvider;
 import org.optaplanner.examples.cloudbalancing.optional.score.CloudBalancingIncrementalScoreCalculator;
@@ -15,7 +14,7 @@ import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionF
 
 import java.io.File;
 
-public final class CloudBalancingProblem extends AbstractProblem<CloudBalance, CloudProcess, CloudComputer> {
+public final class CloudBalancingProblem extends AbstractProblem<CloudBalance, CloudProcess> {
 
     public CloudBalancingProblem(ScoreDirector scoreDirector) {
         super(Example.CLOUD_BALANCING, scoreDirector);

@@ -11,7 +11,7 @@ import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionF
 
 import java.io.File;
 
-public final class ExaminationProblem extends AbstractProblem<Examination, Exam, Room> {
+public final class ExaminationProblem extends AbstractProblem<Examination, Exam> {
 
     public ExaminationProblem(ScoreDirector scoreDirector) {
         super(Example.EXAMINATION, scoreDirector);

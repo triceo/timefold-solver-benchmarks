@@ -24,7 +24,7 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.Random;
 
-abstract class AbstractProblem<Solution_, Entity_, Value_> implements Problem {
+abstract class AbstractProblem<Solution_, Entity_> implements Problem {
 
     private final InnerScoreDirectorFactory<Solution_, ?> scoreDirectorFactory;
     private final Solution_ originalSolution;
@@ -59,10 +59,9 @@ abstract class AbstractProblem<Solution_, Entity_, Value_> implements Problem {
     abstract protected Class<Entity_> getEntityClass();
 
     protected MoveSelectorFactory<Solution_> buildMoveSelectorFactory() {
-        EntitySelectorConfig entitySelectorConfig = new EntitySelectorConfig(getEntityClass());
-        ValueSelectorConfig valueSelectorConfig = new ValueSelectorConfig(getEntityVariableName());
-
-        ChangeMoveSelectorConfig moveSelectorConfig = new ChangeMoveSelectorConfig();
+        final EntitySelectorConfig entitySelectorConfig = new EntitySelectorConfig(getEntityClass());
+        final ValueSelectorConfig valueSelectorConfig = new ValueSelectorConfig(getEntityVariableName());
+        final ChangeMoveSelectorConfig moveSelectorConfig = new ChangeMoveSelectorConfig();
         moveSelectorConfig.setEntitySelectorConfig(entitySelectorConfig);
         moveSelectorConfig.setValueSelectorConfig(valueSelectorConfig);
         return MoveSelectorFactory.create(moveSelectorConfig);
@@ -86,8 +85,8 @@ abstract class AbstractProblem<Solution_, Entity_, Value_> implements Problem {
         solverScope.setScoreDirector(scoreDirector);
         solverScope.setWorkingRandom(new Random(0)); // Always measure the same thing.
         phaseScope = new LocalSearchPhaseScope<>(solverScope);
-        HeuristicConfigPolicy<Solution_> policy = new HeuristicConfigPolicy<>(EnvironmentMode.REPRODUCIBLE, null,
-                null, null, scoreDirectorFactory);
+        final HeuristicConfigPolicy<Solution_> policy = new HeuristicConfigPolicy<>(EnvironmentMode.REPRODUCIBLE,
+                null, null, null, scoreDirectorFactory);
         moveSelector = moveSelectorFactory.buildMoveSelector(policy, SelectionCacheType.PHASE, SelectionOrder.RANDOM);
         moveSelector.solvingStarted(solverScope);
         moveSelector.phaseStarted(phaseScope);
@@ -113,20 +112,13 @@ abstract class AbstractProblem<Solution_, Entity_, Value_> implements Problem {
     @Override
     public final void tearDownInvocation() {
         moveSelector.stepEnded(stepScope);
-        stepScope = null;
     }
 
     @Override
     public final void tearDownIteration() {
         scoreDirector.close();
-        scoreDirector = null;
-        solution = null;
-        moveIterator = null;
         moveSelector.phaseEnded(phaseScope);
-        phaseScope = null;
         moveSelector.solvingEnded(solverScope);
-        solverScope = null;
-        moveSelector = null;
     }
 
     @Override

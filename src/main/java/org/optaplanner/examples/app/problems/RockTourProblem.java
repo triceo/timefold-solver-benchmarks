@@ -13,7 +13,7 @@ import org.optaplanner.examples.rocktour.persistence.RockTourXlsxFileIO;
 
 import java.io.File;
 
-public final class RockTourProblem extends AbstractProblem<RockTourSolution, RockShow, RockStandstill> {
+public final class RockTourProblem extends AbstractProblem<RockTourSolution, RockShow> {
 
     public RockTourProblem(ScoreDirector scoreDirector) {
         super(Example.ROCK_TOUR, scoreDirector);

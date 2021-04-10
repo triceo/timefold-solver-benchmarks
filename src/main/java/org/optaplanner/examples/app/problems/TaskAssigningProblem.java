@@ -13,7 +13,7 @@ import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionF
 
 import java.io.File;
 
-public final class TaskAssigningProblem extends AbstractProblem<TaskAssigningSolution, Task, TaskOrEmployee> {
+public final class TaskAssigningProblem extends AbstractProblem<TaskAssigningSolution, Task> {
 
     public TaskAssigningProblem(ScoreDirector scoreDirector) {
         super(Example.TASK_ASSIGNING, scoreDirector);

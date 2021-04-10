@@ -16,7 +16,7 @@ import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionF
 
 import java.io.File;
 
-public final class VehicleRoutingProblem extends AbstractProblem<VehicleRoutingSolution, Customer, Standstill> {
+public final class VehicleRoutingProblem extends AbstractProblem<VehicleRoutingSolution, Customer> {
 
     public VehicleRoutingProblem(ScoreDirector scoreDirector) {
         super(Example.VEHICLE_ROUTING, scoreDirector);

@@ -12,7 +12,7 @@ import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionF
 
 import java.io.File;
 
-public final class CoachShuttleGatheringProblem extends AbstractProblem<CoachShuttleGatheringSolution, Shuttle, StopOrHub> {
+public final class CoachShuttleGatheringProblem extends AbstractProblem<CoachShuttleGatheringSolution, Shuttle> {
 
     public CoachShuttleGatheringProblem(ScoreDirector scoreDirector) {
         super(Example.COACH_SHUTTLE_GATHERING, scoreDirector);
