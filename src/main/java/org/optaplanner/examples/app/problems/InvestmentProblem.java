@@ -9,7 +9,9 @@ import org.optaplanner.examples.investment.domain.InvestmentSolution;
 import org.optaplanner.examples.investment.optional.score.InvestmentConstraintProvider;
 import org.optaplanner.examples.investment.optional.score.InvestmentEasyScoreCalculator;
 import org.optaplanner.examples.investment.optional.score.InvestmentIncrementalScoreCalculator;
+import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 
+import java.io.File;
 import java.util.List;
 
 public final class InvestmentProblem extends AbstractProblem<InvestmentSolution, AssetClassAllocation, Long> {
@@ -53,7 +55,9 @@ public final class InvestmentProblem extends AbstractProblem<InvestmentSolution,
 
     @Override
     protected InvestmentSolution readAndInitializeSolution() {
-        return null;
+        final XStreamSolutionFileIO<InvestmentSolution> solutionFileIO =
+                new XStreamSolutionFileIO<>(InvestmentSolution.class);
+        return solutionFileIO.read(new File("data/investment-de_smet_1.xml"));
     }
 
     @Override

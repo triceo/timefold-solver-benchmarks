@@ -8,7 +8,9 @@ import org.optaplanner.examples.rocktour.domain.RockShow;
 import org.optaplanner.examples.rocktour.domain.RockStandstill;
 import org.optaplanner.examples.rocktour.domain.RockTourSolution;
 import org.optaplanner.examples.rocktour.optional.score.RockTourConstraintProvider;
+import org.optaplanner.examples.rocktour.persistence.RockTourXlsxFileIO;
 
+import java.io.File;
 import java.util.List;
 
 public final class RockTourProblem extends AbstractProblem<RockTourSolution, RockShow, RockStandstill> {
@@ -51,7 +53,8 @@ public final class RockTourProblem extends AbstractProblem<RockTourSolution, Roc
 
     @Override
     protected RockTourSolution readAndInitializeSolution() {
-        return null;
+        return new RockTourXlsxFileIO()
+                .read(new File("data/rocktour-47shows.xlsx"));
     }
 
     @Override

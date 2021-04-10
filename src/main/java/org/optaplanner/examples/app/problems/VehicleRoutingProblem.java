@@ -10,7 +10,9 @@ import org.optaplanner.examples.vehiclerouting.domain.VehicleRoutingSolution;
 import org.optaplanner.examples.vehiclerouting.optional.score.VehicleRoutingConstraintProvider;
 import org.optaplanner.examples.vehiclerouting.optional.score.VehicleRoutingEasyScoreCalculator;
 import org.optaplanner.examples.vehiclerouting.optional.score.VehicleRoutingIncrementalScoreCalculator;
+import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 
+import java.io.File;
 import java.util.List;
 
 public final class VehicleRoutingProblem extends AbstractProblem<VehicleRoutingSolution, Customer, Standstill> {
@@ -57,7 +59,9 @@ public final class VehicleRoutingProblem extends AbstractProblem<VehicleRoutingS
 
     @Override
     protected VehicleRoutingSolution readAndInitializeSolution() {
-        return null;
+        final XStreamSolutionFileIO<VehicleRoutingSolution> solutionFileIO =
+                new XStreamSolutionFileIO<>(VehicleRoutingSolution.class);
+        return solutionFileIO.read(new File("data/vehiclerouting-belgium-tw-n2750-k55.xml"));
     }
 
     @Override

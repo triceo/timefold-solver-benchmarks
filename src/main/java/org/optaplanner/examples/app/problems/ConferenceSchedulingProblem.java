@@ -8,7 +8,9 @@ import org.optaplanner.examples.conferencescheduling.domain.ConferenceSolution;
 import org.optaplanner.examples.conferencescheduling.domain.Room;
 import org.optaplanner.examples.conferencescheduling.domain.Talk;
 import org.optaplanner.examples.conferencescheduling.optional.score.ConferenceSchedulingConstraintProvider;
+import org.optaplanner.examples.conferencescheduling.persistence.ConferenceSchedulingXlsxFileIO;
 
+import java.io.File;
 import java.util.List;
 
 public final class ConferenceSchedulingProblem extends AbstractProblem<ConferenceSolution, Talk, Room> {
@@ -48,7 +50,8 @@ public final class ConferenceSchedulingProblem extends AbstractProblem<Conferenc
 
     @Override
     protected ConferenceSolution readAndInitializeSolution() {
-        return null;
+        return new ConferenceSchedulingXlsxFileIO()
+                .read(new File("data/conferencescheduling-216-18-20.xlsx"));
     }
 
     @Override

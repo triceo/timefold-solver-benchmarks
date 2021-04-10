@@ -10,7 +10,9 @@ import org.optaplanner.examples.cloudbalancing.domain.CloudProcess;
 import org.optaplanner.examples.cloudbalancing.optional.score.CloudBalancingConstraintProvider;
 import org.optaplanner.examples.cloudbalancing.optional.score.CloudBalancingIncrementalScoreCalculator;
 import org.optaplanner.examples.cloudbalancing.optional.score.CloudBalancingMapBasedEasyScoreCalculator;
+import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 
+import java.io.File;
 import java.util.List;
 
 public final class CloudBalancingProblem extends AbstractProblem<CloudBalance, CloudProcess, CloudComputer> {
@@ -54,7 +56,8 @@ public final class CloudBalancingProblem extends AbstractProblem<CloudBalance, C
 
     @Override
     protected CloudBalance readAndInitializeSolution() {
-        return null;
+        final XStreamSolutionFileIO<CloudBalance> solutionFileIO = new XStreamSolutionFileIO<>(CloudBalance.class);
+        return solutionFileIO.read(new File("data/cloudbalancing-1600-4800.xml"));
     }
 
     @Override

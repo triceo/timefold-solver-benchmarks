@@ -10,7 +10,9 @@ import org.optaplanner.examples.tsp.domain.Visit;
 import org.optaplanner.examples.tsp.optional.score.TspConstraintProvider;
 import org.optaplanner.examples.tsp.optional.score.TspEasyScoreCalculator;
 import org.optaplanner.examples.tsp.optional.score.TspIncrementalScoreCalculator;
+import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 
+import java.io.File;
 import java.util.List;
 
 public final class TspProblem extends AbstractProblem<TspSolution, Visit, Standstill> {
@@ -54,7 +56,9 @@ public final class TspProblem extends AbstractProblem<TspSolution, Visit, Stands
 
     @Override
     protected TspSolution readAndInitializeSolution() {
-        return null;
+        final XStreamSolutionFileIO<TspSolution> solutionFileIO =
+                new XStreamSolutionFileIO<>(TspSolution.class);
+        return solutionFileIO.read(new File("data/tsp-lu980.xml"));
     }
 
     @Override

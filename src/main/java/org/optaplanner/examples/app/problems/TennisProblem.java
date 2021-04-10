@@ -8,7 +8,9 @@ import org.optaplanner.examples.tennis.domain.Team;
 import org.optaplanner.examples.tennis.domain.TeamAssignment;
 import org.optaplanner.examples.tennis.domain.TennisSolution;
 import org.optaplanner.examples.tennis.optional.score.TennisConstraintProvider;
+import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 
+import java.io.File;
 import java.util.List;
 
 public final class TennisProblem extends AbstractProblem<TennisSolution, TeamAssignment, Team> {
@@ -48,7 +50,9 @@ public final class TennisProblem extends AbstractProblem<TennisSolution, TeamAss
 
     @Override
     protected TennisSolution readAndInitializeSolution() {
-        return null;
+        final XStreamSolutionFileIO<TennisSolution> solutionFileIO =
+                new XStreamSolutionFileIO<>(TennisSolution.class);
+        return solutionFileIO.read(new File("data/tennis-munich-7teams.xml"));
     }
 
     @Override

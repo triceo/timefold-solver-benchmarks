@@ -8,7 +8,9 @@ import org.optaplanner.examples.curriculumcourse.domain.CourseSchedule;
 import org.optaplanner.examples.curriculumcourse.domain.Lecture;
 import org.optaplanner.examples.curriculumcourse.domain.Room;
 import org.optaplanner.examples.curriculumcourse.optional.score.CurriculumCourseConstraintProvider;
+import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 
+import java.io.File;
 import java.util.List;
 
 public final class CurriculumCourseProblem extends AbstractProblem<CourseSchedule, Lecture, Room> {
@@ -48,7 +50,9 @@ public final class CurriculumCourseProblem extends AbstractProblem<CourseSchedul
 
     @Override
     protected CourseSchedule readAndInitializeSolution() {
-        return null;
+        final XStreamSolutionFileIO<CourseSchedule> solutionFileIO =
+                new XStreamSolutionFileIO<>(CourseSchedule.class);
+        return solutionFileIO.read(new File("data/curriculumcourse-comp07.xml"));
     }
 
     @Override

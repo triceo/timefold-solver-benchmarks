@@ -8,7 +8,9 @@ import org.optaplanner.examples.travelingtournament.domain.Day;
 import org.optaplanner.examples.travelingtournament.domain.Match;
 import org.optaplanner.examples.travelingtournament.domain.TravelingTournament;
 import org.optaplanner.examples.travelingtournament.optional.score.TravelingTournamentConstraintProvider;
+import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 
+import java.io.File;
 import java.util.List;
 
 public final class TravelingTournamentProblem extends AbstractProblem<TravelingTournament, Match, Day> {
@@ -48,7 +50,9 @@ public final class TravelingTournamentProblem extends AbstractProblem<TravelingT
 
     @Override
     protected TravelingTournament readAndInitializeSolution() {
-        return null;
+        final XStreamSolutionFileIO<TravelingTournament> solutionFileIO =
+                new XStreamSolutionFileIO<>(TravelingTournament.class);
+        return solutionFileIO.read(new File("data/travelingtournament-4-super14.xml"));
     }
 
     @Override

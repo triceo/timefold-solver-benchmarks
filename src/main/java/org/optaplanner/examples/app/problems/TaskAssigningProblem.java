@@ -8,7 +8,9 @@ import org.optaplanner.examples.taskassigning.domain.Task;
 import org.optaplanner.examples.taskassigning.domain.TaskAssigningSolution;
 import org.optaplanner.examples.taskassigning.domain.TaskOrEmployee;
 import org.optaplanner.examples.taskassigning.optional.score.TaskAssigningConstraintProvider;
+import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 
+import java.io.File;
 import java.util.List;
 
 public final class TaskAssigningProblem extends AbstractProblem<TaskAssigningSolution, Task, TaskOrEmployee> {
@@ -51,7 +53,9 @@ public final class TaskAssigningProblem extends AbstractProblem<TaskAssigningSol
 
     @Override
     protected TaskAssigningSolution readAndInitializeSolution() {
-        return null;
+        final XStreamSolutionFileIO<TaskAssigningSolution> solutionFileIO =
+                new XStreamSolutionFileIO<>(TaskAssigningSolution.class);
+        return solutionFileIO.read(new File("data/taskassigning-500-20.xml"));
     }
 
     @Override

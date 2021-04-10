@@ -10,7 +10,9 @@ import org.optaplanner.examples.cloudbalancing.optional.score.CloudBalancingMapB
 import org.optaplanner.examples.nqueens.domain.NQueens;
 import org.optaplanner.examples.nqueens.domain.Queen;
 import org.optaplanner.examples.nqueens.domain.Row;
+import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 
+import java.io.File;
 import java.util.List;
 
 public final class NQueensProblem extends AbstractProblem<NQueens, Queen, Row> {
@@ -57,7 +59,9 @@ public final class NQueensProblem extends AbstractProblem<NQueens, Queen, Row> {
 
     @Override
     protected NQueens readAndInitializeSolution() {
-        return null;
+        final XStreamSolutionFileIO<NQueens> solutionFileIO =
+                new XStreamSolutionFileIO<>(NQueens.class);
+        return solutionFileIO.read(new File("data/nqueens-256.xml"));
     }
 
     @Override

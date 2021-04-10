@@ -8,7 +8,9 @@ import org.optaplanner.examples.meetingscheduling.domain.MeetingAssignment;
 import org.optaplanner.examples.meetingscheduling.domain.MeetingSchedule;
 import org.optaplanner.examples.meetingscheduling.domain.Room;
 import org.optaplanner.examples.meetingscheduling.optional.score.MeetingSchedulingConstraintProvider;
+import org.optaplanner.examples.meetingscheduling.persistence.MeetingSchedulingXlsxFileIO;
 
+import java.io.File;
 import java.util.List;
 
 public final class MeetingSchedulingProblem extends AbstractProblem<MeetingSchedule, MeetingAssignment, Room> {
@@ -48,7 +50,8 @@ public final class MeetingSchedulingProblem extends AbstractProblem<MeetingSched
 
     @Override
     protected MeetingSchedule readAndInitializeSolution() {
-        return null;
+        return new MeetingSchedulingXlsxFileIO()
+                .read(new File("data/meetingscheduling-100-320-5.xlsx"));
     }
 
     @Override

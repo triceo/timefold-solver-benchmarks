@@ -9,7 +9,9 @@ import org.optaplanner.examples.coachshuttlegathering.domain.CoachShuttleGatheri
 import org.optaplanner.examples.coachshuttlegathering.domain.Shuttle;
 import org.optaplanner.examples.coachshuttlegathering.domain.StopOrHub;
 import org.optaplanner.examples.coachshuttlegathering.optional.score.CoachShuttleGatheringConstraintProvider;
+import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 
+import java.io.File;
 import java.util.List;
 
 public final class CoachShuttleGatheringProblem extends AbstractProblem<CoachShuttleGatheringSolution, Shuttle, StopOrHub> {
@@ -51,7 +53,9 @@ public final class CoachShuttleGatheringProblem extends AbstractProblem<CoachShu
 
     @Override
     protected CoachShuttleGatheringSolution readAndInitializeSolution() {
-        return null;
+        final XStreamSolutionFileIO<CoachShuttleGatheringSolution> solutionFileIO =
+                new XStreamSolutionFileIO<>(CoachShuttleGatheringSolution.class);
+        return solutionFileIO.read(new File("data/coachshuttlegathering-demo1.xml"));
     }
 
     @Override

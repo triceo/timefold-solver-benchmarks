@@ -9,7 +9,9 @@ import org.optaplanner.examples.machinereassignment.domain.MrMachine;
 import org.optaplanner.examples.machinereassignment.domain.MrProcessAssignment;
 import org.optaplanner.examples.machinereassignment.optional.score.MachineReassignmentConstraintProvider;
 import org.optaplanner.examples.machinereassignment.score.MachineReassignmentIncrementalScoreCalculator;
+import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 
+import java.io.File;
 import java.util.List;
 
 public final class MachineReassignmentProblem
@@ -52,7 +54,9 @@ public final class MachineReassignmentProblem
 
     @Override
     protected MachineReassignment readAndInitializeSolution() {
-        return null;
+        final XStreamSolutionFileIO<MachineReassignment> solutionFileIO =
+                new XStreamSolutionFileIO<>(MachineReassignment.class);
+        return solutionFileIO.read(new File("data/machinereassignment-a23.xml"));
     }
 
     @Override

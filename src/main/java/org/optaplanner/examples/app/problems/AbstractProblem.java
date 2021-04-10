@@ -1,5 +1,6 @@
 package org.optaplanner.examples.app.problems;
 
+import org.optaplanner.core.api.score.Score;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
 import org.optaplanner.core.impl.domain.variable.descriptor.VariableDescriptor;
@@ -61,6 +62,10 @@ abstract class AbstractProblem<Solution_, Entity_, Value_> implements Problem {
         solution = scoreDirector.cloneSolution(originalSolution); // Start with the fresh solution again.
         entityList = getEntities(solution);
         scoreDirector.setWorkingSolution(solution);
+        final Score<?> score = scoreDirector.calculateScore(); // We only care about incremental performance.
+        if (!score.isSolutionInitialized()) {
+            throw new AssertionError("Solution not initialized.");
+        }
     }
 
     @Override

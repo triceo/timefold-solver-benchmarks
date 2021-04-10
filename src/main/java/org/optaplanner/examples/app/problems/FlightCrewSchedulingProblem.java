@@ -8,7 +8,9 @@ import org.optaplanner.examples.flightcrewscheduling.domain.Employee;
 import org.optaplanner.examples.flightcrewscheduling.domain.FlightAssignment;
 import org.optaplanner.examples.flightcrewscheduling.domain.FlightCrewSolution;
 import org.optaplanner.examples.flightcrewscheduling.optional.score.FlightCrewSchedulingConstraintProvider;
+import org.optaplanner.examples.flightcrewscheduling.persistence.FlightCrewSchedulingXlsxFileIO;
 
+import java.io.File;
 import java.util.List;
 
 public final class FlightCrewSchedulingProblem extends AbstractProblem<FlightCrewSolution, FlightAssignment, Employee> {
@@ -48,7 +50,8 @@ public final class FlightCrewSchedulingProblem extends AbstractProblem<FlightCre
 
     @Override
     protected FlightCrewSolution readAndInitializeSolution() {
-        return null;
+        return new FlightCrewSchedulingXlsxFileIO()
+                .read(new File("data/flightcrewscheduling-875-7-Europe.xlsx"));
     }
 
     @Override

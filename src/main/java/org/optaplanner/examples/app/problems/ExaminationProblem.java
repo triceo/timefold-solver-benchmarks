@@ -8,7 +8,9 @@ import org.optaplanner.examples.examination.domain.Exam;
 import org.optaplanner.examples.examination.domain.Examination;
 import org.optaplanner.examples.examination.domain.Room;
 import org.optaplanner.examples.examination.optional.score.ExaminationConstraintProvider;
+import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 
+import java.io.File;
 import java.util.List;
 
 public final class ExaminationProblem extends AbstractProblem<Examination, Exam, Room> {
@@ -48,7 +50,9 @@ public final class ExaminationProblem extends AbstractProblem<Examination, Exam,
 
     @Override
     protected Examination readAndInitializeSolution() {
-        return null;
+        final XStreamSolutionFileIO<Examination> solutionFileIO =
+                new XStreamSolutionFileIO<>(Examination.class);
+        return solutionFileIO.read(new File("data/examination-comp_set8.xml"));
     }
 
     @Override

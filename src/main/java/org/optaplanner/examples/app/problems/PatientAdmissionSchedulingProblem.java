@@ -8,7 +8,9 @@ import org.optaplanner.examples.pas.domain.Bed;
 import org.optaplanner.examples.pas.domain.BedDesignation;
 import org.optaplanner.examples.pas.domain.PatientAdmissionSchedule;
 import org.optaplanner.examples.pas.optional.score.PatientAdmissionScheduleConstraintProvider;
+import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 
+import java.io.File;
 import java.util.List;
 
 public final class PatientAdmissionSchedulingProblem
@@ -49,7 +51,9 @@ public final class PatientAdmissionSchedulingProblem
 
     @Override
     protected PatientAdmissionSchedule readAndInitializeSolution() {
-        return null;
+        final XStreamSolutionFileIO<PatientAdmissionSchedule> solutionFileIO =
+                new XStreamSolutionFileIO<>(PatientAdmissionSchedule.class);
+        return solutionFileIO.read(new File("data/pas-12.xml"));
     }
 
     @Override
