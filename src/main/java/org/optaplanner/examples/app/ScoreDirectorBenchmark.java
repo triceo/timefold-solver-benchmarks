@@ -32,17 +32,40 @@
 package org.optaplanner.examples.app;
 
 import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.Scope;
+import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
+import org.optaplanner.examples.app.params.*;
 
+@State(Scope.Benchmark)
 public class ScoreDirectorBenchmark {
 
     @Benchmark
-    public void testMethod() {
-        // This is a demo/sample template for building your JMH benchmarks. Edit as needed.
-        // Put your benchmark code here.
+    public Object drl(DrlExample params) {
+        return params.problem.runInvocation();
+    }
+
+    @Benchmark
+    public Object csd(ConstraintStreamsDroolsExample params) {
+        return params.problem.runInvocation();
+    }
+
+    @Benchmark
+    public Object csb(ConstraintStreamsBavetExample params) {
+        return params.problem.runInvocation();
+    }
+
+    @Benchmark
+    public Object javaIncremental(JavaIncrementalExample params) {
+        return params.problem.runInvocation();
+    }
+
+    @Benchmark
+    public Object javaEasy(JavaEasyExample params) {
+        return params.problem.runInvocation();
     }
 
     public static void main(String[] args) throws RunnerException {
