@@ -32,16 +32,39 @@
 package org.optaplanner.examples.app;
 
 import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.profile.AsyncProfiler;
+import org.openjdk.jmh.results.format.ResultFormatType;
 import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.optaplanner.examples.app.params.*;
 
+import java.io.File;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+
 @State(Scope.Benchmark)
-@Fork(jvmArgs = {"-Xms4G", "-Xmx4G"})
+@Warmup(iterations = 10) // 5 has been demonstrated to be too little.
 @BenchmarkMode(Mode.Throughput)
 public class ScoreDirectorBenchmark {
+
+    private static String leftPad(int input, int length) {
+        return String.format("%1$" + length + "s", input)
+                .replace(' ', '0');
+    }
+
+    private static String getTimestamp() {
+        ZonedDateTime now = Instant.now().atZone(ZoneId.systemDefault());
+        String year = leftPad(now.getYear(), 4);
+        String month = leftPad(now.getMonthValue(), 2);
+        String day = leftPad(now.getDayOfMonth(), 2);
+        String hour = leftPad(now.getHour(), 2);
+        String minute = leftPad(now.getMinute(), 2);
+        String second = leftPad(now.getSecond(), 2);
+        return year + "" + month + "" + day + "_" + hour + "" + minute + "" + second;
+    }
 
     @Benchmark
     public Object drl(DrlExample params) {
@@ -69,8 +92,22 @@ public class ScoreDirectorBenchmark {
     }
 
     public static void main(String[] args) throws RunnerException {
+        File resultFolder = new File("results/" + getTimestamp());
+        File benchmarkResults = new File(resultFolder, "benchmarkResults.csv");
+        resultFolder.mkdirs();
+
+        String asyncProfilerAbsolutePath = new File("async-profiler-1.8.5-linux-x64/build/libasyncProfiler.so")
+                .getAbsolutePath();
         Options options = new OptionsBuilder()
                 .include(ScoreDirectorBenchmark.class.getSimpleName())
+                .addProfiler(AsyncProfiler.class,
+                        "event=cpu;" +
+                                "output=flamegraph;" +
+                                "dir=" + resultFolder.getAbsolutePath() + ";" +
+                                "libPath=" + asyncProfilerAbsolutePath)
+                .jvmArgs("-Xms2g", "-Xmx2g")
+                .result(benchmarkResults.getAbsolutePath())
+                .resultFormat(ResultFormatType.CSV)
                 .build();
         new Runner(options).run();
     }
