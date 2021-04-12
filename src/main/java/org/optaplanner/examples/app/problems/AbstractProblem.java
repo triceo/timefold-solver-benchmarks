@@ -31,12 +31,12 @@ abstract class AbstractProblem<Solution_, Entity_> implements Problem {
     private final MoveSelectorFactory<Solution_> moveSelectorFactory;
 
     private InnerScoreDirector<Solution_, ?> scoreDirector;
-    private Solution_ solution;
     private MoveSelector<Solution_> moveSelector;
     private Iterator<Move<Solution_>> moveIterator;
     private SolverScope<Solution_> solverScope;
     private LocalSearchPhaseScope<Solution_> phaseScope;
     private LocalSearchStepScope<Solution_> stepScope;
+    private Move<Solution_> move;
 
     protected AbstractProblem(final Example example, final ScoreDirector scoreDirector) {
         final ScoreDirectorFactoryConfig scoreDirectorFactoryConfig =
@@ -69,60 +69,66 @@ abstract class AbstractProblem<Solution_, Entity_> implements Problem {
 
     @Override
     public final void setupTrial() {
-        solution = readOriginalSolution();
+        // No need to do anything.
     }
 
     @Override
     public final void setupIteration() {
         scoreDirector = scoreDirectorFactory.buildScoreDirector(false, false);
-        solution = scoreDirector.cloneSolution(originalSolution); // Start with the fresh solution again.
         // We only care about incremental performance; therefore calculate the entire solution outside of invocation.
-        scoreDirector.setWorkingSolution(solution);
+        scoreDirector.setWorkingSolution(scoreDirector.cloneSolution(originalSolution)); // Use fresh solution again.
         scoreDirector.triggerVariableListeners();
         scoreDirector.calculateScore();
         // Prepare the move selector that will pick different move for each invocation.
         solverScope = new SolverScope<>();
         solverScope.setScoreDirector(scoreDirector);
-        solverScope.setWorkingRandom(new Random(0)); // Always measure the same thing.
+        solverScope.setWorkingRandom(new Random(0)); // Make results predictable.
         phaseScope = new LocalSearchPhaseScope<>(solverScope);
         final HeuristicConfigPolicy<Solution_> policy = new HeuristicConfigPolicy<>(EnvironmentMode.REPRODUCIBLE,
                 null, null, null, scoreDirectorFactory);
-        moveSelector = moveSelectorFactory.buildMoveSelector(policy, SelectionCacheType.PHASE, SelectionOrder.RANDOM);
+        moveSelector = moveSelectorFactory.buildMoveSelector(policy, SelectionCacheType.JUST_IN_TIME,
+                SelectionOrder.RANDOM); // Random selection, as we need the iterator to never end.
         moveSelector.solvingStarted(solverScope);
         moveSelector.phaseStarted(phaseScope);
+        stepScope = new LocalSearchStepScope<>(phaseScope);
+        moveSelector.stepStarted(stepScope);
         moveIterator = moveSelector.iterator();
     }
 
     @Override
     public final void setupInvocation() {
-        stepScope = new LocalSearchStepScope<>(phaseScope);
-        moveSelector.stepStarted(stepScope);
-        Move<Solution_> move;
         do {
             move = moveIterator.next();
         } while (!move.isMoveDoable(scoreDirector));
-        move.doMove(scoreDirector);
     }
 
     @Override
     public final Object runInvocation() {
+        // We're benchmarking the actual operations inside the score director:
+        // - Speed of variable updates.
+        // - Speed of score calculation on those updates.
+        // Unfortunately, we also benchmark a bit of the overhead of the move. Hopefully, that is not too much.
+        // More importantly, it is a constant overhead and therefore should not affect the results.
+        move.doMove(scoreDirector);
         return scoreDirector.calculateScore();
     }
 
     @Override
     public final void tearDownInvocation() {
-        moveSelector.stepEnded(stepScope);
+        // No need to do anything.
     }
 
     @Override
     public final void tearDownIteration() {
-        scoreDirector.close();
+        moveSelector.stepEnded(stepScope);
         moveSelector.phaseEnded(phaseScope);
         moveSelector.solvingEnded(solverScope);
+        scoreDirector.close();
     }
 
     @Override
     public final void teardownTrial() {
+        // No need to do anything.
     }
 
 }
