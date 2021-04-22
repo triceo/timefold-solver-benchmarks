@@ -102,9 +102,10 @@ public class ScoreDirectorBenchmark {
                 .include(ScoreDirectorBenchmark.class.getSimpleName())
                 .addProfiler(AsyncProfiler.class,
                         "event=cpu;" +
-                                "output=flamegraph;" +
+                                "output=flamegraph,tree;" +
                                 "dir=" + resultFolder.getAbsolutePath() + ";" +
-                                "libPath=" + asyncProfilerAbsolutePath)
+                                "libPath=" + asyncProfilerAbsolutePath + ";" +
+                                "simple=true")
                 .jvmArgs("-Xms2g", "-Xmx2g")
                 .result(benchmarkResults.getAbsolutePath())
                 .resultFormat(ResultFormatType.CSV)
