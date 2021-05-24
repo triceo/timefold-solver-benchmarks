@@ -31,6 +31,8 @@ public enum Example {
     MEETING_SCHEDULING(MeetingSchedulingProblem::new,
             CONSTRAINT_STREAMS_DROOLS, DRL),
     NQUEENS(NQueensProblem::new),
+    NURSE_ROSTERING(NurseRosteringProblem::new,
+            CONSTRAINT_STREAMS_DROOLS, DRL),
     PATIENT_ADMISSION_SCHEDULING(PatientAdmissionSchedulingProblem::new,
             CONSTRAINT_STREAMS_DROOLS, DRL),
     ROCK_TOUR(RockTourProblem::new,
