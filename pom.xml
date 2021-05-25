@@ -23,7 +23,7 @@
         <formatter.skip>true</formatter.skip>
         <java.module.name>org.optaplanner.sdb</java.module.name>
         <java.release>11</java.release>
-        <jmh.version>1.29</jmh.version>
+        <jmh.version>1.31</jmh.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <uberjar.name>benchmarks</uberjar.name>
     </properties>
