@@ -1,8 +1,6 @@
 package org.optaplanner.sdb.problems;
 
 import java.io.File;
-import java.util.Collections;
-import java.util.List;
 
 import org.optaplanner.core.api.score.stream.ConstraintStreamImplType;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
@@ -14,18 +12,18 @@ import org.optaplanner.examples.investment.optional.score.InvestmentEasyScoreCal
 import org.optaplanner.examples.investment.optional.score.InvestmentIncrementalScoreCalculator;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 import org.optaplanner.sdb.params.Example;
-import org.optaplanner.sdb.params.ScoreDirector;
+import org.optaplanner.sdb.params.ScoreDirectorType;
 
-public final class InvestmentProblem extends AbstractProblem<InvestmentSolution, AssetClassAllocation> {
+public final class InvestmentProblem extends AbstractProblem<InvestmentSolution> {
 
-    public InvestmentProblem(ScoreDirector scoreDirector) {
-        super(Example.INVESTMENT, scoreDirector);
+    public InvestmentProblem(ScoreDirectorType scoreDirectorType) {
+        super(Example.INVESTMENT, scoreDirectorType);
     }
 
     @Override
-    protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirector scoreDirector) {
+    protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirectorType scoreDirectorType) {
         ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();
-        switch (scoreDirector) {
+        switch (scoreDirectorType) {
             case CONSTRAINT_STREAMS_DROOLS:
                 return scoreDirectorFactoryConfig
                         .withConstraintProviderClass(InvestmentConstraintProvider.class)
@@ -41,7 +39,7 @@ public final class InvestmentProblem extends AbstractProblem<InvestmentSolution,
                         .withIncrementalScoreCalculatorClass(InvestmentIncrementalScoreCalculator.class);
             case CONSTRAINT_STREAMS_BAVET:
             default:
-                throw new UnsupportedOperationException("Score director: " + scoreDirector);
+                throw new UnsupportedOperationException("Score director: " + scoreDirectorType);
         }
     }
 
@@ -51,20 +49,10 @@ public final class InvestmentProblem extends AbstractProblem<InvestmentSolution,
     }
 
     @Override
-    protected List<String> getEntityVariableNames() {
-        return Collections.singletonList("quantityMillis");
-    }
-
-    @Override
     protected InvestmentSolution readOriginalSolution() {
         final XStreamSolutionFileIO<InvestmentSolution> solutionFileIO =
                 new XStreamSolutionFileIO<>(InvestmentSolution.class);
         return solutionFileIO.read(new File("data/investment-de_smet_1.xml"));
-    }
-
-    @Override
-    protected Class<AssetClassAllocation> getEntityClass() {
-        return AssetClassAllocation.class;
     }
 
 }

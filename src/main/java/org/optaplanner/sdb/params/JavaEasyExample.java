@@ -11,8 +11,8 @@ public class JavaEasyExample extends AbstractExample {
     public Example example;
 
     @Override
-    protected ScoreDirector getScoreDirector() {
-        return ScoreDirector.JAVA_EASY;
+    protected ScoreDirectorType getScoreDirector() {
+        return ScoreDirectorType.JAVA_EASY;
     }
 
     @Override

@@ -1,8 +1,6 @@
 package org.optaplanner.sdb.problems;
 
 import java.io.File;
-import java.util.Collections;
-import java.util.List;
 
 import org.optaplanner.core.api.score.stream.ConstraintStreamImplType;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
@@ -14,22 +12,22 @@ import org.optaplanner.examples.tsp.optional.score.TspEasyScoreCalculator;
 import org.optaplanner.examples.tsp.optional.score.TspIncrementalScoreCalculator;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 import org.optaplanner.sdb.params.Example;
-import org.optaplanner.sdb.params.ScoreDirector;
+import org.optaplanner.sdb.params.ScoreDirectorType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class TspProblem extends AbstractProblem<TspSolution, Visit> {
+public final class TspProblem extends AbstractProblem<TspSolution> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TspProblem.class);
 
-    public TspProblem(ScoreDirector scoreDirector) {
-        super(Example.TSP, scoreDirector);
+    public TspProblem(ScoreDirectorType scoreDirectorType) {
+        super(Example.TSP, scoreDirectorType);
     }
 
     @Override
-    protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirector scoreDirector) {
+    protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirectorType scoreDirectorType) {
         ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();
-        switch (scoreDirector) {
+        switch (scoreDirectorType) {
             case CONSTRAINT_STREAMS_DROOLS:
                 return scoreDirectorFactoryConfig
                         .withConstraintProviderClass(TspConstraintProvider.class)
@@ -45,18 +43,13 @@ public final class TspProblem extends AbstractProblem<TspSolution, Visit> {
                         .withIncrementalScoreCalculatorClass(TspIncrementalScoreCalculator.class);
             case CONSTRAINT_STREAMS_BAVET:
             default:
-                throw new UnsupportedOperationException("Score director: " + scoreDirector);
+                throw new UnsupportedOperationException("Score director: " + scoreDirectorType);
         }
     }
 
     @Override
     protected SolutionDescriptor<TspSolution> buildSolutionDescriptor() {
         return SolutionDescriptor.buildSolutionDescriptor(TspSolution.class, Visit.class);
-    }
-
-    @Override
-    protected List<String> getEntityVariableNames() {
-        return Collections.singletonList("previousStandstill");
     }
 
     @Override
@@ -70,11 +63,6 @@ public final class TspProblem extends AbstractProblem<TspSolution, Visit> {
                 LOGGER.warn("XStream's thrown stack overflow, retrying.");
             }
         }
-    }
-
-    @Override
-    protected Class<Visit> getEntityClass() {
-        return Visit.class;
     }
 
 }

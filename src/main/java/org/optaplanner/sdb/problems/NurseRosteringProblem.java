@@ -1,8 +1,6 @@
 package org.optaplanner.sdb.problems;
 
 import java.io.File;
-import java.util.Collections;
-import java.util.List;
 
 import org.optaplanner.core.api.score.stream.ConstraintStreamImplType;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
@@ -12,18 +10,18 @@ import org.optaplanner.examples.nurserostering.domain.ShiftAssignment;
 import org.optaplanner.examples.nurserostering.optional.score.NurseRosteringConstraintProvider;
 import org.optaplanner.examples.nurserostering.persistence.NurseRosterXmlSolutionFileIO;
 import org.optaplanner.sdb.params.Example;
-import org.optaplanner.sdb.params.ScoreDirector;
+import org.optaplanner.sdb.params.ScoreDirectorType;
 
-public final class NurseRosteringProblem extends AbstractProblem<NurseRoster, ShiftAssignment> {
+public final class NurseRosteringProblem extends AbstractProblem<NurseRoster> {
 
-    public NurseRosteringProblem(ScoreDirector scoreDirector) {
-        super(Example.NURSE_ROSTERING, scoreDirector);
+    public NurseRosteringProblem(ScoreDirectorType scoreDirectorType) {
+        super(Example.NURSE_ROSTERING, scoreDirectorType);
     }
 
     @Override
-    protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirector scoreDirector) {
+    protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirectorType scoreDirectorType) {
         ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();
-        switch (scoreDirector) {
+        switch (scoreDirectorType) {
             case CONSTRAINT_STREAMS_DROOLS:
                 return scoreDirectorFactoryConfig
                         .withConstraintProviderClass(NurseRosteringConstraintProvider.class)
@@ -32,7 +30,7 @@ public final class NurseRosteringProblem extends AbstractProblem<NurseRoster, Sh
                 return scoreDirectorFactoryConfig
                         .withScoreDrls("org/optaplanner/examples/nurserostering/solver/nurseRosteringConstraints.drl");
             default:
-                throw new UnsupportedOperationException("Score director: " + scoreDirector);
+                throw new UnsupportedOperationException("Score director: " + scoreDirectorType);
         }
     }
 
@@ -42,19 +40,9 @@ public final class NurseRosteringProblem extends AbstractProblem<NurseRoster, Sh
     }
 
     @Override
-    protected List<String> getEntityVariableNames() {
-        return Collections.singletonList("employee");
-    }
-
-    @Override
     protected NurseRoster readOriginalSolution() {
         return new NurseRosterXmlSolutionFileIO()
                 .read(new File("data/nurserostering-medium_late01.xml"));
-    }
-
-    @Override
-    protected Class<ShiftAssignment> getEntityClass() {
-        return ShiftAssignment.class;
     }
 
 }

@@ -11,8 +11,8 @@ public class JavaIncrementalExample extends AbstractExample {
     public Example example;
 
     @Override
-    protected ScoreDirector getScoreDirector() {
-        return ScoreDirector.JAVA_INCREMENTAL;
+    protected ScoreDirectorType getScoreDirector() {
+        return ScoreDirectorType.JAVA_INCREMENTAL;
     }
 
     @Override

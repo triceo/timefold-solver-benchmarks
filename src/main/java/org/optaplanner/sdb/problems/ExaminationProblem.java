@@ -1,8 +1,6 @@
 package org.optaplanner.sdb.problems;
 
 import java.io.File;
-import java.util.Collections;
-import java.util.List;
 
 import org.optaplanner.core.api.score.stream.ConstraintStreamImplType;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
@@ -14,18 +12,18 @@ import org.optaplanner.examples.examination.domain.LeadingExam;
 import org.optaplanner.examples.examination.optional.score.ExaminationConstraintProvider;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 import org.optaplanner.sdb.params.Example;
-import org.optaplanner.sdb.params.ScoreDirector;
+import org.optaplanner.sdb.params.ScoreDirectorType;
 
-public final class ExaminationProblem extends AbstractProblem<Examination, Exam> {
+public final class ExaminationProblem extends AbstractProblem<Examination> {
 
-    public ExaminationProblem(ScoreDirector scoreDirector) {
-        super(Example.EXAMINATION, scoreDirector);
+    public ExaminationProblem(ScoreDirectorType scoreDirectorType) {
+        super(Example.EXAMINATION, scoreDirectorType);
     }
 
     @Override
-    protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirector scoreDirector) {
+    protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirectorType scoreDirectorType) {
         ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();
-        switch (scoreDirector) {
+        switch (scoreDirectorType) {
             case CONSTRAINT_STREAMS_DROOLS:
                 return scoreDirectorFactoryConfig
                         .withConstraintProviderClass(ExaminationConstraintProvider.class)
@@ -37,7 +35,7 @@ public final class ExaminationProblem extends AbstractProblem<Examination, Exam>
             case JAVA_EASY:
             case JAVA_INCREMENTAL:
             default:
-                throw new UnsupportedOperationException("Score director: " + scoreDirector);
+                throw new UnsupportedOperationException("Score director: " + scoreDirectorType);
         }
     }
 
@@ -48,20 +46,10 @@ public final class ExaminationProblem extends AbstractProblem<Examination, Exam>
     }
 
     @Override
-    protected List<String> getEntityVariableNames() {
-        return Collections.singletonList("room");
-    }
-
-    @Override
     protected Examination readOriginalSolution() {
         final XStreamSolutionFileIO<Examination> solutionFileIO =
                 new XStreamSolutionFileIO<>(Examination.class);
         return solutionFileIO.read(new File("data/examination-comp_set8.xml"));
-    }
-
-    @Override
-    protected Class<Exam> getEntityClass() {
-        return Exam.class;
     }
 
 }

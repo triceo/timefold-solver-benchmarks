@@ -26,9 +26,9 @@ import org.optaplanner.core.impl.score.director.InnerScoreDirector;
 import org.optaplanner.core.impl.score.director.InnerScoreDirectorFactory;
 import org.optaplanner.core.impl.solver.scope.SolverScope;
 import org.optaplanner.sdb.params.Example;
-import org.optaplanner.sdb.params.ScoreDirector;
+import org.optaplanner.sdb.params.ScoreDirectorType;
 
-abstract class AbstractProblem<Solution_, Entity_> implements Problem {
+abstract class AbstractProblem<Solution_> implements Problem {
 
     private final InnerScoreDirectorFactory<Solution_, ?> scoreDirectorFactory;
     private final Solution_ originalSolution;
@@ -42,36 +42,40 @@ abstract class AbstractProblem<Solution_, Entity_> implements Problem {
     private LocalSearchStepScope<Solution_> stepScope;
     private Move<Solution_> move;
 
-    protected AbstractProblem(final Example example, final ScoreDirector scoreDirector) {
+    protected AbstractProblem(final Example example, final ScoreDirectorType scoreDirectorType) {
         final ScoreDirectorFactoryConfig scoreDirectorFactoryConfig =
-                buildScoreDirectorFactoryConfig(Objects.requireNonNull(scoreDirector));
+                buildScoreDirectorFactoryConfig(Objects.requireNonNull(scoreDirectorType));
         scoreDirectorFactory =
-                ScoreDirector.buildScoreDirectorFactory(scoreDirectorFactoryConfig, buildSolutionDescriptor());
+                ScoreDirectorType.buildScoreDirectorFactory(scoreDirectorFactoryConfig, buildSolutionDescriptor());
         originalSolution = ProblemInitializer.getSolution(example, scoreDirectorFactory.getSolutionDescriptor(),
                 this::buildScoreDirectorFactoryConfig, this::readOriginalSolution); // Expensive.
-        moveSelectorFactory = buildMoveSelectorFactory();
+        moveSelectorFactory = buildMoveSelectorFactory(scoreDirectorFactory.getSolutionDescriptor());
     }
 
-    abstract protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirector scoreDirector);
+    abstract protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirectorType scoreDirectorType);
 
     abstract protected SolutionDescriptor<Solution_> buildSolutionDescriptor();
 
-    abstract protected List<String> getEntityVariableNames();
-
     abstract protected Solution_ readOriginalSolution();
 
-    abstract protected Class<Entity_> getEntityClass();
-
-    protected MoveSelectorFactory<Solution_> buildMoveSelectorFactory() {
-        final EntitySelectorConfig entitySelectorConfig = new EntitySelectorConfig(getEntityClass());
-        List<MoveSelectorConfig> moveSelectorConfigs = getEntityVariableNames().stream()
-                .map(variableName -> {
-                    final ValueSelectorConfig valueSelectorConfig = new ValueSelectorConfig(variableName);
-                    final ChangeMoveSelectorConfig moveSelectorConfig = new ChangeMoveSelectorConfig();
-                    moveSelectorConfig.setEntitySelectorConfig(entitySelectorConfig);
-                    moveSelectorConfig.setValueSelectorConfig(valueSelectorConfig);
-                    return moveSelectorConfig;
-                }).collect(Collectors.toList());
+    protected MoveSelectorFactory<Solution_> buildMoveSelectorFactory(SolutionDescriptor<Solution_> solutionDescriptor) {
+        // Create a union move selector over all entities and variables.
+        // We go via move config, so we don't have to worry about differences between chained and non-chained problems.
+        List<MoveSelectorConfig> moveSelectorConfigs = solutionDescriptor.getGenuineEntityDescriptors().stream()
+                .flatMap(entityDescriptor -> {
+                            EntitySelectorConfig entitySelectorConfig =
+                                    new EntitySelectorConfig(entityDescriptor.getEntityClass());
+                            return entityDescriptor.getGenuineVariableDescriptors().stream()
+                                    .map(variableDescriptor -> {
+                                        String variableName = variableDescriptor.getVariableName();
+                                        ValueSelectorConfig valueSelectorConfig = new ValueSelectorConfig(variableName);
+                                        ChangeMoveSelectorConfig moveSelectorConfig = new ChangeMoveSelectorConfig();
+                                        moveSelectorConfig.setEntitySelectorConfig(entitySelectorConfig);
+                                        moveSelectorConfig.setValueSelectorConfig(valueSelectorConfig);
+                                        return moveSelectorConfig;
+                                    });
+                        }
+                ).collect(Collectors.toList());
         UnionMoveSelectorConfig unionMoveSelectorConfig = new UnionMoveSelectorConfig();
         unionMoveSelectorConfig.setMoveSelectorConfigList(moveSelectorConfigs);
         return MoveSelectorFactory.create(unionMoveSelectorConfig);
@@ -119,8 +123,9 @@ abstract class AbstractProblem<Solution_, Entity_> implements Problem {
         // - Speed of score calculation on those updates.
         // Unfortunately, we also benchmark a bit of the overhead of the move. Hopefully, that is not too much.
         // More importantly, it is a constant overhead and therefore should not affect the results.
-        move.doMove(scoreDirector);
-        return scoreDirector.calculateScore();
+        move = move.doMove(scoreDirector)
+                .doMove(scoreDirector); // We run the undo too, so that we can keep the same move selector.
+        return scoreDirector.calculateScore(); // Run incremental calculation over changes from both moves.
     }
 
     @Override

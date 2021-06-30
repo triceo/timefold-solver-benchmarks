@@ -1,27 +1,27 @@
 package org.optaplanner.sdb;
 
+import java.util.stream.Stream;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.optaplanner.sdb.params.Example;
-import org.optaplanner.sdb.params.ScoreDirector;
+import org.optaplanner.sdb.params.ScoreDirectorType;
 import org.optaplanner.sdb.problems.Problem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.stream.Stream;
 
 final class ScoreDirectorBenchmarkTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ScoreDirectorBenchmarkTest.class);
 
     @ParameterizedTest
-    @MethodSource("scoreDirectorAndExampleProvider")
-    void runTest(ScoreDirector scoreDirector, Example example) {
-        LOGGER.info("Testing {} for {}.", scoreDirector, example);
+    @MethodSource("scoreDirectorTypeAndExampleProvider")
+    void runTest(ScoreDirectorType scoreDirectorType, Example example) {
+        LOGGER.info("Testing {} for {}.", scoreDirectorType, example);
         Assertions.assertDoesNotThrow(() -> {
-            final Problem problem = example.create(scoreDirector);
+            final Problem problem = example.create(scoreDirectorType);
             problem.setupTrial();
             problem.setupIteration();
             problem.setupInvocation();
@@ -32,11 +32,11 @@ final class ScoreDirectorBenchmarkTest {
         });
     }
 
-    public static Stream<Arguments> scoreDirectorAndExampleProvider() {
-        return Stream.of(ScoreDirector.values())
-                .flatMap(scoreDirector -> Stream.of(Example.values())
-                        .filter(example -> example.isSupportedOn(scoreDirector))
-                        .map(example -> Arguments.arguments(scoreDirector, example)));
+    public static Stream<Arguments> scoreDirectorTypeAndExampleProvider() {
+        return Stream.of(ScoreDirectorType.values())
+                .flatMap(scoreDirectorType -> Stream.of(Example.values())
+                        .filter(example -> example.isSupportedOn(scoreDirectorType))
+                        .map(example -> Arguments.arguments(scoreDirectorType, example)));
     }
 
 }

@@ -27,11 +27,11 @@ import org.optaplanner.sdb.problems.TravelingTournamentProblem;
 import org.optaplanner.sdb.problems.TspProblem;
 import org.optaplanner.sdb.problems.VehicleRoutingProblem;
 
-import static org.optaplanner.sdb.params.ScoreDirector.CONSTRAINT_STREAMS_BAVET;
-import static org.optaplanner.sdb.params.ScoreDirector.CONSTRAINT_STREAMS_DROOLS;
-import static org.optaplanner.sdb.params.ScoreDirector.DRL;
-import static org.optaplanner.sdb.params.ScoreDirector.JAVA_EASY;
-import static org.optaplanner.sdb.params.ScoreDirector.JAVA_INCREMENTAL;
+import static org.optaplanner.sdb.params.ScoreDirectorType.CONSTRAINT_STREAMS_BAVET;
+import static org.optaplanner.sdb.params.ScoreDirectorType.CONSTRAINT_STREAMS_DROOLS;
+import static org.optaplanner.sdb.params.ScoreDirectorType.DRL;
+import static org.optaplanner.sdb.params.ScoreDirectorType.JAVA_EASY;
+import static org.optaplanner.sdb.params.ScoreDirectorType.JAVA_INCREMENTAL;
 
 public enum Example {
 
@@ -72,28 +72,28 @@ public enum Example {
             JAVA_EASY, JAVA_INCREMENTAL, CONSTRAINT_STREAMS_DROOLS, DRL),
     VEHICLE_ROUTING(VehicleRoutingProblem::new);
 
-    private final Function<ScoreDirector, Problem> problemFactory;
-    private final Set<ScoreDirector> supportedScoreDirectors;
+    private final Function<ScoreDirectorType, Problem> problemFactory;
+    private final Set<ScoreDirectorType> supportedScoreDirectorTypes;
 
-    Example(Function<ScoreDirector, Problem> problemFactory, ScoreDirector... supportedScoreDirector) {
+    Example(Function<ScoreDirectorType, Problem> problemFactory, ScoreDirectorType... supportedScoreDirectorType) {
         this.problemFactory = Objects.requireNonNull(problemFactory);
-        if (supportedScoreDirector.length == 0) {
-            this.supportedScoreDirectors = EnumSet.allOf(ScoreDirector.class);
+        if (supportedScoreDirectorType.length == 0) {
+            this.supportedScoreDirectorTypes = EnumSet.allOf(ScoreDirectorType.class);
         } else {
-            this.supportedScoreDirectors = EnumSet.copyOf(Arrays.asList(supportedScoreDirector));
+            this.supportedScoreDirectorTypes = EnumSet.copyOf(Arrays.asList(supportedScoreDirectorType));
         }
     }
 
-    public boolean isSupportedOn(ScoreDirector scoreDirector) {
-        return supportedScoreDirectors.contains(scoreDirector);
+    public boolean isSupportedOn(ScoreDirectorType scoreDirectorType) {
+        return supportedScoreDirectorTypes.contains(scoreDirectorType);
     }
 
-    public Problem create(ScoreDirector scoreDirector) {
-        if (!isSupportedOn(scoreDirector)) {
-            throw new IllegalArgumentException("Unsupported score director (" + scoreDirector + ") for example ("
+    public Problem create(ScoreDirectorType scoreDirectorType) {
+        if (!isSupportedOn(scoreDirectorType)) {
+            throw new IllegalArgumentException("Unsupported score director (" + scoreDirectorType + ") for example ("
                     + this + ").");
         }
-        return problemFactory.apply(scoreDirector);
+        return problemFactory.apply(scoreDirectorType);
     }
 
 }

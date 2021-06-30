@@ -21,7 +21,7 @@ import org.optaplanner.core.impl.solver.termination.BasicPlumbingTermination;
 import org.optaplanner.core.impl.solver.termination.Termination;
 import org.optaplanner.core.impl.solver.termination.TerminationFactory;
 import org.optaplanner.sdb.params.Example;
-import org.optaplanner.sdb.params.ScoreDirector;
+import org.optaplanner.sdb.params.ScoreDirectorType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,15 +42,15 @@ public final class ProblemInitializer {
     private static final Map<Example, Object> SOLUTIONS = new EnumMap<>(Example.class);
 
     public static <Solution_> Solution_ getSolution(Example example, SolutionDescriptor<Solution_> solutionDescriptor,
-                                                    Function<ScoreDirector, ScoreDirectorFactoryConfig> configFunction,
+                                                    Function<ScoreDirectorType, ScoreDirectorFactoryConfig> configFunction,
                                                     Supplier<Solution_> solutionSupplier) {
-        final ScoreDirector fastestPossibleScoreDirector = Arrays.stream(ScoreDirector.values())
+        final ScoreDirectorType fastestPossibleScoreDirectorType = Arrays.stream(ScoreDirectorType.values())
                 .filter(example::isSupportedOn)
-                .max(ScoreDirector::compareTo)
+                .max(ScoreDirectorType::compareTo)
                 .orElseThrow();
-        final ScoreDirectorFactoryConfig config = configFunction.apply(fastestPossibleScoreDirector);
+        final ScoreDirectorFactoryConfig config = configFunction.apply(fastestPossibleScoreDirectorType);
         final InnerScoreDirectorFactory<Solution_, ?> scoreDirectorFactory =
-                ScoreDirector.buildScoreDirectorFactory(config, solutionDescriptor);
+                ScoreDirectorType.buildScoreDirectorFactory(config, solutionDescriptor);
         return (Solution_) SOLUTIONS.computeIfAbsent(example,
                 e -> initialize(example, solutionSupplier.get(), scoreDirectorFactory));
     }

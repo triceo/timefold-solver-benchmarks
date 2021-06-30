@@ -11,8 +11,8 @@ public class ConstraintStreamsDroolsExample extends AbstractExample {
     public Example example;
 
     @Override
-    protected ScoreDirector getScoreDirector() {
-        return ScoreDirector.CONSTRAINT_STREAMS_DROOLS;
+    protected ScoreDirectorType getScoreDirector() {
+        return ScoreDirectorType.CONSTRAINT_STREAMS_DROOLS;
     }
 
     @Override

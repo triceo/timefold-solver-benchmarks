@@ -1,8 +1,6 @@
 package org.optaplanner.sdb.problems;
 
 import java.io.File;
-import java.util.Collections;
-import java.util.List;
 
 import org.optaplanner.core.api.score.stream.ConstraintStreamImplType;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
@@ -13,18 +11,18 @@ import org.optaplanner.examples.rocktour.domain.RockTourSolution;
 import org.optaplanner.examples.rocktour.optional.score.RockTourConstraintProvider;
 import org.optaplanner.examples.rocktour.persistence.RockTourXlsxFileIO;
 import org.optaplanner.sdb.params.Example;
-import org.optaplanner.sdb.params.ScoreDirector;
+import org.optaplanner.sdb.params.ScoreDirectorType;
 
-public final class RockTourProblem extends AbstractProblem<RockTourSolution, RockShow> {
+public final class RockTourProblem extends AbstractProblem<RockTourSolution> {
 
-    public RockTourProblem(ScoreDirector scoreDirector) {
-        super(Example.ROCK_TOUR, scoreDirector);
+    public RockTourProblem(ScoreDirectorType scoreDirectorType) {
+        super(Example.ROCK_TOUR, scoreDirectorType);
     }
 
     @Override
-    protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirector scoreDirector) {
+    protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirectorType scoreDirectorType) {
         ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();
-        switch (scoreDirector) {
+        switch (scoreDirectorType) {
             case CONSTRAINT_STREAMS_BAVET:
                 return scoreDirectorFactoryConfig
                         .withConstraintProviderClass(RockTourConstraintProvider.class)
@@ -39,7 +37,7 @@ public final class RockTourProblem extends AbstractProblem<RockTourSolution, Roc
             case JAVA_EASY:
             case JAVA_INCREMENTAL:
             default:
-                throw new UnsupportedOperationException("Score director: " + scoreDirector);
+                throw new UnsupportedOperationException("Score director: " + scoreDirectorType);
         }
     }
 
@@ -49,19 +47,9 @@ public final class RockTourProblem extends AbstractProblem<RockTourSolution, Roc
     }
 
     @Override
-    protected List<String> getEntityVariableNames() {
-        return Collections.singletonList("previousStandstill");
-    }
-
-    @Override
     protected RockTourSolution readOriginalSolution() {
         return new RockTourXlsxFileIO()
                 .read(new File("data/rocktour-47shows.xlsx"));
-    }
-
-    @Override
-    protected Class<RockShow> getEntityClass() {
-        return RockShow.class;
     }
 
 }

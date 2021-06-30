@@ -1,8 +1,6 @@
 package org.optaplanner.sdb.problems;
 
 import java.io.File;
-import java.util.Collections;
-import java.util.List;
 
 import org.optaplanner.core.api.score.stream.ConstraintStreamImplType;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
@@ -13,19 +11,19 @@ import org.optaplanner.examples.machinereassignment.optional.score.MachineReassi
 import org.optaplanner.examples.machinereassignment.score.MachineReassignmentIncrementalScoreCalculator;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 import org.optaplanner.sdb.params.Example;
-import org.optaplanner.sdb.params.ScoreDirector;
+import org.optaplanner.sdb.params.ScoreDirectorType;
 
 public final class MachineReassignmentProblem
-        extends AbstractProblem<MachineReassignment, MrProcessAssignment> {
+        extends AbstractProblem<MachineReassignment> {
 
-    public MachineReassignmentProblem(ScoreDirector scoreDirector) {
-        super(Example.MACHINE_REASSIGNMENT, scoreDirector);
+    public MachineReassignmentProblem(ScoreDirectorType scoreDirectorType) {
+        super(Example.MACHINE_REASSIGNMENT, scoreDirectorType);
     }
 
     @Override
-    protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirector scoreDirector) {
+    protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirectorType scoreDirectorType) {
         ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();
-        switch (scoreDirector) {
+        switch (scoreDirectorType) {
             case CONSTRAINT_STREAMS_DROOLS:
                 return scoreDirectorFactoryConfig
                         .withConstraintProviderClass(MachineReassignmentConstraintProvider.class)
@@ -39,7 +37,7 @@ public final class MachineReassignmentProblem
             case CONSTRAINT_STREAMS_BAVET:
             case JAVA_EASY:
             default:
-                throw new UnsupportedOperationException("Score director: " + scoreDirector);
+                throw new UnsupportedOperationException("Score director: " + scoreDirectorType);
         }
     }
 
@@ -49,20 +47,10 @@ public final class MachineReassignmentProblem
     }
 
     @Override
-    protected List<String> getEntityVariableNames() {
-        return Collections.singletonList("machine");
-    }
-
-    @Override
     protected MachineReassignment readOriginalSolution() {
         final XStreamSolutionFileIO<MachineReassignment> solutionFileIO =
                 new XStreamSolutionFileIO<>(MachineReassignment.class);
         return solutionFileIO.read(new File("data/machinereassignment-a23.xml"));
-    }
-
-    @Override
-    protected Class<MrProcessAssignment> getEntityClass() {
-        return MrProcessAssignment.class;
     }
 
 }

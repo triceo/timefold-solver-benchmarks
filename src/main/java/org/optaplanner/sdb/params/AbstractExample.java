@@ -9,7 +9,7 @@ public abstract class AbstractExample {
 
     public Problem problem;
 
-    abstract protected ScoreDirector getScoreDirector();
+    abstract protected ScoreDirectorType getScoreDirector();
 
     abstract protected Example getExample();
 

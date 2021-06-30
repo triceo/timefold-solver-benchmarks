@@ -9,7 +9,7 @@ import org.optaplanner.core.impl.score.director.ScoreDirectorFactoryFactory;
 /**
  * Order by expected speed increase.
  */
-public enum ScoreDirector implements Comparable<ScoreDirector> {
+public enum ScoreDirectorType implements Comparable<ScoreDirectorType> {
 
     JAVA_EASY,
     DRL,
@@ -21,7 +21,7 @@ public enum ScoreDirector implements Comparable<ScoreDirector> {
             ScoreDirectorFactoryConfig scoreDirectorFactoryConfig, SolutionDescriptor<Solution_> solutionDescriptor) {
         ScoreDirectorFactoryFactory<Solution_, ?> scoreDirectorFactoryFactory =
                 new ScoreDirectorFactoryFactory<>(scoreDirectorFactoryConfig);
-        return scoreDirectorFactoryFactory.buildScoreDirectorFactory(ScoreDirector.class.getClassLoader(),
+        return scoreDirectorFactoryFactory.buildScoreDirectorFactory(ScoreDirectorType.class.getClassLoader(),
                 EnvironmentMode.REPRODUCIBLE, solutionDescriptor);
     }
 

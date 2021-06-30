@@ -11,8 +11,8 @@ public class ConstraintStreamsBavetExample extends AbstractExample {
     public Example example;
 
     @Override
-    protected ScoreDirector getScoreDirector() {
-        return ScoreDirector.CONSTRAINT_STREAMS_BAVET;
+    protected ScoreDirectorType getScoreDirector() {
+        return ScoreDirectorType.CONSTRAINT_STREAMS_BAVET;
     }
 
     @Override

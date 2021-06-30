@@ -11,8 +11,8 @@ public class DrlExample extends AbstractExample {
     public Example example;
 
     @Override
-    protected ScoreDirector getScoreDirector() {
-        return ScoreDirector.DRL;
+    protected ScoreDirectorType getScoreDirector() {
+        return ScoreDirectorType.DRL;
     }
 
     @Override

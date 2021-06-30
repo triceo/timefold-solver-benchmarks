@@ -1,8 +1,6 @@
 package org.optaplanner.sdb.problems;
 
 import java.io.File;
-import java.util.Collections;
-import java.util.List;
 
 import org.optaplanner.core.api.score.stream.ConstraintStreamImplType;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
@@ -12,18 +10,18 @@ import org.optaplanner.examples.travelingtournament.domain.TravelingTournament;
 import org.optaplanner.examples.travelingtournament.optional.score.TravelingTournamentConstraintProvider;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 import org.optaplanner.sdb.params.Example;
-import org.optaplanner.sdb.params.ScoreDirector;
+import org.optaplanner.sdb.params.ScoreDirectorType;
 
-public final class TravelingTournamentProblem extends AbstractProblem<TravelingTournament, Match> {
+public final class TravelingTournamentProblem extends AbstractProblem<TravelingTournament> {
 
-    public TravelingTournamentProblem(ScoreDirector scoreDirector) {
-        super(Example.TRAVELING_TOURNAMENT, scoreDirector);
+    public TravelingTournamentProblem(ScoreDirectorType scoreDirectorType) {
+        super(Example.TRAVELING_TOURNAMENT, scoreDirectorType);
     }
 
     @Override
-    protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirector scoreDirector) {
+    protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirectorType scoreDirectorType) {
         ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();
-        switch (scoreDirector) {
+        switch (scoreDirectorType) {
             case CONSTRAINT_STREAMS_DROOLS:
                 return scoreDirectorFactoryConfig
                         .withConstraintProviderClass(TravelingTournamentConstraintProvider.class)
@@ -35,7 +33,7 @@ public final class TravelingTournamentProblem extends AbstractProblem<TravelingT
             case JAVA_EASY:
             case JAVA_INCREMENTAL:
             default:
-                throw new UnsupportedOperationException("Score director: " + scoreDirector);
+                throw new UnsupportedOperationException("Score director: " + scoreDirectorType);
         }
     }
 
@@ -45,20 +43,10 @@ public final class TravelingTournamentProblem extends AbstractProblem<TravelingT
     }
 
     @Override
-    protected List<String> getEntityVariableNames() {
-        return Collections.singletonList("day");
-    }
-
-    @Override
     protected TravelingTournament readOriginalSolution() {
         final XStreamSolutionFileIO<TravelingTournament> solutionFileIO =
                 new XStreamSolutionFileIO<>(TravelingTournament.class);
         return solutionFileIO.read(new File("data/travelingtournament-4-super14.xml"));
-    }
-
-    @Override
-    protected Class<Match> getEntityClass() {
-        return Match.class;
     }
 
 }

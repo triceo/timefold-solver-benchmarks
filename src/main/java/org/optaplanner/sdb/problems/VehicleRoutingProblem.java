@@ -1,8 +1,6 @@
 package org.optaplanner.sdb.problems;
 
 import java.io.File;
-import java.util.Collections;
-import java.util.List;
 
 import org.optaplanner.core.api.score.stream.ConstraintStreamImplType;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
@@ -16,18 +14,18 @@ import org.optaplanner.examples.vehiclerouting.optional.score.VehicleRoutingEasy
 import org.optaplanner.examples.vehiclerouting.optional.score.VehicleRoutingIncrementalScoreCalculator;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 import org.optaplanner.sdb.params.Example;
-import org.optaplanner.sdb.params.ScoreDirector;
+import org.optaplanner.sdb.params.ScoreDirectorType;
 
-public final class VehicleRoutingProblem extends AbstractProblem<VehicleRoutingSolution, Customer> {
+public final class VehicleRoutingProblem extends AbstractProblem<VehicleRoutingSolution> {
 
-    public VehicleRoutingProblem(ScoreDirector scoreDirector) {
-        super(Example.VEHICLE_ROUTING, scoreDirector);
+    public VehicleRoutingProblem(ScoreDirectorType scoreDirectorType) {
+        super(Example.VEHICLE_ROUTING, scoreDirectorType);
     }
 
     @Override
-    protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirector scoreDirector) {
+    protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirectorType scoreDirectorType) {
         ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();
-        switch (scoreDirector) {
+        switch (scoreDirectorType) {
             case CONSTRAINT_STREAMS_BAVET:
                 return scoreDirectorFactoryConfig
                         .withConstraintProviderClass(VehicleRoutingConstraintProvider.class)
@@ -46,7 +44,7 @@ public final class VehicleRoutingProblem extends AbstractProblem<VehicleRoutingS
                 return scoreDirectorFactoryConfig
                         .withIncrementalScoreCalculatorClass(VehicleRoutingIncrementalScoreCalculator.class);
             default:
-                throw new UnsupportedOperationException("Score director: " + scoreDirector);
+                throw new UnsupportedOperationException("Score director: " + scoreDirectorType);
         }
     }
 
@@ -57,20 +55,10 @@ public final class VehicleRoutingProblem extends AbstractProblem<VehicleRoutingS
     }
 
     @Override
-    protected List<String> getEntityVariableNames() {
-        return Collections.singletonList("previousStandstill");
-    }
-
-    @Override
     protected VehicleRoutingSolution readOriginalSolution() {
         final XStreamSolutionFileIO<VehicleRoutingSolution> solutionFileIO =
                 new XStreamSolutionFileIO<>(VehicleRoutingSolution.class);
         return solutionFileIO.read(new File("data/vehiclerouting-belgium-tw-n2750-k55.xml"));
-    }
-
-    @Override
-    protected Class<Customer> getEntityClass() {
-        return Customer.class;
     }
 
 }

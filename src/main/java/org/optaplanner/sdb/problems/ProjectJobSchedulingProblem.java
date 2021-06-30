@@ -1,8 +1,6 @@
 package org.optaplanner.sdb.problems;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
 
 import org.optaplanner.core.api.score.stream.ConstraintStreamImplType;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
@@ -13,18 +11,18 @@ import org.optaplanner.examples.projectjobscheduling.optional.score.ProjectJobSc
 import org.optaplanner.examples.projectjobscheduling.score.ProjectJobSchedulingIncrementalScoreCalculator;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 import org.optaplanner.sdb.params.Example;
-import org.optaplanner.sdb.params.ScoreDirector;
+import org.optaplanner.sdb.params.ScoreDirectorType;
 
-public final class ProjectJobSchedulingProblem extends AbstractProblem<Schedule, Allocation> {
+public final class ProjectJobSchedulingProblem extends AbstractProblem<Schedule> {
 
-    public ProjectJobSchedulingProblem(ScoreDirector scoreDirector) {
-        super(Example.PROJECT_JOB_SCHEDULING, scoreDirector);
+    public ProjectJobSchedulingProblem(ScoreDirectorType scoreDirectorType) {
+        super(Example.PROJECT_JOB_SCHEDULING, scoreDirectorType);
     }
 
     @Override
-    protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirector scoreDirector) {
+    protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirectorType scoreDirectorType) {
         ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();
-        switch (scoreDirector) {
+        switch (scoreDirectorType) {
             case CONSTRAINT_STREAMS_DROOLS:
                 return scoreDirectorFactoryConfig
                         .withConstraintProviderClass(ProjectJobSchedulingConstraintProvider.class)
@@ -38,7 +36,7 @@ public final class ProjectJobSchedulingProblem extends AbstractProblem<Schedule,
             case CONSTRAINT_STREAMS_BAVET:
             case JAVA_EASY:
             default:
-                throw new UnsupportedOperationException("Score director: " + scoreDirector);
+                throw new UnsupportedOperationException("Score director: " + scoreDirectorType);
         }
     }
 
@@ -48,20 +46,10 @@ public final class ProjectJobSchedulingProblem extends AbstractProblem<Schedule,
     }
 
     @Override
-    protected List<String> getEntityVariableNames() {
-        return Arrays.asList("executionMode", "delay");
-    }
-
-    @Override
     protected Schedule readOriginalSolution() {
         final XStreamSolutionFileIO<Schedule> solutionFileIO =
                 new XStreamSolutionFileIO<>(Schedule.class);
         return solutionFileIO.read(new File("data/projectjobscheduling-B-10.xml"));
-    }
-
-    @Override
-    protected Class<Allocation> getEntityClass() {
-        return Allocation.class;
     }
 
 }
