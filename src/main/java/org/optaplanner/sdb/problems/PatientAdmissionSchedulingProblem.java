@@ -1,16 +1,18 @@
 package org.optaplanner.sdb.problems;
 
+import java.io.File;
+import java.util.Collections;
+import java.util.List;
+
 import org.optaplanner.core.api.score.stream.ConstraintStreamImplType;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
-import org.optaplanner.sdb.params.ScoreDirector;
-import org.optaplanner.sdb.params.Example;
 import org.optaplanner.examples.pas.domain.BedDesignation;
 import org.optaplanner.examples.pas.domain.PatientAdmissionSchedule;
 import org.optaplanner.examples.pas.optional.score.PatientAdmissionScheduleConstraintProvider;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
-
-import java.io.File;
+import org.optaplanner.sdb.params.Example;
+import org.optaplanner.sdb.params.ScoreDirector;
 
 public final class PatientAdmissionSchedulingProblem
         extends AbstractProblem<PatientAdmissionSchedule, BedDesignation> {
@@ -44,8 +46,8 @@ public final class PatientAdmissionSchedulingProblem
     }
 
     @Override
-    protected String getEntityVariableName() {
-        return "bed";
+    protected List<String> getEntityVariableNames() {
+        return Collections.singletonList("bed");
     }
 
     @Override

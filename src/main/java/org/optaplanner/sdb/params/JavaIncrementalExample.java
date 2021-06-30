@@ -7,7 +7,7 @@ import org.openjdk.jmh.annotations.State;
 @State(Scope.Benchmark)
 public class JavaIncrementalExample extends AbstractExample {
 
-    @Param({"CLOUD_BALANCING", "INVESTMENT", "MACHINE_REASSIGNMENT", "NQUEENS", "TSP", "VEHICLE_ROUTING"})
+    @Param({"CLOUD_BALANCING", "INVESTMENT", "MACHINE_REASSIGNMENT", "NQUEENS", "PROJECT_JOB_SCHEDULING", "TSP", "VEHICLE_ROUTING"})
     public Example example;
 
     @Override

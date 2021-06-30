@@ -1,17 +1,19 @@
 package org.optaplanner.sdb.problems;
 
+import java.io.File;
+import java.util.Collections;
+import java.util.List;
+
 import org.optaplanner.core.api.score.stream.ConstraintStreamImplType;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
-import org.optaplanner.sdb.params.ScoreDirector;
-import org.optaplanner.sdb.params.Example;
 import org.optaplanner.examples.machinereassignment.domain.MachineReassignment;
 import org.optaplanner.examples.machinereassignment.domain.MrProcessAssignment;
 import org.optaplanner.examples.machinereassignment.optional.score.MachineReassignmentConstraintProvider;
 import org.optaplanner.examples.machinereassignment.score.MachineReassignmentIncrementalScoreCalculator;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
-
-import java.io.File;
+import org.optaplanner.sdb.params.Example;
+import org.optaplanner.sdb.params.ScoreDirector;
 
 public final class MachineReassignmentProblem
         extends AbstractProblem<MachineReassignment, MrProcessAssignment> {
@@ -47,8 +49,8 @@ public final class MachineReassignmentProblem
     }
 
     @Override
-    protected String getEntityVariableName() {
-        return "machine";
+    protected List<String> getEntityVariableNames() {
+        return Collections.singletonList("machine");
     }
 
     @Override

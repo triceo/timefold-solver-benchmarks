@@ -1,5 +1,9 @@
 package org.optaplanner.sdb.problems;
 
+import java.io.File;
+import java.util.Collections;
+import java.util.List;
+
 import org.optaplanner.core.api.score.stream.ConstraintStreamImplType;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
@@ -9,8 +13,6 @@ import org.optaplanner.examples.nurserostering.optional.score.NurseRosteringCons
 import org.optaplanner.examples.nurserostering.persistence.NurseRosterXmlSolutionFileIO;
 import org.optaplanner.sdb.params.Example;
 import org.optaplanner.sdb.params.ScoreDirector;
-
-import java.io.File;
 
 public final class NurseRosteringProblem extends AbstractProblem<NurseRoster, ShiftAssignment> {
 
@@ -40,8 +42,8 @@ public final class NurseRosteringProblem extends AbstractProblem<NurseRoster, Sh
     }
 
     @Override
-    protected String getEntityVariableName() {
-        return "employee";
+    protected List<String> getEntityVariableNames() {
+        return Collections.singletonList("employee");
     }
 
     @Override

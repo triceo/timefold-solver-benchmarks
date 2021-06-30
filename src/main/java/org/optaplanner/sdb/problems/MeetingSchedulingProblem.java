@@ -1,16 +1,18 @@
 package org.optaplanner.sdb.problems;
 
+import java.io.File;
+import java.util.Collections;
+import java.util.List;
+
 import org.optaplanner.core.api.score.stream.ConstraintStreamImplType;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
-import org.optaplanner.sdb.params.ScoreDirector;
-import org.optaplanner.sdb.params.Example;
 import org.optaplanner.examples.meetingscheduling.domain.MeetingAssignment;
 import org.optaplanner.examples.meetingscheduling.domain.MeetingSchedule;
 import org.optaplanner.examples.meetingscheduling.optional.score.MeetingSchedulingConstraintProvider;
 import org.optaplanner.examples.meetingscheduling.persistence.MeetingSchedulingXlsxFileIO;
-
-import java.io.File;
+import org.optaplanner.sdb.params.Example;
+import org.optaplanner.sdb.params.ScoreDirector;
 
 public final class MeetingSchedulingProblem extends AbstractProblem<MeetingSchedule, MeetingAssignment> {
 
@@ -43,8 +45,8 @@ public final class MeetingSchedulingProblem extends AbstractProblem<MeetingSched
     }
 
     @Override
-    protected String getEntityVariableName() {
-        return "room";
+    protected List<String> getEntityVariableNames() {
+        return Collections.singletonList("room");
     }
 
     @Override

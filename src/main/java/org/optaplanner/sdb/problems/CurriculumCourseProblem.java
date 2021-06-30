@@ -1,16 +1,18 @@
 package org.optaplanner.sdb.problems;
 
+import java.io.File;
+import java.util.Collections;
+import java.util.List;
+
 import org.optaplanner.core.api.score.stream.ConstraintStreamImplType;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
-import org.optaplanner.sdb.params.ScoreDirector;
-import org.optaplanner.sdb.params.Example;
 import org.optaplanner.examples.curriculumcourse.domain.CourseSchedule;
 import org.optaplanner.examples.curriculumcourse.domain.Lecture;
 import org.optaplanner.examples.curriculumcourse.optional.score.CurriculumCourseConstraintProvider;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
-
-import java.io.File;
+import org.optaplanner.sdb.params.Example;
+import org.optaplanner.sdb.params.ScoreDirector;
 
 public final class CurriculumCourseProblem extends AbstractProblem<CourseSchedule, Lecture> {
 
@@ -43,8 +45,8 @@ public final class CurriculumCourseProblem extends AbstractProblem<CourseSchedul
     }
 
     @Override
-    protected String getEntityVariableName() {
-        return "room";
+    protected List<String> getEntityVariableNames() {
+        return Collections.singletonList("room");
     }
 
     @Override

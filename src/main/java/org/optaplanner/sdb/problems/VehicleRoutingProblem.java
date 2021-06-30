@@ -1,10 +1,12 @@
 package org.optaplanner.sdb.problems;
 
+import java.io.File;
+import java.util.Collections;
+import java.util.List;
+
 import org.optaplanner.core.api.score.stream.ConstraintStreamImplType;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
-import org.optaplanner.sdb.params.ScoreDirector;
-import org.optaplanner.sdb.params.Example;
 import org.optaplanner.examples.vehiclerouting.domain.Customer;
 import org.optaplanner.examples.vehiclerouting.domain.Standstill;
 import org.optaplanner.examples.vehiclerouting.domain.VehicleRoutingSolution;
@@ -13,8 +15,8 @@ import org.optaplanner.examples.vehiclerouting.optional.score.VehicleRoutingCons
 import org.optaplanner.examples.vehiclerouting.optional.score.VehicleRoutingEasyScoreCalculator;
 import org.optaplanner.examples.vehiclerouting.optional.score.VehicleRoutingIncrementalScoreCalculator;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
-
-import java.io.File;
+import org.optaplanner.sdb.params.Example;
+import org.optaplanner.sdb.params.ScoreDirector;
 
 public final class VehicleRoutingProblem extends AbstractProblem<VehicleRoutingSolution, Customer> {
 
@@ -55,8 +57,8 @@ public final class VehicleRoutingProblem extends AbstractProblem<VehicleRoutingS
     }
 
     @Override
-    protected String getEntityVariableName() {
-        return "previousStandstill";
+    protected List<String> getEntityVariableNames() {
+        return Collections.singletonList("previousStandstill");
     }
 
     @Override

@@ -1,17 +1,19 @@
 package org.optaplanner.sdb.problems;
 
+import java.io.File;
+import java.util.Collections;
+import java.util.List;
+
 import org.optaplanner.core.api.score.stream.ConstraintStreamImplType;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
-import org.optaplanner.sdb.params.ScoreDirector;
-import org.optaplanner.sdb.params.Example;
 import org.optaplanner.examples.rocktour.domain.RockShow;
 import org.optaplanner.examples.rocktour.domain.RockStandstill;
 import org.optaplanner.examples.rocktour.domain.RockTourSolution;
 import org.optaplanner.examples.rocktour.optional.score.RockTourConstraintProvider;
 import org.optaplanner.examples.rocktour.persistence.RockTourXlsxFileIO;
-
-import java.io.File;
+import org.optaplanner.sdb.params.Example;
+import org.optaplanner.sdb.params.ScoreDirector;
 
 public final class RockTourProblem extends AbstractProblem<RockTourSolution, RockShow> {
 
@@ -47,8 +49,8 @@ public final class RockTourProblem extends AbstractProblem<RockTourSolution, Roc
     }
 
     @Override
-    protected String getEntityVariableName() {
-        return "previousStandstill";
+    protected List<String> getEntityVariableNames() {
+        return Collections.singletonList("previousStandstill");
     }
 
     @Override

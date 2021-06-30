@@ -1,18 +1,20 @@
 package org.optaplanner.sdb.problems;
 
+import java.io.File;
+import java.util.Collections;
+import java.util.List;
+
 import org.optaplanner.core.api.score.stream.ConstraintStreamImplType;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
-import org.optaplanner.sdb.params.ScoreDirector;
-import org.optaplanner.sdb.params.Example;
 import org.optaplanner.examples.nqueens.domain.NQueens;
 import org.optaplanner.examples.nqueens.domain.Queen;
 import org.optaplanner.examples.nqueens.optional.score.NQueensAdvancedIncrementalScoreCalculator;
 import org.optaplanner.examples.nqueens.optional.score.NQueensConstraintProvider;
 import org.optaplanner.examples.nqueens.optional.score.NQueensMapBasedEasyScoreCalculator;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
-
-import java.io.File;
+import org.optaplanner.sdb.params.Example;
+import org.optaplanner.sdb.params.ScoreDirector;
 
 public final class NQueensProblem extends AbstractProblem<NQueens, Queen> {
 
@@ -52,8 +54,8 @@ public final class NQueensProblem extends AbstractProblem<NQueens, Queen> {
     }
 
     @Override
-    protected String getEntityVariableName() {
-        return "row";
+    protected List<String> getEntityVariableNames() {
+        return Collections.singletonList("row");
     }
 
     @Override

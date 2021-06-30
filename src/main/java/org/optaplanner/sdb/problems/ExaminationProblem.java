@@ -1,15 +1,20 @@
 package org.optaplanner.sdb.problems;
 
+import java.io.File;
+import java.util.Collections;
+import java.util.List;
+
 import org.optaplanner.core.api.score.stream.ConstraintStreamImplType;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
-import org.optaplanner.sdb.params.ScoreDirector;
-import org.optaplanner.sdb.params.Example;
-import org.optaplanner.examples.examination.domain.*;
+import org.optaplanner.examples.examination.domain.Exam;
+import org.optaplanner.examples.examination.domain.Examination;
+import org.optaplanner.examples.examination.domain.FollowingExam;
+import org.optaplanner.examples.examination.domain.LeadingExam;
 import org.optaplanner.examples.examination.optional.score.ExaminationConstraintProvider;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
-
-import java.io.File;
+import org.optaplanner.sdb.params.Example;
+import org.optaplanner.sdb.params.ScoreDirector;
 
 public final class ExaminationProblem extends AbstractProblem<Examination, Exam> {
 
@@ -43,8 +48,8 @@ public final class ExaminationProblem extends AbstractProblem<Examination, Exam>
     }
 
     @Override
-    protected String getEntityVariableName() {
-        return "room";
+    protected List<String> getEntityVariableNames() {
+        return Collections.singletonList("room");
     }
 
     @Override

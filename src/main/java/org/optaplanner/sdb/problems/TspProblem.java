@@ -1,20 +1,22 @@
 package org.optaplanner.sdb.problems;
 
+import java.io.File;
+import java.util.Collections;
+import java.util.List;
+
 import org.optaplanner.core.api.score.stream.ConstraintStreamImplType;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
-import org.optaplanner.sdb.params.Example;
-import org.optaplanner.sdb.params.ScoreDirector;
 import org.optaplanner.examples.tsp.domain.TspSolution;
 import org.optaplanner.examples.tsp.domain.Visit;
 import org.optaplanner.examples.tsp.optional.score.TspConstraintProvider;
 import org.optaplanner.examples.tsp.optional.score.TspEasyScoreCalculator;
 import org.optaplanner.examples.tsp.optional.score.TspIncrementalScoreCalculator;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
+import org.optaplanner.sdb.params.Example;
+import org.optaplanner.sdb.params.ScoreDirector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.File;
 
 public final class TspProblem extends AbstractProblem<TspSolution, Visit> {
 
@@ -53,8 +55,8 @@ public final class TspProblem extends AbstractProblem<TspSolution, Visit> {
     }
 
     @Override
-    protected String getEntityVariableName() {
-        return "previousStandstill";
+    protected List<String> getEntityVariableNames() {
+        return Collections.singletonList("previousStandstill");
     }
 
     @Override

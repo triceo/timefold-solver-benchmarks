@@ -1,8 +1,16 @@
 package org.optaplanner.sdb.problems;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
+import java.util.Random;
+import java.util.stream.Collectors;
+
 import org.optaplanner.core.config.heuristic.selector.common.SelectionCacheType;
 import org.optaplanner.core.config.heuristic.selector.common.SelectionOrder;
 import org.optaplanner.core.config.heuristic.selector.entity.EntitySelectorConfig;
+import org.optaplanner.core.config.heuristic.selector.move.MoveSelectorConfig;
+import org.optaplanner.core.config.heuristic.selector.move.composite.UnionMoveSelectorConfig;
 import org.optaplanner.core.config.heuristic.selector.move.generic.ChangeMoveSelectorConfig;
 import org.optaplanner.core.config.heuristic.selector.value.ValueSelectorConfig;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
@@ -19,10 +27,6 @@ import org.optaplanner.core.impl.score.director.InnerScoreDirectorFactory;
 import org.optaplanner.core.impl.solver.scope.SolverScope;
 import org.optaplanner.sdb.params.Example;
 import org.optaplanner.sdb.params.ScoreDirector;
-
-import java.util.Iterator;
-import java.util.Objects;
-import java.util.Random;
 
 abstract class AbstractProblem<Solution_, Entity_> implements Problem {
 
@@ -52,7 +56,7 @@ abstract class AbstractProblem<Solution_, Entity_> implements Problem {
 
     abstract protected SolutionDescriptor<Solution_> buildSolutionDescriptor();
 
-    abstract protected String getEntityVariableName();
+    abstract protected List<String> getEntityVariableNames();
 
     abstract protected Solution_ readOriginalSolution();
 
@@ -60,11 +64,17 @@ abstract class AbstractProblem<Solution_, Entity_> implements Problem {
 
     protected MoveSelectorFactory<Solution_> buildMoveSelectorFactory() {
         final EntitySelectorConfig entitySelectorConfig = new EntitySelectorConfig(getEntityClass());
-        final ValueSelectorConfig valueSelectorConfig = new ValueSelectorConfig(getEntityVariableName());
-        final ChangeMoveSelectorConfig moveSelectorConfig = new ChangeMoveSelectorConfig();
-        moveSelectorConfig.setEntitySelectorConfig(entitySelectorConfig);
-        moveSelectorConfig.setValueSelectorConfig(valueSelectorConfig);
-        return MoveSelectorFactory.create(moveSelectorConfig);
+        List<MoveSelectorConfig> moveSelectorConfigs = getEntityVariableNames().stream()
+                .map(variableName -> {
+                    final ValueSelectorConfig valueSelectorConfig = new ValueSelectorConfig(variableName);
+                    final ChangeMoveSelectorConfig moveSelectorConfig = new ChangeMoveSelectorConfig();
+                    moveSelectorConfig.setEntitySelectorConfig(entitySelectorConfig);
+                    moveSelectorConfig.setValueSelectorConfig(valueSelectorConfig);
+                    return moveSelectorConfig;
+                }).collect(Collectors.toList());
+        UnionMoveSelectorConfig unionMoveSelectorConfig = new UnionMoveSelectorConfig();
+        unionMoveSelectorConfig.setMoveSelectorConfigList(moveSelectorConfigs);
+        return MoveSelectorFactory.create(unionMoveSelectorConfig);
     }
 
     @Override

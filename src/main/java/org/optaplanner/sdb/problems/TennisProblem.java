@@ -1,16 +1,18 @@
 package org.optaplanner.sdb.problems;
 
+import java.io.File;
+import java.util.Collections;
+import java.util.List;
+
 import org.optaplanner.core.api.score.stream.ConstraintStreamImplType;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
-import org.optaplanner.sdb.params.ScoreDirector;
-import org.optaplanner.sdb.params.Example;
 import org.optaplanner.examples.tennis.domain.TeamAssignment;
 import org.optaplanner.examples.tennis.domain.TennisSolution;
 import org.optaplanner.examples.tennis.optional.score.TennisConstraintProvider;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
-
-import java.io.File;
+import org.optaplanner.sdb.params.Example;
+import org.optaplanner.sdb.params.ScoreDirector;
 
 public final class TennisProblem extends AbstractProblem<TennisSolution, TeamAssignment> {
 
@@ -43,8 +45,8 @@ public final class TennisProblem extends AbstractProblem<TennisSolution, TeamAss
     }
 
     @Override
-    protected String getEntityVariableName() {
-        return "team";
+    protected List<String> getEntityVariableNames() {
+        return Collections.singletonList("team");
     }
 
     @Override
