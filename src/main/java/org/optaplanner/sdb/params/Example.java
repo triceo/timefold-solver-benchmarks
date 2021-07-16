@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 
+import org.optaplanner.sdb.problems.CheapTimeProblem;
 import org.optaplanner.sdb.problems.CloudBalancingProblem;
 import org.optaplanner.sdb.problems.CoachShuttleGatheringProblem;
 import org.optaplanner.sdb.problems.ConferenceSchedulingProblem;
@@ -35,6 +36,8 @@ import static org.optaplanner.sdb.params.ScoreDirectorType.JAVA_INCREMENTAL;
 
 public enum Example {
 
+    CHEAP_TIME(CheapTimeProblem::new,
+            JAVA_EASY, JAVA_INCREMENTAL, CONSTRAINT_STREAMS_DROOLS, DRL),
     CLOUD_BALANCING(CloudBalancingProblem::new,
             JAVA_EASY, JAVA_INCREMENTAL, CONSTRAINT_STREAMS_DROOLS, DRL),
     COACH_SHUTTLE_GATHERING(CoachShuttleGatheringProblem::new,
