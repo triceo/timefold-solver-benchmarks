@@ -8,7 +8,7 @@ import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
 import org.optaplanner.examples.taskassigning.domain.Task;
 import org.optaplanner.examples.taskassigning.domain.TaskAssigningSolution;
 import org.optaplanner.examples.taskassigning.domain.TaskOrEmployee;
-import org.optaplanner.examples.taskassigning.optional.score.TaskAssigningConstraintProvider;
+import org.optaplanner.examples.taskassigning.score.TaskAssigningConstraintProvider;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 import org.optaplanner.sdb.params.Example;
 import org.optaplanner.sdb.params.ScoreDirectorType;
@@ -33,7 +33,7 @@ public final class TaskAssigningProblem extends AbstractProblem<TaskAssigningSol
                         .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
             case DRL:
                 return scoreDirectorFactoryConfig
-                        .withScoreDrls("org/optaplanner/examples/taskassigning/solver/taskAssigningConstraints.drl");
+                        .withScoreDrls("org/optaplanner/examples/taskassigning/optional/score/taskAssigningConstraints.drl");
             case JAVA_EASY:
             case JAVA_INCREMENTAL:
             default:

@@ -7,8 +7,8 @@ import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
 import org.optaplanner.examples.projectjobscheduling.domain.Allocation;
 import org.optaplanner.examples.projectjobscheduling.domain.Schedule;
-import org.optaplanner.examples.projectjobscheduling.optional.score.ProjectJobSchedulingConstraintProvider;
-import org.optaplanner.examples.projectjobscheduling.score.ProjectJobSchedulingIncrementalScoreCalculator;
+import org.optaplanner.examples.projectjobscheduling.optional.score.ProjectJobSchedulingIncrementalScoreCalculator;
+import org.optaplanner.examples.projectjobscheduling.score.ProjectJobSchedulingConstraintProvider;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 import org.optaplanner.sdb.params.Example;
 import org.optaplanner.sdb.params.ScoreDirectorType;
@@ -29,7 +29,7 @@ public final class ProjectJobSchedulingProblem extends AbstractProblem<Schedule>
                         .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
             case DRL:
                 return scoreDirectorFactoryConfig
-                        .withScoreDrls("org/optaplanner/examples/projectjobscheduling/solver/projectJobSchedulingConstraints.drl");
+                        .withScoreDrls("org/optaplanner/examples/projectjobscheduling/optional/score/projectJobSchedulingConstraints.drl");
             case JAVA_INCREMENTAL:
                 return scoreDirectorFactoryConfig
                         .withIncrementalScoreCalculatorClass(ProjectJobSchedulingIncrementalScoreCalculator.class);

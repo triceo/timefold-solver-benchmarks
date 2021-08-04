@@ -7,7 +7,7 @@ import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
 import org.optaplanner.examples.travelingtournament.domain.Match;
 import org.optaplanner.examples.travelingtournament.domain.TravelingTournament;
-import org.optaplanner.examples.travelingtournament.optional.score.TravelingTournamentConstraintProvider;
+import org.optaplanner.examples.travelingtournament.score.TravelingTournamentConstraintProvider;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 import org.optaplanner.sdb.params.Example;
 import org.optaplanner.sdb.params.ScoreDirectorType;
@@ -28,7 +28,7 @@ public final class TravelingTournamentProblem extends AbstractProblem<TravelingT
                         .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
             case DRL:
                 return scoreDirectorFactoryConfig
-                        .withScoreDrls("org/optaplanner/examples/travelingtournament/solver/travelingTournamentConstraints.drl");
+                        .withScoreDrls("org/optaplanner/examples/travelingtournament/optional/score/travelingTournamentConstraints.drl");
             case CONSTRAINT_STREAMS_BAVET:
             case JAVA_EASY:
             case JAVA_INCREMENTAL:

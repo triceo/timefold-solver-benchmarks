@@ -7,7 +7,7 @@ import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
 import org.optaplanner.examples.tennis.domain.TeamAssignment;
 import org.optaplanner.examples.tennis.domain.TennisSolution;
-import org.optaplanner.examples.tennis.optional.score.TennisConstraintProvider;
+import org.optaplanner.examples.tennis.score.TennisConstraintProvider;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 import org.optaplanner.sdb.params.Example;
 import org.optaplanner.sdb.params.ScoreDirectorType;
@@ -28,7 +28,7 @@ public final class TennisProblem extends AbstractProblem<TennisSolution> {
                         .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
             case DRL:
                 return scoreDirectorFactoryConfig
-                        .withScoreDrls("org/optaplanner/examples/tennis/solver/tennisConstraints.drl");
+                        .withScoreDrls("org/optaplanner/examples/tennis/optional/score/tennisConstraints.drl");
             case CONSTRAINT_STREAMS_BAVET:
             case JAVA_EASY:
             case JAVA_INCREMENTAL:

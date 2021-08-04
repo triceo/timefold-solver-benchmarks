@@ -7,7 +7,7 @@ import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
 import org.optaplanner.examples.pas.domain.BedDesignation;
 import org.optaplanner.examples.pas.domain.PatientAdmissionSchedule;
-import org.optaplanner.examples.pas.optional.score.PatientAdmissionScheduleConstraintProvider;
+import org.optaplanner.examples.pas.score.PatientAdmissionScheduleConstraintProvider;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 import org.optaplanner.sdb.params.Example;
 import org.optaplanner.sdb.params.ScoreDirectorType;
@@ -29,7 +29,7 @@ public final class PatientAdmissionSchedulingProblem
                         .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
             case DRL:
                 return scoreDirectorFactoryConfig
-                        .withScoreDrls("org/optaplanner/examples/pas/solver/patientAdmissionScheduleConstraints.drl");
+                        .withScoreDrls("org/optaplanner/examples/pas/optional/score/patientAdmissionScheduleConstraints.drl");
             case CONSTRAINT_STREAMS_BAVET:
             case JAVA_EASY:
             case JAVA_INCREMENTAL:

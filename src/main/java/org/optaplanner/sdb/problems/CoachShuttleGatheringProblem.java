@@ -11,8 +11,8 @@ import org.optaplanner.examples.coachshuttlegathering.domain.Coach;
 import org.optaplanner.examples.coachshuttlegathering.domain.CoachShuttleGatheringSolution;
 import org.optaplanner.examples.coachshuttlegathering.domain.Shuttle;
 import org.optaplanner.examples.coachshuttlegathering.domain.StopOrHub;
-import org.optaplanner.examples.coachshuttlegathering.optional.score.CoachShuttleGatheringConstraintProvider;
 import org.optaplanner.examples.coachshuttlegathering.optional.score.CoachShuttleGatheringEasyScoreCalculator;
+import org.optaplanner.examples.coachshuttlegathering.score.CoachShuttleGatheringConstraintProvider;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 import org.optaplanner.sdb.params.Example;
 import org.optaplanner.sdb.params.ScoreDirectorType;
@@ -33,7 +33,7 @@ public final class CoachShuttleGatheringProblem extends AbstractProblem<CoachShu
                         .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
             case DRL:
                 return scoreDirectorFactoryConfig
-                        .withScoreDrls("org/optaplanner/examples/coachshuttlegathering/solver/coachShuttleGatheringConstraints.drl");
+                        .withScoreDrls("org/optaplanner/examples/coachshuttlegathering/optional/score/coachShuttleGatheringConstraints.drl");
             case JAVA_EASY:
                 return scoreDirectorFactoryConfig
                         .withEasyScoreCalculatorClass(CoachShuttleGatheringEasyScoreCalculator.class);

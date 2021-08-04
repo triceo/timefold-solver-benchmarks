@@ -7,8 +7,8 @@ import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
 import org.optaplanner.examples.conferencescheduling.domain.ConferenceSolution;
 import org.optaplanner.examples.conferencescheduling.domain.Talk;
-import org.optaplanner.examples.conferencescheduling.optional.score.ConferenceSchedulingConstraintProvider;
 import org.optaplanner.examples.conferencescheduling.persistence.ConferenceSchedulingXlsxFileIO;
+import org.optaplanner.examples.conferencescheduling.score.ConferenceSchedulingConstraintProvider;
 import org.optaplanner.sdb.params.Example;
 import org.optaplanner.sdb.params.ScoreDirectorType;
 
@@ -28,7 +28,7 @@ public final class ConferenceSchedulingProblem extends AbstractProblem<Conferenc
                         .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
             case DRL:
                 return scoreDirectorFactoryConfig
-                        .withScoreDrls("org/optaplanner/examples/conferencescheduling/solver/conferenceSchedulingConstraints.drl");
+                        .withScoreDrls("org/optaplanner/examples/conferencescheduling/optional/score/conferenceSchedulingConstraints.drl");
             case CONSTRAINT_STREAMS_BAVET:
             case JAVA_EASY:
             case JAVA_INCREMENTAL:

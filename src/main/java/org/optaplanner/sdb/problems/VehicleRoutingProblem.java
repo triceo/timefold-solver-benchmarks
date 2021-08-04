@@ -9,9 +9,9 @@ import org.optaplanner.examples.vehiclerouting.domain.Customer;
 import org.optaplanner.examples.vehiclerouting.domain.Standstill;
 import org.optaplanner.examples.vehiclerouting.domain.VehicleRoutingSolution;
 import org.optaplanner.examples.vehiclerouting.domain.timewindowed.TimeWindowedCustomer;
-import org.optaplanner.examples.vehiclerouting.optional.score.VehicleRoutingConstraintProvider;
 import org.optaplanner.examples.vehiclerouting.optional.score.VehicleRoutingEasyScoreCalculator;
 import org.optaplanner.examples.vehiclerouting.optional.score.VehicleRoutingIncrementalScoreCalculator;
+import org.optaplanner.examples.vehiclerouting.score.VehicleRoutingConstraintProvider;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 import org.optaplanner.sdb.params.Example;
 import org.optaplanner.sdb.params.ScoreDirectorType;
@@ -36,7 +36,7 @@ public final class VehicleRoutingProblem extends AbstractProblem<VehicleRoutingS
                         .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
             case DRL:
                 return scoreDirectorFactoryConfig
-                        .withScoreDrls("org/optaplanner/examples/vehiclerouting/solver/vehicleRoutingConstraints.drl");
+                        .withScoreDrls("org/optaplanner/examples/vehiclerouting/optional/score/vehicleRoutingConstraints.drl");
             case JAVA_EASY:
                 return scoreDirectorFactoryConfig
                         .withEasyScoreCalculatorClass(VehicleRoutingEasyScoreCalculator.class);

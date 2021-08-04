@@ -7,9 +7,9 @@ import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
 import org.optaplanner.examples.investment.domain.AssetClassAllocation;
 import org.optaplanner.examples.investment.domain.InvestmentSolution;
-import org.optaplanner.examples.investment.optional.score.InvestmentConstraintProvider;
 import org.optaplanner.examples.investment.optional.score.InvestmentEasyScoreCalculator;
 import org.optaplanner.examples.investment.optional.score.InvestmentIncrementalScoreCalculator;
+import org.optaplanner.examples.investment.score.InvestmentConstraintProvider;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 import org.optaplanner.sdb.params.Example;
 import org.optaplanner.sdb.params.ScoreDirectorType;
@@ -30,7 +30,7 @@ public final class InvestmentProblem extends AbstractProblem<InvestmentSolution>
                         .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
             case DRL:
                 return scoreDirectorFactoryConfig
-                        .withScoreDrls("org/optaplanner/examples/investment/solver/investmentConstraints.drl");
+                        .withScoreDrls("org/optaplanner/examples/investment/optional/score/investmentConstraints.drl");
             case JAVA_EASY:
                 return scoreDirectorFactoryConfig
                         .withEasyScoreCalculatorClass(InvestmentEasyScoreCalculator.class);

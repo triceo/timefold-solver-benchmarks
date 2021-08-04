@@ -8,8 +8,8 @@ import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
 import org.optaplanner.examples.rocktour.domain.RockShow;
 import org.optaplanner.examples.rocktour.domain.RockStandstill;
 import org.optaplanner.examples.rocktour.domain.RockTourSolution;
-import org.optaplanner.examples.rocktour.optional.score.RockTourConstraintProvider;
 import org.optaplanner.examples.rocktour.persistence.RockTourXlsxFileIO;
+import org.optaplanner.examples.rocktour.score.RockTourConstraintProvider;
 import org.optaplanner.sdb.params.Example;
 import org.optaplanner.sdb.params.ScoreDirectorType;
 
@@ -33,7 +33,7 @@ public final class RockTourProblem extends AbstractProblem<RockTourSolution> {
                         .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
             case DRL:
                 return scoreDirectorFactoryConfig
-                        .withScoreDrls("org/optaplanner/examples/rocktour/solver/rockTourConstraints.drl");
+                        .withScoreDrls("org/optaplanner/examples/rocktour/optional/score/rockTourConstraints.drl");
             case JAVA_EASY:
             case JAVA_INCREMENTAL:
             default:

@@ -9,7 +9,7 @@ import org.optaplanner.examples.examination.domain.Exam;
 import org.optaplanner.examples.examination.domain.Examination;
 import org.optaplanner.examples.examination.domain.FollowingExam;
 import org.optaplanner.examples.examination.domain.LeadingExam;
-import org.optaplanner.examples.examination.optional.score.ExaminationConstraintProvider;
+import org.optaplanner.examples.examination.score.ExaminationConstraintProvider;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 import org.optaplanner.sdb.params.Example;
 import org.optaplanner.sdb.params.ScoreDirectorType;
@@ -30,7 +30,7 @@ public final class ExaminationProblem extends AbstractProblem<Examination> {
                         .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
             case DRL:
                 return scoreDirectorFactoryConfig
-                        .withScoreDrls("org/optaplanner/examples/examination/solver/examinationConstraints.drl");
+                        .withScoreDrls("org/optaplanner/examples/examination/optional/score/examinationConstraints.drl");
             case CONSTRAINT_STREAMS_BAVET:
             case JAVA_EASY:
             case JAVA_INCREMENTAL:

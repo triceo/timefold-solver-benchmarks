@@ -8,8 +8,8 @@ import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
 import org.optaplanner.examples.flightcrewscheduling.domain.Employee;
 import org.optaplanner.examples.flightcrewscheduling.domain.FlightAssignment;
 import org.optaplanner.examples.flightcrewscheduling.domain.FlightCrewSolution;
-import org.optaplanner.examples.flightcrewscheduling.optional.score.FlightCrewSchedulingConstraintProvider;
 import org.optaplanner.examples.flightcrewscheduling.persistence.FlightCrewSchedulingXlsxFileIO;
+import org.optaplanner.examples.flightcrewscheduling.score.FlightCrewSchedulingConstraintProvider;
 import org.optaplanner.sdb.params.Example;
 import org.optaplanner.sdb.params.ScoreDirectorType;
 
@@ -29,7 +29,7 @@ public final class FlightCrewSchedulingProblem extends AbstractProblem<FlightCre
                         .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
             case DRL:
                 return scoreDirectorFactoryConfig
-                        .withScoreDrls("org/optaplanner/examples/flightcrewscheduling/solver/flightCrewSchedulingConstraints.drl");
+                        .withScoreDrls("org/optaplanner/examples/flightcrewscheduling/optional/score/flightCrewSchedulingConstraints.drl");
             case CONSTRAINT_STREAMS_BAVET:
             case JAVA_EASY:
             case JAVA_INCREMENTAL:

@@ -7,8 +7,8 @@ import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
 import org.optaplanner.examples.machinereassignment.domain.MachineReassignment;
 import org.optaplanner.examples.machinereassignment.domain.MrProcessAssignment;
-import org.optaplanner.examples.machinereassignment.optional.score.MachineReassignmentConstraintProvider;
-import org.optaplanner.examples.machinereassignment.score.MachineReassignmentIncrementalScoreCalculator;
+import org.optaplanner.examples.machinereassignment.optional.score.MachineReassignmentIncrementalScoreCalculator;
+import org.optaplanner.examples.machinereassignment.score.MachineReassignmentConstraintProvider;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 import org.optaplanner.sdb.params.Example;
 import org.optaplanner.sdb.params.ScoreDirectorType;
@@ -30,7 +30,7 @@ public final class MachineReassignmentProblem
                         .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
             case DRL:
                 return scoreDirectorFactoryConfig
-                        .withScoreDrls("org/optaplanner/examples/machinereassignment/solver/machineReassignmentConstraints.drl");
+                        .withScoreDrls("org/optaplanner/examples/machinereassignment/optional/score/machineReassignmentConstraints.drl");
             case JAVA_INCREMENTAL:
                 return scoreDirectorFactoryConfig
                         .withIncrementalScoreCalculatorClass(MachineReassignmentIncrementalScoreCalculator.class);

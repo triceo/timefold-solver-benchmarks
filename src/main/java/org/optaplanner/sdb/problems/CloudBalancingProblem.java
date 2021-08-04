@@ -7,9 +7,9 @@ import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
 import org.optaplanner.examples.cloudbalancing.domain.CloudBalance;
 import org.optaplanner.examples.cloudbalancing.domain.CloudProcess;
-import org.optaplanner.examples.cloudbalancing.optional.score.CloudBalancingConstraintProvider;
 import org.optaplanner.examples.cloudbalancing.optional.score.CloudBalancingIncrementalScoreCalculator;
 import org.optaplanner.examples.cloudbalancing.optional.score.CloudBalancingMapBasedEasyScoreCalculator;
+import org.optaplanner.examples.cloudbalancing.score.CloudBalancingConstraintProvider;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 import org.optaplanner.sdb.params.Example;
 import org.optaplanner.sdb.params.ScoreDirectorType;
@@ -30,7 +30,7 @@ public final class CloudBalancingProblem extends AbstractProblem<CloudBalance> {
                         .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
             case DRL:
                 return scoreDirectorFactoryConfig
-                        .withScoreDrls("org/optaplanner/examples/cloudbalancing/solver/cloudBalancingConstraints.drl");
+                        .withScoreDrls("org/optaplanner/examples/cloudbalancing/optional/score/cloudBalancingConstraints.drl");
             case JAVA_EASY:
                 return scoreDirectorFactoryConfig
                         .withEasyScoreCalculatorClass(CloudBalancingMapBasedEasyScoreCalculator.class);

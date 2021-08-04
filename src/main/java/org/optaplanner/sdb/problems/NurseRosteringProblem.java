@@ -7,8 +7,8 @@ import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
 import org.optaplanner.examples.nurserostering.domain.NurseRoster;
 import org.optaplanner.examples.nurserostering.domain.ShiftAssignment;
-import org.optaplanner.examples.nurserostering.optional.score.NurseRosteringConstraintProvider;
 import org.optaplanner.examples.nurserostering.persistence.NurseRosterXmlSolutionFileIO;
+import org.optaplanner.examples.nurserostering.score.NurseRosteringConstraintProvider;
 import org.optaplanner.sdb.params.Example;
 import org.optaplanner.sdb.params.ScoreDirectorType;
 
@@ -28,7 +28,7 @@ public final class NurseRosteringProblem extends AbstractProblem<NurseRoster> {
                         .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
             case DRL:
                 return scoreDirectorFactoryConfig
-                        .withScoreDrls("org/optaplanner/examples/nurserostering/solver/nurseRosteringConstraints.drl");
+                        .withScoreDrls("org/optaplanner/examples/nurserostering/optional/score/nurseRosteringConstraints.drl");
             default:
                 throw new UnsupportedOperationException("Score director: " + scoreDirectorType);
         }

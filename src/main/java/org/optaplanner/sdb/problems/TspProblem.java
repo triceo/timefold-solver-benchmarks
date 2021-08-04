@@ -9,7 +9,7 @@ import org.optaplanner.examples.tsp.domain.TspSolution;
 import org.optaplanner.examples.tsp.domain.Visit;
 import org.optaplanner.examples.tsp.optional.score.TspConstraintProvider;
 import org.optaplanner.examples.tsp.optional.score.TspEasyScoreCalculator;
-import org.optaplanner.examples.tsp.optional.score.TspIncrementalScoreCalculator;
+import org.optaplanner.examples.tsp.score.TspIncrementalScoreCalculator;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 import org.optaplanner.sdb.params.Example;
 import org.optaplanner.sdb.params.ScoreDirectorType;
@@ -34,7 +34,7 @@ public final class TspProblem extends AbstractProblem<TspSolution> {
                         .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
             case DRL:
                 return scoreDirectorFactoryConfig
-                        .withScoreDrls("org/optaplanner/examples/tsp/solver/tspConstraints.drl");
+                        .withScoreDrls("org/optaplanner/examples/tsp/optional/score/tspConstraints.drl");
             case JAVA_EASY:
                 return scoreDirectorFactoryConfig
                         .withEasyScoreCalculatorClass(TspEasyScoreCalculator.class);

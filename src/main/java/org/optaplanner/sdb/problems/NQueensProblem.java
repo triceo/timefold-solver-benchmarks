@@ -8,8 +8,8 @@ import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
 import org.optaplanner.examples.nqueens.domain.NQueens;
 import org.optaplanner.examples.nqueens.domain.Queen;
 import org.optaplanner.examples.nqueens.optional.score.NQueensAdvancedIncrementalScoreCalculator;
-import org.optaplanner.examples.nqueens.optional.score.NQueensConstraintProvider;
 import org.optaplanner.examples.nqueens.optional.score.NQueensMapBasedEasyScoreCalculator;
+import org.optaplanner.examples.nqueens.score.NQueensConstraintProvider;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 import org.optaplanner.sdb.params.Example;
 import org.optaplanner.sdb.params.ScoreDirectorType;
@@ -34,7 +34,7 @@ public final class NQueensProblem extends AbstractProblem<NQueens> {
                         .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
             case DRL:
                 return scoreDirectorFactoryConfig
-                        .withScoreDrls("org/optaplanner/examples/nqueens/solver/nQueensConstraints.drl");
+                        .withScoreDrls("org/optaplanner/examples/nqueens/optional/score/nQueensConstraints.drl");
             case JAVA_EASY:
                 return scoreDirectorFactoryConfig
                         .withEasyScoreCalculatorClass(NQueensMapBasedEasyScoreCalculator.class);
