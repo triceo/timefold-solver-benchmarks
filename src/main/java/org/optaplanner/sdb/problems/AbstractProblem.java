@@ -83,36 +83,36 @@ abstract class AbstractProblem<Solution_> implements Problem {
 
     @Override
     public final void setupTrial() {
-        // No need to do anything.
-    }
-
-    @Override
-    public final void setupIteration() {
         scoreDirector = scoreDirectorFactory.buildScoreDirector(false, false);
         // We only care about incremental performance; therefore calculate the entire solution outside of invocation.
         scoreDirector.setWorkingSolution(scoreDirector.cloneSolution(originalSolution)); // Use fresh solution again.
         scoreDirector.triggerVariableListeners();
         scoreDirector.calculateScore();
         // Prepare the move selector that will pick different move for each invocation.
-        solverScope = new SolverScope<>();
-        solverScope.setScoreDirector(scoreDirector);
-        solverScope.setWorkingRandom(new Random(0)); // Make results predictable.
-        phaseScope = new LocalSearchPhaseScope<>(solverScope);
+        // Reproducible random selection without caching; we need the selection to never end.
         final HeuristicConfigPolicy<Solution_> policy = new HeuristicConfigPolicy<>(EnvironmentMode.REPRODUCIBLE,
                 null, null, null, scoreDirectorFactory);
         moveSelector = moveSelectorFactory.buildMoveSelector(policy, SelectionCacheType.JUST_IN_TIME,
-                SelectionOrder.RANDOM); // Random selection, as we need the iterator to never end.
+                SelectionOrder.RANDOM);
+    }
+
+    @Override
+    public final void setupIteration() {
+        solverScope = new SolverScope<>();
+        solverScope.setScoreDirector(scoreDirector);
+        solverScope.setWorkingRandom(new Random(0)); // Make results reproducible.
+        phaseScope = new LocalSearchPhaseScope<>(solverScope);
         moveSelector.solvingStarted(solverScope);
         moveSelector.phaseStarted(phaseScope);
         stepScope = new LocalSearchStepScope<>(phaseScope);
         moveSelector.stepStarted(stepScope);
-        moveIterator = moveSelector.iterator();
+        moveIterator = moveSelector.iterator(); // Trial invocations will share this, making the sequence reproducible.
     }
 
     @Override
     public final void setupInvocation() {
         do {
-            move = moveIterator.next();
+            move = moveIterator.next(); // Find the next doable move.
         } while (!move.isMoveDoable(scoreDirector));
     }
 
@@ -124,7 +124,7 @@ abstract class AbstractProblem<Solution_> implements Problem {
         // Unfortunately, we also benchmark a bit of the overhead of the move. Hopefully, that is not too much.
         // More importantly, it is a constant overhead and therefore should not affect the results.
         move = move.doMove(scoreDirector)
-                .doMove(scoreDirector); // We run the undo too, so that we can keep the same move selector.
+                .doMove(scoreDirector); // Undo too; solution does not change, therefore we can reuse the scaffolding.
         return scoreDirector.calculateScore(); // Run incremental calculation over changes from both moves.
     }
 
@@ -138,12 +138,11 @@ abstract class AbstractProblem<Solution_> implements Problem {
         moveSelector.stepEnded(stepScope);
         moveSelector.phaseEnded(phaseScope);
         moveSelector.solvingEnded(solverScope);
-        scoreDirector.close();
     }
 
     @Override
     public final void teardownTrial() {
-        // No need to do anything.
+        scoreDirector.close();
     }
 
 }
