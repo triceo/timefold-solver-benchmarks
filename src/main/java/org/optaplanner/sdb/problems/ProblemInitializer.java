@@ -1,22 +1,36 @@
 package org.optaplanner.sdb.problems;
 
+import java.util.Arrays;
+import java.util.EnumMap;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
 import org.optaplanner.core.api.score.Score;
 import org.optaplanner.core.config.constructionheuristic.ConstructionHeuristicPhaseConfig;
 import org.optaplanner.core.config.constructionheuristic.ConstructionHeuristicType;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.config.solver.EnvironmentMode;
+import org.optaplanner.core.config.solver.monitoring.SolverMetric;
+import org.optaplanner.core.config.solver.random.RandomType;
 import org.optaplanner.core.config.solver.termination.TerminationConfig;
-import org.optaplanner.core.impl.constructionheuristic.ConstructionHeuristicPhase;
+import org.optaplanner.core.impl.constructionheuristic.DefaultConstructionHeuristicPhase;
 import org.optaplanner.core.impl.constructionheuristic.DefaultConstructionHeuristicPhaseFactory;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
 import org.optaplanner.core.impl.heuristic.HeuristicConfigPolicy;
-import org.optaplanner.core.impl.phase.event.PhaseLifecycleSupport;
+import org.optaplanner.core.impl.phase.scope.AbstractPhaseScope;
 import org.optaplanner.core.impl.score.director.InnerScoreDirector;
 import org.optaplanner.core.impl.score.director.InnerScoreDirectorFactory;
+import org.optaplanner.core.impl.solver.AbstractSolver;
+import org.optaplanner.core.impl.solver.DefaultSolver;
 import org.optaplanner.core.impl.solver.event.SolverEventSupport;
+import org.optaplanner.core.impl.solver.random.DefaultRandomFactory;
 import org.optaplanner.core.impl.solver.recaller.BestSolutionRecaller;
 import org.optaplanner.core.impl.solver.recaller.BestSolutionRecallerFactory;
 import org.optaplanner.core.impl.solver.scope.SolverScope;
+import org.optaplanner.core.impl.solver.termination.AbstractTermination;
 import org.optaplanner.core.impl.solver.termination.BasicPlumbingTermination;
 import org.optaplanner.core.impl.solver.termination.Termination;
 import org.optaplanner.core.impl.solver.termination.TerminationFactory;
@@ -24,12 +38,6 @@ import org.optaplanner.sdb.params.Example;
 import org.optaplanner.sdb.params.ScoreDirectorType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Arrays;
-import java.util.EnumMap;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * XLS-based examples can not read initialized solution from the file.
@@ -78,15 +86,21 @@ public final class ProblemInitializer {
             bestSolutionRecaller.setSolverEventSupport(new SolverEventSupport<>(null));
             Termination<Solution_> termination = TerminationFactory.<Solution_>create(new TerminationConfig())
                     .buildTermination(policy, new BasicPlumbingTermination<>(false));
-            ConstructionHeuristicPhase<Solution_> constructionHeuristicPhase =
-                    factory.buildPhase(0, policy, bestSolutionRecaller, termination);
-            constructionHeuristicPhase.setSolverPhaseLifecycleSupport(new PhaseLifecycleSupport<>());
+            DefaultConstructionHeuristicPhase<Solution_> constructionHeuristicPhase =
+                    (DefaultConstructionHeuristicPhase<Solution_>) factory.buildPhase(0, policy, bestSolutionRecaller, termination);
 
-            // Start the construction heuristic.
+            // Create solver; more or less a mock.
             SolverScope<Solution_> solverScope = new SolverScope<>();
             solverScope.setBestSolution(uninitializedSolution);
             solverScope.setScoreDirector(scoreDirector);
+            solverScope.setSolverMetricSet(EnumSet.noneOf(SolverMetric.class));
             solverScope.startingNow();
+            AbstractSolver<Solution_> solver = new DefaultSolver<>(EnvironmentMode.REPRODUCIBLE,
+                    new DefaultRandomFactory(RandomType.JDK, 0L), bestSolutionRecaller, null,
+                    new NoopTermination<>(), List.of(constructionHeuristicPhase), solverScope, null);
+            constructionHeuristicPhase.setSolver(solver);
+
+            // Start the construction heuristic.
             bestSolutionRecaller.solvingStarted(solverScope);
             constructionHeuristicPhase.solvingStarted(solverScope);
             constructionHeuristicPhase.solve(solverScope);
@@ -101,4 +115,25 @@ public final class ProblemInitializer {
         }
     }
 
+    private static final class NoopTermination<Solution_> extends AbstractTermination<Solution_> {
+        @Override
+        public boolean isSolverTerminated(SolverScope<Solution_> solverScope) {
+            return false;
+        }
+
+        @Override
+        public boolean isPhaseTerminated(AbstractPhaseScope<Solution_> phaseScope) {
+            return false;
+        }
+
+        @Override
+        public double calculateSolverTimeGradient(SolverScope<Solution_> solverScope) {
+            return 0;
+        }
+
+        @Override
+        public double calculatePhaseTimeGradient(AbstractPhaseScope<Solution_> phaseScope) {
+            return 0;
+        }
+    }
 }

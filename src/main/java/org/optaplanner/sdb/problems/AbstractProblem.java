@@ -65,7 +65,7 @@ abstract class AbstractProblem<Solution_> implements Problem {
                 .flatMap(entityDescriptor -> {
                             EntitySelectorConfig entitySelectorConfig =
                                     new EntitySelectorConfig(entityDescriptor.getEntityClass());
-                            return entityDescriptor.getGenuineVariableDescriptors().stream()
+                            return entityDescriptor.getGenuineVariableDescriptorList().stream()
                                     .map(variableDescriptor -> {
                                         String variableName = variableDescriptor.getVariableName();
                                         ValueSelectorConfig valueSelectorConfig = new ValueSelectorConfig(variableName);
