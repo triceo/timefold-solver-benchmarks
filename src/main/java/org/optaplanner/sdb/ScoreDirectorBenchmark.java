@@ -31,19 +31,28 @@
 
 package org.optaplanner.sdb;
 
-import org.openjdk.jmh.annotations.*;
-import org.openjdk.jmh.profile.AsyncProfiler;
-import org.openjdk.jmh.results.format.ResultFormatType;
-import org.openjdk.jmh.runner.Runner;
-import org.openjdk.jmh.runner.RunnerException;
-import org.openjdk.jmh.runner.options.Options;
-import org.openjdk.jmh.runner.options.OptionsBuilder;
-import org.optaplanner.sdb.params.*;
-
 import java.io.File;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+
+import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.BenchmarkMode;
+import org.openjdk.jmh.annotations.Mode;
+import org.openjdk.jmh.annotations.Scope;
+import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.Warmup;
+import org.openjdk.jmh.profile.AsyncProfiler;
+import org.openjdk.jmh.results.format.ResultFormatType;
+import org.openjdk.jmh.runner.Runner;
+import org.openjdk.jmh.runner.RunnerException;
+import org.openjdk.jmh.runner.options.ChainedOptionsBuilder;
+import org.openjdk.jmh.runner.options.OptionsBuilder;
+import org.optaplanner.sdb.params.ConstraintStreamsBavetExample;
+import org.optaplanner.sdb.params.ConstraintStreamsDroolsExample;
+import org.optaplanner.sdb.params.DrlExample;
+import org.optaplanner.sdb.params.JavaEasyExample;
+import org.optaplanner.sdb.params.JavaIncrementalExample;
 
 @State(Scope.Benchmark)
 @Warmup(iterations = 10) // 5 has been demonstrated to be too little.
@@ -67,17 +76,17 @@ public class ScoreDirectorBenchmark {
     }
 
     @Benchmark
-    public Object drl(DrlExample params) {
+    public Object droolsDrl(DrlExample params) {
         return params.problem.runInvocation();
     }
 
     @Benchmark
-    public Object csd(ConstraintStreamsDroolsExample params) {
+    public Object droolsCsd(ConstraintStreamsDroolsExample params) {
         return params.problem.runInvocation();
     }
 
     @Benchmark
-    public Object csb(ConstraintStreamsBavetExample params) {
+    public Object javaCsb(ConstraintStreamsBavetExample params) {
         return params.problem.runInvocation();
     }
 
@@ -98,7 +107,7 @@ public class ScoreDirectorBenchmark {
 
         String asyncProfilerAbsolutePath = new File("async-profiler-2.0-linux-x64/build/libasyncProfiler.so")
                 .getAbsolutePath();
-        Options options = new OptionsBuilder()
+        ChainedOptionsBuilder options = new OptionsBuilder()
                 .include(ScoreDirectorBenchmark.class.getSimpleName())
                 .addProfiler(AsyncProfiler.class,
                         "event=cpu;" +
@@ -108,9 +117,12 @@ public class ScoreDirectorBenchmark {
                                 "simple=true")
                 .jvmArgs("-Xms2g", "-Xmx2g")
                 .result(benchmarkResults.getAbsolutePath())
-                .resultFormat(ResultFormatType.CSV)
-                .build();
-        new Runner(options).run();
+                .resultFormat(ResultFormatType.CSV);
+        String exclusionRegexp = args.length > 0 ? args[0] : null;
+        if (exclusionRegexp != null) {
+            options = options.exclude(exclusionRegexp);
+        }
+        new Runner(options.build()).run();
     }
 
 }
