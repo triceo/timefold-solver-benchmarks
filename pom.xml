@@ -18,12 +18,12 @@
     <url>https://www.optaplanner.org</url>
 
     <properties>
-        <version.org.optaplanner>8.14.0-SNAPSHOT</version.org.optaplanner>
+        <version.org.optaplanner>8.20.0-SNAPSHOT</version.org.optaplanner>
         <version.org.junit>5.7.1</version.org.junit>
         <formatter.skip>true</formatter.skip>
         <java.module.name>org.optaplanner.sdb</java.module.name>
         <java.release>11</java.release>
-        <jmh.version>1.32</jmh.version>
+        <jmh.version>1.34</jmh.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <uberjar.name>benchmarks</uberjar.name>
     </properties>

@@ -80,7 +80,9 @@ public final class ProblemInitializer {
                     .withConstructionHeuristicType(ConstructionHeuristicType.FIRST_FIT);
             DefaultConstructionHeuristicPhaseFactory<Solution_> factory = new DefaultConstructionHeuristicPhaseFactory<>(config);
 
-            HeuristicConfigPolicy<Solution_> policy = new HeuristicConfigPolicy<>(EnvironmentMode.REPRODUCIBLE, null, null, null, scoreDirectorFactory);
+            final HeuristicConfigPolicy<Solution_> policy = new HeuristicConfigPolicy.Builder<>(EnvironmentMode.REPRODUCIBLE,
+                    null, null, null, scoreDirectorFactory)
+                    .build();
             BestSolutionRecaller<Solution_> bestSolutionRecaller =
                     BestSolutionRecallerFactory.create().buildBestSolutionRecaller(EnvironmentMode.REPRODUCIBLE);
             bestSolutionRecaller.setSolverEventSupport(new SolverEventSupport<>(null));

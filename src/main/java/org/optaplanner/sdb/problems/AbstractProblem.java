@@ -76,7 +76,7 @@ abstract class AbstractProblem<Solution_> implements Problem {
                         }
                 ).collect(Collectors.toList());
         UnionMoveSelectorConfig unionMoveSelectorConfig = new UnionMoveSelectorConfig();
-        unionMoveSelectorConfig.setMoveSelectorConfigList(moveSelectorConfigs);
+        unionMoveSelectorConfig.setMoveSelectorList(moveSelectorConfigs);
         return MoveSelectorFactory.create(unionMoveSelectorConfig);
     }
 
@@ -85,8 +85,9 @@ abstract class AbstractProblem<Solution_> implements Problem {
         scoreDirector = scoreDirectorFactory.buildScoreDirector(false, false);
         // Prepare the move selector that will pick different move for each invocation.
         // Reproducible random selection without caching; we need the selection to never end.
-        final HeuristicConfigPolicy<Solution_> policy = new HeuristicConfigPolicy<>(EnvironmentMode.REPRODUCIBLE,
-                null, null, null, scoreDirectorFactory);
+        final HeuristicConfigPolicy<Solution_> policy = new HeuristicConfigPolicy.Builder<>(EnvironmentMode.REPRODUCIBLE,
+                null, null, null, scoreDirectorFactory)
+                .build();
         moveSelector = moveSelectorFactory.buildMoveSelector(policy, SelectionCacheType.JUST_IN_TIME,
                 SelectionOrder.RANDOM);
     }
@@ -123,12 +124,13 @@ abstract class AbstractProblem<Solution_> implements Problem {
         // - Speed of score calculation on those updates.
         // Unfortunately, we also benchmark a bit of the overhead of the move. Hopefully, that is not too much.
         // More importantly, it is a constant overhead and therefore should not affect the results.
-        move = move.doMove(scoreDirector);
+        move.doMoveOnly(scoreDirector);
         return scoreDirector.calculateScore(); // Run incremental calculation over the changes made by the move.
     }
 
     @Override
     public final void tearDownInvocation() {
+        move = null;
         moveSelector.stepEnded(stepScope);
     }
 

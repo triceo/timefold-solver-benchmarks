@@ -49,7 +49,7 @@ public final class ProjectJobSchedulingProblem extends AbstractProblem<Schedule>
     protected Schedule readOriginalSolution() {
         final XStreamSolutionFileIO<Schedule> solutionFileIO =
                 new XStreamSolutionFileIO<>(Schedule.class);
-        return solutionFileIO.read(new File("data/projectjobscheduling-B-10.xml"));
+        return solutionFileIO.read(new File("data/projectjobscheduling-B-7.xml"));
     }
 
 }
