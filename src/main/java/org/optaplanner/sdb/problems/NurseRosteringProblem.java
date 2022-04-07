@@ -22,6 +22,10 @@ public final class NurseRosteringProblem extends AbstractProblem<NurseRoster> {
     protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirectorType scoreDirectorType) {
         ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();
         switch (scoreDirectorType) {
+            case CONSTRAINT_STREAMS_BAVET:
+                return scoreDirectorFactoryConfig
+                        .withConstraintProviderClass(NurseRosteringConstraintProvider.class)
+                        .withConstraintStreamImplType(ConstraintStreamImplType.BAVET);
             case CONSTRAINT_STREAMS_DROOLS:
                 return scoreDirectorFactoryConfig
                         .withConstraintProviderClass(NurseRosteringConstraintProvider.class)

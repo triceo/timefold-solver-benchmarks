@@ -34,8 +34,6 @@ public final class TaskAssigningProblem extends AbstractProblem<TaskAssigningSol
             case DRL:
                 return scoreDirectorFactoryConfig
                         .withScoreDrls("org/optaplanner/examples/taskassigning/optional/score/taskAssigningConstraints.drl");
-            case JAVA_EASY:
-            case JAVA_INCREMENTAL:
             default:
                 throw new UnsupportedOperationException("Score director: " + scoreDirectorType);
         }

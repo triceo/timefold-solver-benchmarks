@@ -22,6 +22,10 @@ public final class ConferenceSchedulingProblem extends AbstractProblem<Conferenc
     protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirectorType scoreDirectorType) {
         ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();
         switch (scoreDirectorType) {
+            case CONSTRAINT_STREAMS_BAVET:
+                return scoreDirectorFactoryConfig
+                        .withConstraintProviderClass(ConferenceSchedulingConstraintProvider.class)
+                        .withConstraintStreamImplType(ConstraintStreamImplType.BAVET);
             case CONSTRAINT_STREAMS_DROOLS:
                 return scoreDirectorFactoryConfig
                         .withConstraintProviderClass(ConferenceSchedulingConstraintProvider.class)
@@ -29,9 +33,6 @@ public final class ConferenceSchedulingProblem extends AbstractProblem<Conferenc
             case DRL:
                 return scoreDirectorFactoryConfig
                         .withScoreDrls("org/optaplanner/examples/conferencescheduling/optional/score/conferenceSchedulingConstraints.drl");
-            case CONSTRAINT_STREAMS_BAVET:
-            case JAVA_EASY:
-            case JAVA_INCREMENTAL:
             default:
                 throw new UnsupportedOperationException("Score director: " + scoreDirectorType);
         }

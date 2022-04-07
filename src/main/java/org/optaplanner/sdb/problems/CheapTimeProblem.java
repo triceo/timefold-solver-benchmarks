@@ -24,6 +24,10 @@ public final class CheapTimeProblem extends AbstractProblem<CheapTimeSolution> {
     protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirectorType scoreDirectorType) {
         ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();
         switch (scoreDirectorType) {
+            case CONSTRAINT_STREAMS_BAVET:
+                return scoreDirectorFactoryConfig
+                        .withConstraintProviderClass(CheapTimeConstraintProvider.class)
+                        .withConstraintStreamImplType(ConstraintStreamImplType.BAVET);
             case CONSTRAINT_STREAMS_DROOLS:
                 return scoreDirectorFactoryConfig
                         .withConstraintProviderClass(CheapTimeConstraintProvider.class)
@@ -37,7 +41,6 @@ public final class CheapTimeProblem extends AbstractProblem<CheapTimeSolution> {
             case JAVA_INCREMENTAL:
                 return scoreDirectorFactoryConfig
                         .withIncrementalScoreCalculatorClass(CheapTimeIncrementalScoreCalculator.class);
-            case CONSTRAINT_STREAMS_BAVET:
             default:
                 throw new UnsupportedOperationException("Score director: " + scoreDirectorType);
         }

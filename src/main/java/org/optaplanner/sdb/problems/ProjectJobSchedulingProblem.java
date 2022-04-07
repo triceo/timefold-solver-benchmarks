@@ -23,6 +23,10 @@ public final class ProjectJobSchedulingProblem extends AbstractProblem<Schedule>
     protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirectorType scoreDirectorType) {
         ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();
         switch (scoreDirectorType) {
+            case CONSTRAINT_STREAMS_BAVET:
+                return scoreDirectorFactoryConfig
+                        .withConstraintProviderClass(ProjectJobSchedulingConstraintProvider.class)
+                        .withConstraintStreamImplType(ConstraintStreamImplType.BAVET);
             case CONSTRAINT_STREAMS_DROOLS:
                 return scoreDirectorFactoryConfig
                         .withConstraintProviderClass(ProjectJobSchedulingConstraintProvider.class)
@@ -33,8 +37,6 @@ public final class ProjectJobSchedulingProblem extends AbstractProblem<Schedule>
             case JAVA_INCREMENTAL:
                 return scoreDirectorFactoryConfig
                         .withIncrementalScoreCalculatorClass(ProjectJobSchedulingIncrementalScoreCalculator.class);
-            case CONSTRAINT_STREAMS_BAVET:
-            case JAVA_EASY:
             default:
                 throw new UnsupportedOperationException("Score director: " + scoreDirectorType);
         }

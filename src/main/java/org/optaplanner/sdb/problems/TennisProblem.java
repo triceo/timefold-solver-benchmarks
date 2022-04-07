@@ -22,6 +22,10 @@ public final class TennisProblem extends AbstractProblem<TennisSolution> {
     protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirectorType scoreDirectorType) {
         ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();
         switch (scoreDirectorType) {
+            case CONSTRAINT_STREAMS_BAVET:
+                return scoreDirectorFactoryConfig
+                        .withConstraintProviderClass(TennisConstraintProvider.class)
+                        .withConstraintStreamImplType(ConstraintStreamImplType.BAVET);
             case CONSTRAINT_STREAMS_DROOLS:
                 return scoreDirectorFactoryConfig
                         .withConstraintProviderClass(TennisConstraintProvider.class)
@@ -29,9 +33,6 @@ public final class TennisProblem extends AbstractProblem<TennisSolution> {
             case DRL:
                 return scoreDirectorFactoryConfig
                         .withScoreDrls("org/optaplanner/examples/tennis/optional/score/tennisConstraints.drl");
-            case CONSTRAINT_STREAMS_BAVET:
-            case JAVA_EASY:
-            case JAVA_INCREMENTAL:
             default:
                 throw new UnsupportedOperationException("Score director: " + scoreDirectorType);
         }

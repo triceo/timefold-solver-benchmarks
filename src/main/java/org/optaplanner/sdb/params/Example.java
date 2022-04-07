@@ -38,8 +38,7 @@ public enum Example {
 
     CHEAP_TIME(CheapTimeProblem::new,
             JAVA_EASY, JAVA_INCREMENTAL, CONSTRAINT_STREAMS_DROOLS, DRL),
-    CLOUD_BALANCING(CloudBalancingProblem::new,
-            JAVA_EASY, JAVA_INCREMENTAL, CONSTRAINT_STREAMS_DROOLS, DRL),
+    CLOUD_BALANCING(CloudBalancingProblem::new),
     COACH_SHUTTLE_GATHERING(CoachShuttleGatheringProblem::new,
             JAVA_EASY, CONSTRAINT_STREAMS_DROOLS, DRL),
     CONFERENCE_SCHEDULING(ConferenceSchedulingProblem::new,

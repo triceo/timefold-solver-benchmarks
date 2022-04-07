@@ -27,6 +27,10 @@ public final class CoachShuttleGatheringProblem extends AbstractProblem<CoachShu
     protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirectorType scoreDirectorType) {
         ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();
         switch (scoreDirectorType) {
+            case CONSTRAINT_STREAMS_BAVET:
+                return scoreDirectorFactoryConfig
+                        .withConstraintProviderClass(CoachShuttleGatheringConstraintProvider.class)
+                        .withConstraintStreamImplType(ConstraintStreamImplType.BAVET);
             case CONSTRAINT_STREAMS_DROOLS:
                 return scoreDirectorFactoryConfig
                         .withConstraintProviderClass(CoachShuttleGatheringConstraintProvider.class)
@@ -37,8 +41,6 @@ public final class CoachShuttleGatheringProblem extends AbstractProblem<CoachShu
             case JAVA_EASY:
                 return scoreDirectorFactoryConfig
                         .withEasyScoreCalculatorClass(CoachShuttleGatheringEasyScoreCalculator.class);
-            case CONSTRAINT_STREAMS_BAVET:
-            case JAVA_INCREMENTAL:
             default:
                 throw new UnsupportedOperationException("Score director: " + scoreDirectorType);
         }

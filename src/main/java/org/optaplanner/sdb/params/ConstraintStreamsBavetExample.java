@@ -7,7 +7,7 @@ import org.openjdk.jmh.annotations.State;
 @State(Scope.Benchmark)
 public class ConstraintStreamsBavetExample extends AbstractExample {
 
-    @Param({"NQUEENS", "ROCK_TOUR", "TASK_ASSIGNING", "VEHICLE_ROUTING"})
+    @Param ({"CLOUD_BALANCING", "NQUEENS", "ROCK_TOUR", "TASK_ASSIGNING", "VEHICLE_ROUTING"})
     public Example example;
 
     @Override

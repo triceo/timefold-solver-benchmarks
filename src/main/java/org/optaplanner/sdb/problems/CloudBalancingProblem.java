@@ -24,6 +24,10 @@ public final class CloudBalancingProblem extends AbstractProblem<CloudBalance> {
     protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirectorType scoreDirectorType) {
         ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();
         switch (scoreDirectorType) {
+            case CONSTRAINT_STREAMS_BAVET:
+                return scoreDirectorFactoryConfig
+                        .withConstraintProviderClass(CloudBalancingConstraintProvider.class)
+                        .withConstraintStreamImplType(ConstraintStreamImplType.BAVET);
             case CONSTRAINT_STREAMS_DROOLS:
                 return scoreDirectorFactoryConfig
                         .withConstraintProviderClass(CloudBalancingConstraintProvider.class)
@@ -37,7 +41,6 @@ public final class CloudBalancingProblem extends AbstractProblem<CloudBalance> {
             case JAVA_INCREMENTAL:
                 return scoreDirectorFactoryConfig
                         .withIncrementalScoreCalculatorClass(CloudBalancingIncrementalScoreCalculator.class);
-            case CONSTRAINT_STREAMS_BAVET:
             default:
                 throw new UnsupportedOperationException("Score director: " + scoreDirectorType);
         }
