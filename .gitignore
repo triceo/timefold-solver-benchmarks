@@ -6,3 +6,4 @@ hs_err_pid*
 *.iml
 dependency-reduced-pom.xml
 /results
+/async-profiler**/*
