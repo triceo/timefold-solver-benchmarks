@@ -7,8 +7,8 @@ import org.openjdk.jmh.annotations.State;
 @State(Scope.Benchmark)
 public class JavaEasyExample extends AbstractExample {
 
-    @Param({"CHEAP_TIME", "CLOUD_BALANCING", "COACH_SHUTTLE_GATHERING", "INVESTMENT", "NQUEENS", "TSP", "VEHICLE_ROUTING"})
-    public Example example;
+    @Param
+    public Example easyExample;
 
     @Override
     protected ScoreDirectorType getScoreDirector() {
@@ -17,6 +17,6 @@ public class JavaEasyExample extends AbstractExample {
 
     @Override
     protected Example getExample() {
-        return example;
+        return easyExample;
     }
 }

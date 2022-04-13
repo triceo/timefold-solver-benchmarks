@@ -48,7 +48,7 @@ public enum Example {
     EXAMINATION(ExaminationProblem::new,
             CONSTRAINT_STREAMS_DROOLS, DRL),
     FLIGHT_CREW_SCHEDULING(FlightCrewSchedulingProblem::new,
-            CONSTRAINT_STREAMS_DROOLS, DRL),
+            CONSTRAINT_STREAMS_BAVET, CONSTRAINT_STREAMS_DROOLS, DRL),
     INVESTMENT(InvestmentProblem::new,
             JAVA_EASY, JAVA_INCREMENTAL, CONSTRAINT_STREAMS_DROOLS, DRL),
     MACHINE_REASSIGNMENT(MachineReassignmentProblem::new,

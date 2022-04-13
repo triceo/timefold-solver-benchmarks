@@ -35,6 +35,7 @@ import java.io.File;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Arrays;
 
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
@@ -51,8 +52,10 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.optaplanner.sdb.params.ConstraintStreamsBavetExample;
 import org.optaplanner.sdb.params.ConstraintStreamsDroolsExample;
 import org.optaplanner.sdb.params.DrlExample;
+import org.optaplanner.sdb.params.Example;
 import org.optaplanner.sdb.params.JavaEasyExample;
 import org.optaplanner.sdb.params.JavaIncrementalExample;
+import org.optaplanner.sdb.params.ScoreDirectorType;
 
 @State(Scope.Benchmark)
 @Warmup(iterations = 10) // 5 has been demonstrated to be too little.
@@ -116,6 +119,11 @@ public class ScoreDirectorBenchmark {
                                 "libPath=" + asyncProfilerAbsolutePath + ";" +
                                 "simple=true")
                 .jvmArgs("-Xms2g", "-Xmx2g")
+                .param("drlExample", getSupportedExampleNames(ScoreDirectorType.DRL))
+                .param("csdExample", getSupportedExampleNames(ScoreDirectorType.CONSTRAINT_STREAMS_DROOLS))
+                .param("csbExample", getSupportedExampleNames(ScoreDirectorType.CONSTRAINT_STREAMS_BAVET))
+                .param("easyExample", getSupportedExampleNames(ScoreDirectorType.JAVA_EASY))
+                .param("incrementalExample", getSupportedExampleNames(ScoreDirectorType.JAVA_INCREMENTAL))
                 .result(benchmarkResults.getAbsolutePath())
                 .resultFormat(ResultFormatType.CSV);
         String exclusionRegexp = args.length > 0 ? args[0] : null;
@@ -123,6 +131,13 @@ public class ScoreDirectorBenchmark {
             options = options.exclude(exclusionRegexp);
         }
         new Runner(options.build()).run();
+    }
+
+    private static String[] getSupportedExampleNames(ScoreDirectorType scoreDirectorType) {
+        return Arrays.stream(Example.values())
+                .filter(s -> s.isSupportedOn(scoreDirectorType))
+                .map(Enum::name)
+                .toArray(String[]::new);
     }
 
 }

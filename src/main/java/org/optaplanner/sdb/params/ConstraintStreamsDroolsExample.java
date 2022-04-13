@@ -7,8 +7,8 @@ import org.openjdk.jmh.annotations.State;
 @State(Scope.Benchmark)
 public class ConstraintStreamsDroolsExample extends AbstractExample {
 
-    @Param // All of them.
-    public Example example;
+    @Param
+    public Example csdExample;
 
     @Override
     protected ScoreDirectorType getScoreDirector() {
@@ -17,6 +17,6 @@ public class ConstraintStreamsDroolsExample extends AbstractExample {
 
     @Override
     protected Example getExample() {
-        return example;
+        return csdExample;
     }
 }
