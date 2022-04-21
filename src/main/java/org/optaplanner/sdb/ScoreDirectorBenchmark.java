@@ -108,7 +108,7 @@ public class ScoreDirectorBenchmark {
         File benchmarkResults = new File(resultFolder, "benchmarkResults.csv");
         resultFolder.mkdirs();
 
-        String asyncProfilerAbsolutePath = new File("async-profiler-2.6-linux-x64/build/libasyncProfiler.so")
+        String asyncProfilerAbsolutePath = new File("async-profiler-2.7-linux-x64/build/libasyncProfiler.so")
                 .getAbsolutePath();
         ChainedOptionsBuilder options = new OptionsBuilder()
                 .include(ScoreDirectorBenchmark.class.getSimpleName())
