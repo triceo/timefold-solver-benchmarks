@@ -69,9 +69,8 @@ public enum Example {
     TENNIS(TennisProblem::new,
             CONSTRAINT_STREAMS_DROOLS, DRL),
     TRAVELING_TOURNAMENT(TravelingTournamentProblem::new,
-            CONSTRAINT_STREAMS_DROOLS, DRL),
-    TSP(TspProblem::new,
-            JAVA_EASY, JAVA_INCREMENTAL, CONSTRAINT_STREAMS_DROOLS, DRL),
+            CONSTRAINT_STREAMS_BAVET, CONSTRAINT_STREAMS_DROOLS, DRL),
+    TSP(TspProblem::new),
     VEHICLE_ROUTING(VehicleRoutingProblem::new);
 
     private final Function<ScoreDirectorType, Problem> problemFactory;
