@@ -42,9 +42,9 @@ public enum Example {
     COACH_SHUTTLE_GATHERING(CoachShuttleGatheringProblem::new,
             JAVA_EASY, CONSTRAINT_STREAMS_DROOLS, DRL),
     CONFERENCE_SCHEDULING(ConferenceSchedulingProblem::new,
-            CONSTRAINT_STREAMS_DROOLS, DRL),
+            CONSTRAINT_STREAMS_BAVET, CONSTRAINT_STREAMS_DROOLS, DRL),
     CURRICULUM_COURSE(CurriculumCourseProblem::new,
-            CONSTRAINT_STREAMS_DROOLS, DRL),
+            CONSTRAINT_STREAMS_BAVET, CONSTRAINT_STREAMS_DROOLS, DRL),
     EXAMINATION(ExaminationProblem::new,
             CONSTRAINT_STREAMS_DROOLS, DRL),
     FLIGHT_CREW_SCHEDULING(FlightCrewSchedulingProblem::new,
@@ -59,7 +59,7 @@ public enum Example {
     NURSE_ROSTERING(NurseRosteringProblem::new,
             CONSTRAINT_STREAMS_DROOLS, DRL),
     PATIENT_ADMISSION_SCHEDULING(PatientAdmissionSchedulingProblem::new,
-            CONSTRAINT_STREAMS_DROOLS, DRL),
+            CONSTRAINT_STREAMS_BAVET, CONSTRAINT_STREAMS_DROOLS, DRL),
     PROJECT_JOB_SCHEDULING(ProjectJobSchedulingProblem::new,
             JAVA_INCREMENTAL, CONSTRAINT_STREAMS_DROOLS, DRL),
     ROCK_TOUR(RockTourProblem::new,
@@ -89,7 +89,7 @@ public enum Example {
         return supportedScoreDirectorTypes.contains(scoreDirectorType);
     }
 
-    public Problem create(ScoreDirectorType scoreDirectorType) {
+    public Problem  create(ScoreDirectorType scoreDirectorType) {
         if (!isSupportedOn(scoreDirectorType)) {
             throw new IllegalArgumentException("Unsupported score director (" + scoreDirectorType + ") for example ("
                     + this + ").");
