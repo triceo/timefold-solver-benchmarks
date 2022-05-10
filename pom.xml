@@ -22,7 +22,7 @@
         <version.org.junit>5.7.1</version.org.junit>
         <formatter.skip>true</formatter.skip>
         <java.module.name>org.optaplanner.sdb</java.module.name>
-        <java.release>11</java.release>
+        <java.release>17</java.release>
         <jmh.version>1.35</jmh.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <uberjar.name>benchmarks</uberjar.name>
@@ -77,45 +77,28 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.1</version>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <finalName>${uberjar.name}</finalName>
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <descriptors> <!-- Builds a JAR with dependencies that correctly merges META-INF/service descriptors. -->
+                        <descriptor>src/assembly/jar-with-dependencies-and-services.xml</descriptor>
+                    </descriptors>
+                    <archive>
+                        <manifestEntries>
+                            <Main-Class>org.optaplanner.sdb.ScoreDirectorBenchmark</Main-Class>
+                            <Multi-Release>true</Multi-Release> <!-- Some of our dependencies are multi-release JARs. -->
+                        </manifestEntries>
+                    </archive>
+                </configuration>
                 <executions>
                     <execution>
+                        <id>make-assembly</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>shade</goal>
+                            <goal>single</goal>
                         </goals>
-                        <configuration>
-                            <finalName>${uberjar.name}</finalName>
-                            <filters>
-                                <filter> <!-- Disable modularity for all dependencies, in order to not confuse JLink later. -->
-                                    <artifact>*:*</artifact>
-                                    <excludes>
-                                        <exclude>**/*module-info*</exclude>
-                                    </excludes>
-                                </filter>
-                                <filter> <!-- Disable JAR signing as only some of the JARs would be signed, creating problems. -->
-                                    <artifact>*:*</artifact>
-                                    <excludes>
-                                        <excludes>META-INF/*.SF</excludes>
-                                        <excludes>META-INF/*.DSA</excludes>
-                                        <excludes>META-INF/*.RSA</excludes>
-                                    </excludes>
-                                </filter>
-                            </filters>
-                            <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <manifestEntries>
-                                        <Main-Class>org.optaplanner.sdb.ScoreDirectorBenchmark</Main-Class>
-                                        <Multi-Release>true</Multi-Release>
-                                    </manifestEntries>
-                                </transformer>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                                    <resource>META-INF/kie.conf</resource>
-                                </transformer>
-                            </transformers>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
