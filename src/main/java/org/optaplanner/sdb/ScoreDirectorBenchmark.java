@@ -78,10 +78,12 @@ public class ScoreDirectorBenchmark {
         return year + "" + month + "" + day + "_" + hour + "" + minute + "" + second;
     }
 
+    /*
     @Benchmark
     public Object droolsDrl(DrlExample params) {
-        return params.problem.runInvocation();
+        return params.problem.runInvocation(); // DRL is deprecated
     }
+     */
 
     @Benchmark
     public Object droolsCsd(ConstraintStreamsDroolsExample params) {
