@@ -120,7 +120,8 @@ public class ScoreDirectorBenchmark {
                                 "dir=" + resultFolder.getAbsolutePath() + ";" +
                                 "libPath=" + asyncProfilerAbsolutePath + ";" +
                                 "simple=true")
-                .jvmArgs("-Xms2g", "-Xmx2g")
+                .jvmArgs("-XX:+UnlockExperimentalVMOptions", "-XX:+UseEpsilonGC", "-XX:+AlwaysPreTouch",
+                        "-Xms64g", "-Xmx64g")
                 .param("drlExample", getSupportedExampleNames(ScoreDirectorType.DRL))
                 .param("csdExample", getSupportedExampleNames(ScoreDirectorType.CONSTRAINT_STREAMS_DROOLS))
                 .param("csbExample", getSupportedExampleNames(ScoreDirectorType.CONSTRAINT_STREAMS_BAVET))
