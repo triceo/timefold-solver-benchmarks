@@ -36,9 +36,12 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
+import org.openjdk.jmh.annotations.Fork;
+import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
@@ -58,8 +61,10 @@ import org.optaplanner.sdb.params.JavaIncrementalExample;
 import org.optaplanner.sdb.params.ScoreDirectorType;
 
 @State(Scope.Benchmark)
-@Warmup(iterations = 10) // 5 has been demonstrated to be too little.
 @BenchmarkMode(Mode.Throughput)
+@Warmup(iterations = 10) // 5 has been demonstrated to be too little.
+@Measurement(iterations = 5)
+@Fork(5)
 public class ScoreDirectorBenchmark {
 
     private static String leftPad(int input, int length) {
@@ -120,7 +125,7 @@ public class ScoreDirectorBenchmark {
                                 "dir=" + resultFolder.getAbsolutePath() + ";" +
                                 "libPath=" + asyncProfilerAbsolutePath + ";" +
                                 "simple=true")
-                .jvmArgs("-Xms2g", "-Xmx2g")
+                .jvmArgs("-XX:+UseSerialGC", "-Xms1g", "-Xmx1g") // Minimize GC overhead.
                 .param("drlExample", getSupportedExampleNames(ScoreDirectorType.DRL))
                 .param("csdExample", getSupportedExampleNames(ScoreDirectorType.CONSTRAINT_STREAMS_DROOLS))
                 .param("csbExample", getSupportedExampleNames(ScoreDirectorType.CONSTRAINT_STREAMS_BAVET))
