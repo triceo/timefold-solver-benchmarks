@@ -17,7 +17,7 @@ final class Configuration {
         properties.load(inputStream);
 
         List<ScoreDirectorType> enabledScoreDirectorTypes;
-        String scoreDirectorTypes = properties.getProperty("score_director_types");
+        String scoreDirectorTypes = properties.getProperty("score_director_type");
         if (scoreDirectorTypes == null) {
             enabledScoreDirectorTypes = Arrays.asList(ScoreDirectorType.values());
         } else {

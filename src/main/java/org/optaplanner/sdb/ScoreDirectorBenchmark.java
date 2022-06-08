@@ -39,7 +39,6 @@ import java.nio.file.Path;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Arrays;
 
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
@@ -58,7 +57,6 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.optaplanner.sdb.params.ConstraintStreamsBavetExample;
 import org.optaplanner.sdb.params.ConstraintStreamsDroolsExample;
 import org.optaplanner.sdb.params.DrlExample;
-import org.optaplanner.sdb.params.Example;
 import org.optaplanner.sdb.params.JavaEasyExample;
 import org.optaplanner.sdb.params.JavaIncrementalExample;
 import org.optaplanner.sdb.params.ScoreDirectorType;
@@ -171,9 +169,9 @@ public class ScoreDirectorBenchmark {
             LOGGER.info("No examples enabled for score director type " + scoreDirectorType);
             return new String[0];
         }
-        String[] examples = Arrays.stream(Example.values())
+        String[] examples = configuration.getEnabledExamples()
+                .stream()
                 .filter(example -> example.isSupportedOn(scoreDirectorType))
-                .filter(example -> configuration.getEnabledExamples().contains(example))
                 .map(Enum::name)
                 .toArray(String[]::new);
         LOGGER.info("Examples enabled for score director type {}: {}", scoreDirectorType, examples);
