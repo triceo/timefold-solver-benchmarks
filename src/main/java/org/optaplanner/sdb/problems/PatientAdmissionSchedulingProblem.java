@@ -9,8 +9,8 @@ import org.optaplanner.examples.pas.domain.BedDesignation;
 import org.optaplanner.examples.pas.domain.PatientAdmissionSchedule;
 import org.optaplanner.examples.pas.score.PatientAdmissionScheduleConstraintProvider;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
-import org.optaplanner.sdb.params.Example;
-import org.optaplanner.sdb.params.ScoreDirectorType;
+import org.optaplanner.sdb.Example;
+import org.optaplanner.sdb.ScoreDirectorType;
 
 public final class PatientAdmissionSchedulingProblem
         extends AbstractProblem<PatientAdmissionSchedule> {

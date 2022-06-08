@@ -1,11 +1,10 @@
-package org.optaplanner.sdb.params;
+package org.optaplanner.sdb.benchmarks;
 
 import org.openjdk.jmh.annotations.Param;
-import org.openjdk.jmh.annotations.Scope;
-import org.openjdk.jmh.annotations.State;
+import org.optaplanner.sdb.Example;
+import org.optaplanner.sdb.ScoreDirectorType;
 
-@State(Scope.Benchmark)
-public class ConstraintStreamsDroolsExample extends AbstractExample {
+public class ConstraintStreamsDrools extends AbstractBenchmark {
 
     @Param
     public Example csdExample;

@@ -11,8 +11,8 @@ import org.optaplanner.examples.cloudbalancing.optional.score.CloudBalancingIncr
 import org.optaplanner.examples.cloudbalancing.optional.score.CloudBalancingMapBasedEasyScoreCalculator;
 import org.optaplanner.examples.cloudbalancing.score.CloudBalancingConstraintProvider;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
-import org.optaplanner.sdb.params.Example;
-import org.optaplanner.sdb.params.ScoreDirectorType;
+import org.optaplanner.sdb.Example;
+import org.optaplanner.sdb.ScoreDirectorType;
 
 public final class CloudBalancingProblem extends AbstractProblem<CloudBalance> {
 

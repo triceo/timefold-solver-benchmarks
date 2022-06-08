@@ -9,8 +9,8 @@ import org.optaplanner.examples.curriculumcourse.domain.CourseSchedule;
 import org.optaplanner.examples.curriculumcourse.domain.Lecture;
 import org.optaplanner.examples.curriculumcourse.score.CurriculumCourseConstraintProvider;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
-import org.optaplanner.sdb.params.Example;
-import org.optaplanner.sdb.params.ScoreDirectorType;
+import org.optaplanner.sdb.Example;
+import org.optaplanner.sdb.ScoreDirectorType;
 
 public final class CurriculumCourseProblem extends AbstractProblem<CourseSchedule> {
 

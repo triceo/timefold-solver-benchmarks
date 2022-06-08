@@ -34,8 +34,8 @@ import org.optaplanner.core.impl.solver.termination.AbstractTermination;
 import org.optaplanner.core.impl.solver.termination.BasicPlumbingTermination;
 import org.optaplanner.core.impl.solver.termination.Termination;
 import org.optaplanner.core.impl.solver.termination.TerminationFactory;
-import org.optaplanner.sdb.params.Example;
-import org.optaplanner.sdb.params.ScoreDirectorType;
+import org.optaplanner.sdb.Example;
+import org.optaplanner.sdb.ScoreDirectorType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

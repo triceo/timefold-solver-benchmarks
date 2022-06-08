@@ -10,8 +10,8 @@ import org.optaplanner.examples.projectjobscheduling.domain.Schedule;
 import org.optaplanner.examples.projectjobscheduling.optional.score.ProjectJobSchedulingIncrementalScoreCalculator;
 import org.optaplanner.examples.projectjobscheduling.score.ProjectJobSchedulingConstraintProvider;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
-import org.optaplanner.sdb.params.Example;
-import org.optaplanner.sdb.params.ScoreDirectorType;
+import org.optaplanner.sdb.Example;
+import org.optaplanner.sdb.ScoreDirectorType;
 
 public final class ProjectJobSchedulingProblem extends AbstractProblem<Schedule> {
 

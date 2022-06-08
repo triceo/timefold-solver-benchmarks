@@ -10,8 +10,8 @@ import org.optaplanner.examples.rocktour.domain.RockStandstill;
 import org.optaplanner.examples.rocktour.domain.RockTourSolution;
 import org.optaplanner.examples.rocktour.persistence.RockTourXlsxFileIO;
 import org.optaplanner.examples.rocktour.score.RockTourConstraintProvider;
-import org.optaplanner.sdb.params.Example;
-import org.optaplanner.sdb.params.ScoreDirectorType;
+import org.optaplanner.sdb.Example;
+import org.optaplanner.sdb.ScoreDirectorType;
 
 public final class RockTourProblem extends AbstractProblem<RockTourSolution> {
 

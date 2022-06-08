@@ -9,8 +9,8 @@ import org.optaplanner.examples.meetingscheduling.domain.MeetingAssignment;
 import org.optaplanner.examples.meetingscheduling.domain.MeetingSchedule;
 import org.optaplanner.examples.meetingscheduling.persistence.MeetingSchedulingXlsxFileIO;
 import org.optaplanner.examples.meetingscheduling.score.MeetingSchedulingConstraintProvider;
-import org.optaplanner.sdb.params.Example;
-import org.optaplanner.sdb.params.ScoreDirectorType;
+import org.optaplanner.sdb.Example;
+import org.optaplanner.sdb.ScoreDirectorType;
 
 public final class MeetingSchedulingProblem extends AbstractProblem<MeetingSchedule> {
 

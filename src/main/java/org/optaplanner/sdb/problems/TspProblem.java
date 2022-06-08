@@ -11,8 +11,8 @@ import org.optaplanner.examples.tsp.optional.score.TspEasyScoreCalculator;
 import org.optaplanner.examples.tsp.optional.score.TspIncrementalScoreCalculator;
 import org.optaplanner.examples.tsp.score.TspConstraintProvider;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
-import org.optaplanner.sdb.params.Example;
-import org.optaplanner.sdb.params.ScoreDirectorType;
+import org.optaplanner.sdb.Example;
+import org.optaplanner.sdb.ScoreDirectorType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

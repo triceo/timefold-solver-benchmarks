@@ -9,8 +9,8 @@ import org.optaplanner.examples.travelingtournament.domain.Match;
 import org.optaplanner.examples.travelingtournament.domain.TravelingTournament;
 import org.optaplanner.examples.travelingtournament.score.TravelingTournamentConstraintProvider;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
-import org.optaplanner.sdb.params.Example;
-import org.optaplanner.sdb.params.ScoreDirectorType;
+import org.optaplanner.sdb.Example;
+import org.optaplanner.sdb.ScoreDirectorType;
 
 public final class TravelingTournamentProblem extends AbstractProblem<TravelingTournament> {
 

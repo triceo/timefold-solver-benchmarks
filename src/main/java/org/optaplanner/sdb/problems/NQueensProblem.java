@@ -11,8 +11,8 @@ import org.optaplanner.examples.nqueens.optional.score.NQueensAdvancedIncrementa
 import org.optaplanner.examples.nqueens.optional.score.NQueensMapBasedEasyScoreCalculator;
 import org.optaplanner.examples.nqueens.score.NQueensConstraintProvider;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
-import org.optaplanner.sdb.params.Example;
-import org.optaplanner.sdb.params.ScoreDirectorType;
+import org.optaplanner.sdb.Example;
+import org.optaplanner.sdb.ScoreDirectorType;
 
 public final class NQueensProblem extends AbstractProblem<NQueens> {
 

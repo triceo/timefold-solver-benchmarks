@@ -1,8 +1,5 @@
 package org.optaplanner.sdb;
 
-import org.optaplanner.sdb.params.Example;
-import org.optaplanner.sdb.params.ScoreDirectorType;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;

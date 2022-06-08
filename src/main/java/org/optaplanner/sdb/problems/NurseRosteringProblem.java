@@ -9,8 +9,8 @@ import org.optaplanner.examples.nurserostering.domain.NurseRoster;
 import org.optaplanner.examples.nurserostering.domain.ShiftAssignment;
 import org.optaplanner.examples.nurserostering.persistence.NurseRosterXmlSolutionFileIO;
 import org.optaplanner.examples.nurserostering.score.NurseRosteringConstraintProvider;
-import org.optaplanner.sdb.params.Example;
-import org.optaplanner.sdb.params.ScoreDirectorType;
+import org.optaplanner.sdb.Example;
+import org.optaplanner.sdb.ScoreDirectorType;
 
 public final class NurseRosteringProblem extends AbstractProblem<NurseRoster> {
 

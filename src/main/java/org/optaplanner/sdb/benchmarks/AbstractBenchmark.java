@@ -1,11 +1,20 @@
-package org.optaplanner.sdb.params;
+package org.optaplanner.sdb.benchmarks;
 
+import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Level;
+import org.openjdk.jmh.annotations.Mode;
+import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
+import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.TearDown;
+import org.optaplanner.sdb.Example;
+import org.optaplanner.sdb.ScoreDirectorType;
 import org.optaplanner.sdb.problems.Problem;
 
-public abstract class AbstractExample {
+@State(Scope.Benchmark)
+@BenchmarkMode(Mode.Throughput)
+public abstract class AbstractBenchmark {
 
     public Problem problem;
 
@@ -27,6 +36,11 @@ public abstract class AbstractExample {
     @Setup(Level.Invocation)
     public void setupInvocation() {
         problem.setupInvocation();
+    }
+
+    @Benchmark
+    public Object run() {
+        return problem.runInvocation();
     }
 
     @TearDown(Level.Invocation)

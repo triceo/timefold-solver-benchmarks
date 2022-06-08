@@ -13,8 +13,8 @@ import org.optaplanner.examples.vehiclerouting.optional.score.VehicleRoutingEasy
 import org.optaplanner.examples.vehiclerouting.optional.score.VehicleRoutingIncrementalScoreCalculator;
 import org.optaplanner.examples.vehiclerouting.score.VehicleRoutingConstraintProvider;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
-import org.optaplanner.sdb.params.Example;
-import org.optaplanner.sdb.params.ScoreDirectorType;
+import org.optaplanner.sdb.Example;
+import org.optaplanner.sdb.ScoreDirectorType;
 
 public final class VehicleRoutingProblem extends AbstractProblem<VehicleRoutingSolution> {
 

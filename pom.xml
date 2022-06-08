@@ -87,7 +87,7 @@
                     </descriptors>
                     <archive>
                         <manifestEntries>
-                            <Main-Class>org.optaplanner.sdb.ScoreDirectorBenchmark</Main-Class>
+                            <Main-Class>org.optaplanner.sdb.Main</Main-Class>
                             <Multi-Release>true</Multi-Release> <!-- Some of our dependencies are multi-release JARs. -->
                         </manifestEntries>
                     </archive>

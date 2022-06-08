@@ -1,4 +1,4 @@
-package org.optaplanner.sdb.params;
+package org.optaplanner.sdb;
 
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -28,11 +28,11 @@ import org.optaplanner.sdb.problems.TravelingTournamentProblem;
 import org.optaplanner.sdb.problems.TspProblem;
 import org.optaplanner.sdb.problems.VehicleRoutingProblem;
 
-import static org.optaplanner.sdb.params.ScoreDirectorType.CONSTRAINT_STREAMS_BAVET;
-import static org.optaplanner.sdb.params.ScoreDirectorType.CONSTRAINT_STREAMS_DROOLS;
-import static org.optaplanner.sdb.params.ScoreDirectorType.DRL;
-import static org.optaplanner.sdb.params.ScoreDirectorType.JAVA_EASY;
-import static org.optaplanner.sdb.params.ScoreDirectorType.JAVA_INCREMENTAL;
+import static org.optaplanner.sdb.ScoreDirectorType.CONSTRAINT_STREAMS_BAVET;
+import static org.optaplanner.sdb.ScoreDirectorType.CONSTRAINT_STREAMS_DROOLS;
+import static org.optaplanner.sdb.ScoreDirectorType.DRL;
+import static org.optaplanner.sdb.ScoreDirectorType.JAVA_EASY;
+import static org.optaplanner.sdb.ScoreDirectorType.JAVA_INCREMENTAL;
 
 public enum Example {
 

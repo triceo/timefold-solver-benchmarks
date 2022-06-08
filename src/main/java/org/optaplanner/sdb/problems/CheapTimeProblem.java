@@ -11,8 +11,8 @@ import org.optaplanner.examples.cheaptime.optional.score.CheapTimeEasyScoreCalcu
 import org.optaplanner.examples.cheaptime.optional.score.CheapTimeIncrementalScoreCalculator;
 import org.optaplanner.examples.cheaptime.score.CheapTimeConstraintProvider;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
-import org.optaplanner.sdb.params.Example;
-import org.optaplanner.sdb.params.ScoreDirectorType;
+import org.optaplanner.sdb.Example;
+import org.optaplanner.sdb.ScoreDirectorType;
 
 public final class CheapTimeProblem extends AbstractProblem<CheapTimeSolution> {
 

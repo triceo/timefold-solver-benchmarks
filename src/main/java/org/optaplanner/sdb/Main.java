@@ -40,37 +40,24 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-import org.openjdk.jmh.annotations.Benchmark;
-import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.Fork;
-import org.openjdk.jmh.annotations.Measurement;
-import org.openjdk.jmh.annotations.Mode;
-import org.openjdk.jmh.annotations.Scope;
-import org.openjdk.jmh.annotations.State;
-import org.openjdk.jmh.annotations.Warmup;
 import org.openjdk.jmh.profile.AsyncProfiler;
 import org.openjdk.jmh.results.format.ResultFormatType;
 import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.ChainedOptionsBuilder;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
-import org.optaplanner.sdb.params.ConstraintStreamsBavetExample;
-import org.optaplanner.sdb.params.ConstraintStreamsDroolsExample;
-import org.optaplanner.sdb.params.DrlExample;
-import org.optaplanner.sdb.params.JavaEasyExample;
-import org.optaplanner.sdb.params.JavaIncrementalExample;
-import org.optaplanner.sdb.params.ScoreDirectorType;
+import org.optaplanner.sdb.benchmarks.AbstractBenchmark;
+import org.optaplanner.sdb.benchmarks.ConstraintStreamsBavet;
+import org.optaplanner.sdb.benchmarks.ConstraintStreamsDrools;
+import org.optaplanner.sdb.benchmarks.Drl;
+import org.optaplanner.sdb.benchmarks.JavaEasy;
+import org.optaplanner.sdb.benchmarks.JavaIncremental;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@State(Scope.Benchmark)
-@BenchmarkMode(Mode.Throughput)
-@Warmup(iterations = 10) // 5 has been demonstrated to be too little.
-@Measurement(iterations = 5)
-@Fork(5)
-public class ScoreDirectorBenchmark {
+public class Main {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ScoreDirectorBenchmark.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
     private static String leftPad(int input, int length) {
         return String.format("%1$" + length + "s", input)
@@ -86,31 +73,6 @@ public class ScoreDirectorBenchmark {
         String minute = leftPad(now.getMinute(), 2);
         String second = leftPad(now.getSecond(), 2);
         return year + "" + month + "" + day + "_" + hour + "" + minute + "" + second;
-    }
-
-    @Benchmark
-    public Object droolsDrl(DrlExample params) {
-        return params.problem.runInvocation();
-    }
-
-    @Benchmark
-    public Object droolsCsd(ConstraintStreamsDroolsExample params) {
-        return params.problem.runInvocation();
-    }
-
-    @Benchmark
-    public Object javaCsb(ConstraintStreamsBavetExample params) {
-        return params.problem.runInvocation();
-    }
-
-    @Benchmark
-    public Object javaIncremental(JavaIncrementalExample params) {
-        return params.problem.runInvocation();
-    }
-
-    @Benchmark
-    public Object javaEasy(JavaEasyExample params) {
-        return params.problem.runInvocation();
     }
 
     private static Configuration readConfiguration() {
@@ -137,15 +99,18 @@ public class ScoreDirectorBenchmark {
         resultFolder.mkdirs();
 
         ChainedOptionsBuilder options = new OptionsBuilder()
-                .include(ScoreDirectorBenchmark.class.getSimpleName())
-                .jvmArgs("-XX:+UseSerialGC", "-Xms1g", "-Xmx1g") // Minimize GC overhead.
-                .param("drlExample", getSupportedExampleNames(configuration, ScoreDirectorType.DRL))
-                .param("csdExample", getSupportedExampleNames(configuration, ScoreDirectorType.CONSTRAINT_STREAMS_DROOLS))
-                .param("csbExample", getSupportedExampleNames(configuration, ScoreDirectorType.CONSTRAINT_STREAMS_BAVET))
-                .param("easyExample", getSupportedExampleNames(configuration, ScoreDirectorType.JAVA_EASY))
-                .param("incrementalExample", getSupportedExampleNames(configuration, ScoreDirectorType.JAVA_INCREMENTAL))
+                .forks(10)
+                .warmupIterations(5)
+                .measurementIterations(5)
+                .jvmArgs("-XX:+UseParallelGC", "-Xms1g", "-Xmx1g") // Minimize GC overhead.
                 .result(benchmarkResults.getAbsolutePath())
                 .resultFormat(ResultFormatType.CSV);
+
+        options = processBenchmark(options, ConstraintStreamsBavet.class, "csbExample", configuration, ScoreDirectorType.CONSTRAINT_STREAMS_BAVET);
+        options = processBenchmark(options, ConstraintStreamsDrools.class, "csdExample", configuration, ScoreDirectorType.CONSTRAINT_STREAMS_DROOLS);
+        options = processBenchmark(options, Drl.class, "drlExample", configuration, ScoreDirectorType.DRL);
+        options = processBenchmark(options, JavaEasy.class, "easyExample", configuration, ScoreDirectorType.JAVA_EASY);
+        options = processBenchmark(options, JavaIncremental.class, "incrementalExample", configuration, ScoreDirectorType.JAVA_INCREMENTAL);
 
         Path asyncProfilerPath = Path.of("async-profiler-2.7-linux-x64", "build", "libasyncProfiler.so")
                 .toAbsolutePath();
@@ -162,6 +127,17 @@ public class ScoreDirectorBenchmark {
         }
 
         new Runner(options.build()).run();
+    }
+
+    private static ChainedOptionsBuilder processBenchmark(ChainedOptionsBuilder options, Class<? extends AbstractBenchmark> benchmarkClass,
+                                                          String benchmarkParamName, Configuration configuration, ScoreDirectorType scoreDirectorType) {
+        String[] supportedExampleNames = getSupportedExampleNames(configuration, scoreDirectorType);
+        if (supportedExampleNames.length > 0) {
+            options = options.include(benchmarkClass.getSimpleName())
+                    .param(benchmarkParamName, supportedExampleNames);
+
+        }
+        return options;
     }
 
     private static String[] getSupportedExampleNames(Configuration configuration, ScoreDirectorType scoreDirectorType) {

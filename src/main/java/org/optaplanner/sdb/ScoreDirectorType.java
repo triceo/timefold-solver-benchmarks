@@ -1,4 +1,4 @@
-package org.optaplanner.sdb.params;
+package org.optaplanner.sdb;
 
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.config.solver.EnvironmentMode;

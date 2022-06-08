@@ -10,8 +10,8 @@ import org.optaplanner.examples.flightcrewscheduling.domain.FlightAssignment;
 import org.optaplanner.examples.flightcrewscheduling.domain.FlightCrewSolution;
 import org.optaplanner.examples.flightcrewscheduling.persistence.FlightCrewSchedulingXlsxFileIO;
 import org.optaplanner.examples.flightcrewscheduling.score.FlightCrewSchedulingConstraintProvider;
-import org.optaplanner.sdb.params.Example;
-import org.optaplanner.sdb.params.ScoreDirectorType;
+import org.optaplanner.sdb.Example;
+import org.optaplanner.sdb.ScoreDirectorType;
 
 public final class FlightCrewSchedulingProblem extends AbstractProblem<FlightCrewSolution> {
 

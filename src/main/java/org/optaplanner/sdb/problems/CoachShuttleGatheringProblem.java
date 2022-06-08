@@ -14,8 +14,8 @@ import org.optaplanner.examples.coachshuttlegathering.domain.StopOrHub;
 import org.optaplanner.examples.coachshuttlegathering.optional.score.CoachShuttleGatheringEasyScoreCalculator;
 import org.optaplanner.examples.coachshuttlegathering.score.CoachShuttleGatheringConstraintProvider;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
-import org.optaplanner.sdb.params.Example;
-import org.optaplanner.sdb.params.ScoreDirectorType;
+import org.optaplanner.sdb.Example;
+import org.optaplanner.sdb.ScoreDirectorType;
 
 public final class CoachShuttleGatheringProblem extends AbstractProblem<CoachShuttleGatheringSolution> {
 
