@@ -32,6 +32,11 @@
 package org.optaplanner.sdb;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -59,6 +64,8 @@ import org.optaplanner.sdb.params.Example;
 import org.optaplanner.sdb.params.JavaEasyExample;
 import org.optaplanner.sdb.params.JavaIncrementalExample;
 import org.optaplanner.sdb.params.ScoreDirectorType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @State(Scope.Benchmark)
 @BenchmarkMode(Mode.Throughput)
@@ -66,6 +73,8 @@ import org.optaplanner.sdb.params.ScoreDirectorType;
 @Measurement(iterations = 5)
 @Fork(5)
 public class ScoreDirectorBenchmark {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ScoreDirectorBenchmark.class);
 
     private static String leftPad(int input, int length) {
         return String.format("%1$" + length + "s", input)
@@ -110,41 +119,69 @@ public class ScoreDirectorBenchmark {
         return params.problem.runInvocation();
     }
 
+    private static Configuration readConfiguration() {
+        Path configPath = Path.of("benchmark.properties")
+                .toAbsolutePath();
+        if (configPath.toFile().exists()) {
+            LOGGER.info("Using benchmark configuration file: {}.", configPath);
+            try (InputStream inputStream = Files.newInputStream(configPath)) {
+                return Configuration.read(inputStream);
+            } catch (IOException e) {
+                throw new IllegalStateException("Failed reading benchmark properties: " + configPath, e);
+            }
+        } else {
+            LOGGER.info("Using default benchmark configuration.");
+            return Configuration.getDefault();
+        }
+    }
+
     public static void main(String[] args) throws RunnerException {
+        Configuration configuration = readConfiguration();
+
         File resultFolder = new File("results/" + getTimestamp());
         File benchmarkResults = new File(resultFolder, "benchmarkResults.csv");
         resultFolder.mkdirs();
 
-        String asyncProfilerAbsolutePath = new File("async-profiler-2.7-linux-x64/build/libasyncProfiler.so")
-                .getAbsolutePath();
         ChainedOptionsBuilder options = new OptionsBuilder()
                 .include(ScoreDirectorBenchmark.class.getSimpleName())
-                .addProfiler(AsyncProfiler.class,
-                        "event=cpu;" +
-                                "output=flamegraph,tree;" +
-                                "dir=" + resultFolder.getAbsolutePath() + ";" +
-                                "libPath=" + asyncProfilerAbsolutePath + ";" +
-                                "simple=true")
                 .jvmArgs("-XX:+UseSerialGC", "-Xms1g", "-Xmx1g") // Minimize GC overhead.
-                .param("drlExample", getSupportedExampleNames(ScoreDirectorType.DRL))
-                .param("csdExample", getSupportedExampleNames(ScoreDirectorType.CONSTRAINT_STREAMS_DROOLS))
-                .param("csbExample", getSupportedExampleNames(ScoreDirectorType.CONSTRAINT_STREAMS_BAVET))
-                .param("easyExample", getSupportedExampleNames(ScoreDirectorType.JAVA_EASY))
-                .param("incrementalExample", getSupportedExampleNames(ScoreDirectorType.JAVA_INCREMENTAL))
+                .param("drlExample", getSupportedExampleNames(configuration, ScoreDirectorType.DRL))
+                .param("csdExample", getSupportedExampleNames(configuration, ScoreDirectorType.CONSTRAINT_STREAMS_DROOLS))
+                .param("csbExample", getSupportedExampleNames(configuration, ScoreDirectorType.CONSTRAINT_STREAMS_BAVET))
+                .param("easyExample", getSupportedExampleNames(configuration, ScoreDirectorType.JAVA_EASY))
+                .param("incrementalExample", getSupportedExampleNames(configuration, ScoreDirectorType.JAVA_INCREMENTAL))
                 .result(benchmarkResults.getAbsolutePath())
                 .resultFormat(ResultFormatType.CSV);
-        String exclusionRegexp = args.length > 0 ? args[0] : null;
-        if (exclusionRegexp != null) {
-            options = options.exclude(exclusionRegexp);
+
+        Path asyncProfilerPath = Path.of("async-profiler-2.7-linux-x64", "build", "libasyncProfiler.so")
+                .toAbsolutePath();
+        if (asyncProfilerPath.toFile().exists()) {
+            LOGGER.info("Using Async profiler from {}.", asyncProfilerPath);
+            options = options.addProfiler(AsyncProfiler.class,
+                    "event=cpu;" +
+                            "output=flamegraph,tree;" +
+                            "dir=" + resultFolder.getAbsolutePath() + ";" +
+                            "libPath=" + asyncProfilerPath + ";" +
+                            "simple=true");
+        } else {
+            LOGGER.info("Async profiler not found in {}. Profiler disabled.", asyncProfilerPath);
         }
+
         new Runner(options.build()).run();
     }
 
-    private static String[] getSupportedExampleNames(ScoreDirectorType scoreDirectorType) {
-        return Arrays.stream(Example.values())
-                .filter(s -> s.isSupportedOn(scoreDirectorType))
+    private static String[] getSupportedExampleNames(Configuration configuration, ScoreDirectorType scoreDirectorType) {
+        if (!configuration.getEnabledScoreDirectorTypes().contains(scoreDirectorType)) {
+            LOGGER.info("No examples enabled for score director type " + scoreDirectorType);
+            return new String[0];
+        }
+        String[] examples = Arrays.stream(Example.values())
+                .filter(example -> example.isSupportedOn(scoreDirectorType))
+                .filter(example -> configuration.getEnabledExamples().contains(example))
                 .map(Enum::name)
                 .toArray(String[]::new);
+        LOGGER.info("Examples enabled for score director type {}: {}", scoreDirectorType, examples);
+        return examples;
     }
 
 }
