@@ -34,14 +34,12 @@ package org.optaplanner.sdb;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
 
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
@@ -92,12 +90,10 @@ public class ScoreDirectorBenchmark {
         return year + "" + month + "" + day + "_" + hour + "" + minute + "" + second;
     }
 
-    /*
     @Benchmark
     public Object droolsDrl(DrlExample params) {
-        return params.problem.runInvocation(); // DRL is deprecated
+        return params.problem.runInvocation();
     }
-     */
 
     @Benchmark
     public Object droolsCsd(ConstraintStreamsDroolsExample params) {
