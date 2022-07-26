@@ -112,7 +112,7 @@ public class Main {
         options = processBenchmark(options, JavaEasy.class, "easyExample", configuration, ScoreDirectorType.JAVA_EASY);
         options = processBenchmark(options, JavaIncremental.class, "incrementalExample", configuration, ScoreDirectorType.JAVA_INCREMENTAL);
 
-        Path asyncProfilerPath = Path.of("async-profiler-2.7-linux-x64", "build", "libasyncProfiler.so")
+        Path asyncProfilerPath = Path.of("async-profiler-2.8.3-linux-x64", "build", "libasyncProfiler.so")
                 .toAbsolutePath();
         if (asyncProfilerPath.toFile().exists()) {
             LOGGER.info("Using Async profiler from {}.", asyncProfilerPath);
@@ -123,7 +123,7 @@ public class Main {
                             "libPath=" + asyncProfilerPath + ";" +
                             "simple=true");
         } else {
-            LOGGER.info("Async profiler not found in {}. Profiler disabled.", asyncProfilerPath);
+            LOGGER.warn("Async profiler not found in {}. Profiler disabled.", asyncProfilerPath);
         }
 
         new Runner(options.build()).run();
@@ -142,7 +142,7 @@ public class Main {
 
     private static String[] getSupportedExampleNames(Configuration configuration, ScoreDirectorType scoreDirectorType) {
         if (!configuration.getEnabledScoreDirectorTypes().contains(scoreDirectorType)) {
-            LOGGER.info("No examples enabled for score director type " + scoreDirectorType);
+            LOGGER.warn("No examples enabled for score director type " + scoreDirectorType);
             return new String[0];
         }
         String[] examples = configuration.getEnabledExamples()

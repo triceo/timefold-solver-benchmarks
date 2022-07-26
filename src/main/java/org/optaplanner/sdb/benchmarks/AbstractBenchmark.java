@@ -8,6 +8,7 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.TearDown;
+import org.openjdk.jmh.infra.Blackhole;
 import org.optaplanner.sdb.Example;
 import org.optaplanner.sdb.ScoreDirectorType;
 import org.optaplanner.sdb.problems.Problem;
@@ -39,8 +40,8 @@ public abstract class AbstractBenchmark {
     }
 
     @Benchmark
-    public Object run() {
-        return problem.runInvocation();
+    public Object run(Blackhole blackhole) {
+        return problem.runInvocation(blackhole);
     }
 
     @TearDown(Level.Invocation)

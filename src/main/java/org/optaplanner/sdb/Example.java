@@ -36,8 +36,7 @@ import static org.optaplanner.sdb.ScoreDirectorType.JAVA_INCREMENTAL;
 
 public enum Example {
 
-    CHEAP_TIME(CheapTimeProblem::new,
-            JAVA_EASY, JAVA_INCREMENTAL, CONSTRAINT_STREAMS_DROOLS, DRL),
+    CHEAP_TIME(CheapTimeProblem::new),
     CLOUD_BALANCING(CloudBalancingProblem::new),
     COACH_SHUTTLE_GATHERING(CoachShuttleGatheringProblem::new,
             JAVA_EASY, CONSTRAINT_STREAMS_BAVET, CONSTRAINT_STREAMS_DROOLS, DRL),
@@ -56,11 +55,11 @@ public enum Example {
             CONSTRAINT_STREAMS_BAVET, CONSTRAINT_STREAMS_DROOLS, DRL),
     NQUEENS(NQueensProblem::new),
     NURSE_ROSTERING(NurseRosteringProblem::new,
-            CONSTRAINT_STREAMS_DROOLS, DRL),
+            CONSTRAINT_STREAMS_BAVET, CONSTRAINT_STREAMS_DROOLS, DRL),
     PATIENT_ADMISSION_SCHEDULING(PatientAdmissionSchedulingProblem::new,
             CONSTRAINT_STREAMS_BAVET, CONSTRAINT_STREAMS_DROOLS, DRL),
     PROJECT_JOB_SCHEDULING(ProjectJobSchedulingProblem::new,
-            JAVA_INCREMENTAL, CONSTRAINT_STREAMS_DROOLS, DRL),
+            JAVA_INCREMENTAL, CONSTRAINT_STREAMS_BAVET, CONSTRAINT_STREAMS_DROOLS, DRL),
     ROCK_TOUR(RockTourProblem::new,
             CONSTRAINT_STREAMS_BAVET, CONSTRAINT_STREAMS_DROOLS, DRL),
     TASK_ASSIGNING(TaskAssigningProblem::new,

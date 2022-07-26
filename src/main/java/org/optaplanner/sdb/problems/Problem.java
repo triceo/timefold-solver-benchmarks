@@ -1,5 +1,7 @@
 package org.optaplanner.sdb.problems;
 
+import org.openjdk.jmh.infra.Blackhole;
+
 public interface Problem {
 
     void setupTrial();
@@ -8,7 +10,7 @@ public interface Problem {
 
     void setupInvocation();
 
-    Object runInvocation();
+    Object runInvocation(Blackhole blackhole);
 
     void tearDownInvocation();
 
