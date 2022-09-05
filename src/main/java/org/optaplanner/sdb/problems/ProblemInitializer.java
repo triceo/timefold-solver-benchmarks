@@ -1,13 +1,5 @@
 package org.optaplanner.sdb.problems;
 
-import java.util.Arrays;
-import java.util.EnumMap;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.function.Supplier;
-
 import org.optaplanner.core.api.score.Score;
 import org.optaplanner.core.config.constructionheuristic.ConstructionHeuristicPhaseConfig;
 import org.optaplanner.core.config.constructionheuristic.ConstructionHeuristicType;
@@ -38,6 +30,10 @@ import org.optaplanner.sdb.Example;
 import org.optaplanner.sdb.ScoreDirectorType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.*;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * XLS-based examples can not read initialized solution from the file.
@@ -81,7 +77,8 @@ public final class ProblemInitializer {
             DefaultConstructionHeuristicPhaseFactory<Solution_> factory = new DefaultConstructionHeuristicPhaseFactory<>(config);
 
             final HeuristicConfigPolicy<Solution_> policy = new HeuristicConfigPolicy.Builder<>(EnvironmentMode.REPRODUCIBLE,
-                    null, null, null, scoreDirectorFactory)
+                    null, null, null, scoreDirectorFactory.getInitializingScoreTrend(),
+                    scoreDirectorFactory.getSolutionDescriptor())
                     .build();
             BestSolutionRecaller<Solution_> bestSolutionRecaller =
                     BestSolutionRecallerFactory.create().buildBestSolutionRecaller(EnvironmentMode.REPRODUCIBLE);

@@ -1,11 +1,5 @@
 package org.optaplanner.sdb.problems;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
-import java.util.stream.Collectors;
-
 import org.openjdk.jmh.infra.Blackhole;
 import org.optaplanner.core.config.heuristic.selector.common.SelectionCacheType;
 import org.optaplanner.core.config.heuristic.selector.common.SelectionOrder;
@@ -28,6 +22,12 @@ import org.optaplanner.core.impl.score.director.InnerScoreDirectorFactory;
 import org.optaplanner.core.impl.solver.scope.SolverScope;
 import org.optaplanner.sdb.Example;
 import org.optaplanner.sdb.ScoreDirectorType;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 abstract class AbstractProblem<Solution_> implements Problem {
 
@@ -95,7 +95,8 @@ abstract class AbstractProblem<Solution_> implements Problem {
         // Prepare the move selector that will pick different move for each invocation.
         // Reproducible random selection without caching; we need the selection to never end.
         final HeuristicConfigPolicy<Solution_> policy = new HeuristicConfigPolicy.Builder<>(EnvironmentMode.REPRODUCIBLE,
-                null, null, null, scoreDirectorFactory)
+                null, null, null, scoreDirectorFactory.getInitializingScoreTrend(),
+                scoreDirectorFactory.getSolutionDescriptor())
                 .build();
         moveSelector = moveSelectorFactory.buildMoveSelector(policy, SelectionCacheType.JUST_IN_TIME,
                 SelectionOrder.RANDOM);
