@@ -1,11 +1,5 @@
 package org.optaplanner.sdb;
 
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.Objects;
-import java.util.Set;
-import java.util.function.Function;
-
 import org.optaplanner.sdb.problems.CheapTimeProblem;
 import org.optaplanner.sdb.problems.CloudBalancingProblem;
 import org.optaplanner.sdb.problems.CoachShuttleGatheringProblem;
@@ -27,6 +21,12 @@ import org.optaplanner.sdb.problems.TennisProblem;
 import org.optaplanner.sdb.problems.TravelingTournamentProblem;
 import org.optaplanner.sdb.problems.TspProblem;
 import org.optaplanner.sdb.problems.VehicleRoutingProblem;
+
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.Objects;
+import java.util.Set;
+import java.util.function.Function;
 
 import static org.optaplanner.sdb.ScoreDirectorType.CONSTRAINT_STREAMS_BAVET;
 import static org.optaplanner.sdb.ScoreDirectorType.CONSTRAINT_STREAMS_DROOLS;
@@ -69,7 +69,8 @@ public enum Example {
     TRAVELING_TOURNAMENT(TravelingTournamentProblem::new,
             CONSTRAINT_STREAMS_BAVET, CONSTRAINT_STREAMS_DROOLS, DRL),
     TSP(TspProblem::new),
-    VEHICLE_ROUTING(VehicleRoutingProblem::new);
+    VEHICLE_ROUTING(VehicleRoutingProblem::new,
+            JAVA_EASY, CONSTRAINT_STREAMS_BAVET, CONSTRAINT_STREAMS_DROOLS, DRL);
 
     private final Function<ScoreDirectorType, Problem> problemFactory;
     private final Set<ScoreDirectorType> supportedScoreDirectorTypes;
