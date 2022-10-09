@@ -1,5 +1,13 @@
 package org.optaplanner.sdb.problems;
 
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
+import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.openjdk.jmh.infra.Blackhole;
 import org.optaplanner.core.config.heuristic.selector.common.SelectionCacheType;
 import org.optaplanner.core.config.heuristic.selector.common.SelectionOrder;
@@ -7,6 +15,7 @@ import org.optaplanner.core.config.heuristic.selector.entity.EntitySelectorConfi
 import org.optaplanner.core.config.heuristic.selector.move.MoveSelectorConfig;
 import org.optaplanner.core.config.heuristic.selector.move.composite.UnionMoveSelectorConfig;
 import org.optaplanner.core.config.heuristic.selector.move.generic.ChangeMoveSelectorConfig;
+import org.optaplanner.core.config.heuristic.selector.move.generic.SwapMoveSelectorConfig;
 import org.optaplanner.core.config.heuristic.selector.value.ValueSelectorConfig;
 import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.config.solver.EnvironmentMode;
@@ -23,16 +32,10 @@ import org.optaplanner.core.impl.solver.scope.SolverScope;
 import org.optaplanner.sdb.Example;
 import org.optaplanner.sdb.ScoreDirectorType;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
-import java.util.stream.Collectors;
-
 abstract class AbstractProblem<Solution_> implements Problem {
 
     // Each fork starts from a different place.
-    private static final int RANDOM_SEED = (int) Math.random() * 1_000;
+    private static final int RANDOM_SEED = (int) (Math.random() * 100);
     private static final double PROBABILITY_OF_UNDO = 0.9;
 
     private final InnerScoreDirectorFactory<Solution_, ?> scoreDirectorFactory;
@@ -71,14 +74,17 @@ abstract class AbstractProblem<Solution_> implements Problem {
                             EntitySelectorConfig entitySelectorConfig =
                                     new EntitySelectorConfig(entityDescriptor.getEntityClass());
                             return entityDescriptor.getGenuineVariableDescriptorList().stream()
-                                    .map(variableDescriptor -> {
+                                    .flatMap(variableDescriptor -> {
                                         String variableName = variableDescriptor.getVariableName();
+
                                         ValueSelectorConfig valueSelectorConfig = new ValueSelectorConfig(variableName);
-                                        ChangeMoveSelectorConfig moveSelectorConfig = new ChangeMoveSelectorConfig();
-                                        moveSelectorConfig.setEntitySelectorConfig(entitySelectorConfig);
-                                        moveSelectorConfig.setValueSelectorConfig(valueSelectorConfig);
-                                        return moveSelectorConfig;
-                                    });
+                                        ChangeMoveSelectorConfig changeMoveSelectorConfig = new ChangeMoveSelectorConfig();
+                                        changeMoveSelectorConfig.setValueSelectorConfig(valueSelectorConfig);
+
+                                        SwapMoveSelectorConfig swapMoveSelectorConfig = new SwapMoveSelectorConfig();
+                                        swapMoveSelectorConfig.setVariableNameIncludeList(Collections.singletonList(variableName));
+                                        return Stream.of(changeMoveSelectorConfig, changeMoveSelectorConfig);
+                                    }).peek(config -> config.setEntitySelectorConfig(entitySelectorConfig));
                         }
                 ).collect(Collectors.toList());
         if (moveSelectorConfigs.size() == 1) {
