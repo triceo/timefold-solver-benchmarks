@@ -8,6 +8,7 @@ import org.optaplanner.examples.vehiclerouting.domain.Vehicle;
 import org.optaplanner.examples.vehiclerouting.domain.VehicleRoutingSolution;
 import org.optaplanner.examples.vehiclerouting.domain.timewindowed.TimeWindowedCustomer;
 import org.optaplanner.examples.vehiclerouting.optional.score.VehicleRoutingEasyScoreCalculator;
+import org.optaplanner.examples.vehiclerouting.optional.score.VehicleRoutingIncrementalScoreCalculator;
 import org.optaplanner.examples.vehiclerouting.score.VehicleRoutingConstraintProvider;
 import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
 import org.optaplanner.sdb.Example;
@@ -39,6 +40,9 @@ public final class VehicleRoutingProblem extends AbstractProblem<VehicleRoutingS
             case JAVA_EASY:
                 return scoreDirectorFactoryConfig
                         .withEasyScoreCalculatorClass(VehicleRoutingEasyScoreCalculator.class);
+            case JAVA_INCREMENTAL:
+                return scoreDirectorFactoryConfig
+                        .withIncrementalScoreCalculatorClass(VehicleRoutingIncrementalScoreCalculator.class);
             default:
                 throw new UnsupportedOperationException("Score director: " + scoreDirectorType);
         }

@@ -69,8 +69,7 @@ public enum Example {
     TRAVELING_TOURNAMENT(TravelingTournamentProblem::new,
             CONSTRAINT_STREAMS_BAVET, CONSTRAINT_STREAMS_DROOLS, DRL),
     TSP(TspProblem::new),
-    VEHICLE_ROUTING(VehicleRoutingProblem::new,
-            JAVA_EASY, CONSTRAINT_STREAMS_BAVET, CONSTRAINT_STREAMS_DROOLS, DRL);
+    VEHICLE_ROUTING(VehicleRoutingProblem::new);
 
     private final Function<ScoreDirectorType, Problem> problemFactory;
     private final Set<ScoreDirectorType> supportedScoreDirectorTypes;
