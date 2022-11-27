@@ -19,12 +19,12 @@
 
     <properties>
         <version.org.optaplanner>8.32.0-SNAPSHOT</version.org.optaplanner>
-        <version.org.junit>5.8.2</version.org.junit>
-        <version.org.mockito>4.6.1</version.org.mockito>
+        <version.org.junit>5.9.1</version.org.junit>
+        <version.org.mockito>4.9.0</version.org.mockito>
         <formatter.skip>true</formatter.skip>
         <java.module.name>org.optaplanner.sdb</java.module.name>
         <java.release>17</java.release>
-        <jmh.version>1.35</jmh.version>
+        <jmh.version>1.36</jmh.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <uberjar.name>benchmarks</uberjar.name>
     </properties>
@@ -85,7 +85,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.3.0</version>
+                <version>3.4.2</version>
                 <configuration>
                     <finalName>${uberjar.name}</finalName>
                     <appendAssemblyId>false</appendAssemblyId>
@@ -111,7 +111,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version>
+                <version>3.0.0-M7</version>
             </plugin>
         </plugins>
     </build>
