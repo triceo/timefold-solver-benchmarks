@@ -8,8 +8,9 @@ import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
 import org.optaplanner.examples.machinereassignment.domain.MachineReassignment;
 import org.optaplanner.examples.machinereassignment.domain.MrProcessAssignment;
 import org.optaplanner.examples.machinereassignment.optional.score.MachineReassignmentIncrementalScoreCalculator;
+import org.optaplanner.examples.machinereassignment.persistence.MachineReassignmentSolutionFileIO;
 import org.optaplanner.examples.machinereassignment.score.MachineReassignmentConstraintProvider;
-import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
+import org.optaplanner.persistence.common.api.domain.solution.SolutionFileIO;
 import org.optaplanner.sdb.Example;
 import org.optaplanner.sdb.ScoreDirectorType;
 
@@ -23,24 +24,20 @@ public final class MachineReassignmentProblem
     @Override
     protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirectorType scoreDirectorType) {
         ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();
-        switch (scoreDirectorType) {
-            case CONSTRAINT_STREAMS_BAVET:
-                return scoreDirectorFactoryConfig
-                        .withConstraintProviderClass(MachineReassignmentConstraintProvider.class)
-                        .withConstraintStreamImplType(ConstraintStreamImplType.BAVET);
-            case CONSTRAINT_STREAMS_DROOLS:
-                return scoreDirectorFactoryConfig
-                        .withConstraintProviderClass(MachineReassignmentConstraintProvider.class)
-                        .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
-            case DRL:
-                return scoreDirectorFactoryConfig
-                        .withScoreDrls("org/optaplanner/examples/machinereassignment/optional/score/machineReassignmentConstraints.drl");
-            case JAVA_INCREMENTAL:
-                return scoreDirectorFactoryConfig
-                        .withIncrementalScoreCalculatorClass(MachineReassignmentIncrementalScoreCalculator.class);
-            default:
-                throw new UnsupportedOperationException("Score director: " + scoreDirectorType);
-        }
+        return switch (scoreDirectorType) {
+            case CONSTRAINT_STREAMS_BAVET -> scoreDirectorFactoryConfig
+                    .withConstraintProviderClass(MachineReassignmentConstraintProvider.class)
+                    .withConstraintStreamImplType(ConstraintStreamImplType.BAVET);
+            case CONSTRAINT_STREAMS_DROOLS -> scoreDirectorFactoryConfig
+                    .withConstraintProviderClass(MachineReassignmentConstraintProvider.class)
+                    .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
+            case DRL -> scoreDirectorFactoryConfig
+                    .withScoreDrls(
+                            "org/optaplanner/examples/machinereassignment/optional/score/machineReassignmentConstraints.drl");
+            case JAVA_INCREMENTAL -> scoreDirectorFactoryConfig
+                    .withIncrementalScoreCalculatorClass(MachineReassignmentIncrementalScoreCalculator.class);
+            default -> throw new UnsupportedOperationException("Score director: " + scoreDirectorType);
+        };
     }
 
     @Override
@@ -50,9 +47,8 @@ public final class MachineReassignmentProblem
 
     @Override
     protected MachineReassignment readOriginalSolution() {
-        final XStreamSolutionFileIO<MachineReassignment> solutionFileIO =
-                new XStreamSolutionFileIO<>(MachineReassignment.class);
-        return solutionFileIO.read(new File("data/machinereassignment-a23.xml"));
+        final SolutionFileIO<MachineReassignment> solutionFileIO = new MachineReassignmentSolutionFileIO();
+        return solutionFileIO.read(new File("data/machinereassignment-a23.json"));
     }
 
 }

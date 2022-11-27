@@ -9,8 +9,9 @@ import org.optaplanner.examples.nqueens.domain.NQueens;
 import org.optaplanner.examples.nqueens.domain.Queen;
 import org.optaplanner.examples.nqueens.optional.score.NQueensAdvancedIncrementalScoreCalculator;
 import org.optaplanner.examples.nqueens.optional.score.NQueensMapBasedEasyScoreCalculator;
+import org.optaplanner.examples.nqueens.persistence.NQueensSolutionFileIO;
 import org.optaplanner.examples.nqueens.score.NQueensConstraintProvider;
-import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
+import org.optaplanner.persistence.common.api.domain.solution.SolutionFileIO;
 import org.optaplanner.sdb.Example;
 import org.optaplanner.sdb.ScoreDirectorType;
 
@@ -23,27 +24,21 @@ public final class NQueensProblem extends AbstractProblem<NQueens> {
     @Override
     protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirectorType scoreDirectorType) {
         ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();
-        switch (scoreDirectorType) {
-            case CONSTRAINT_STREAMS_BAVET:
-                return scoreDirectorFactoryConfig
-                        .withConstraintProviderClass(NQueensConstraintProvider.class)
-                        .withConstraintStreamImplType(ConstraintStreamImplType.BAVET);
-            case CONSTRAINT_STREAMS_DROOLS:
-                return scoreDirectorFactoryConfig
-                        .withConstraintProviderClass(NQueensConstraintProvider.class)
-                        .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
-            case DRL:
-                return scoreDirectorFactoryConfig
-                        .withScoreDrls("org/optaplanner/examples/nqueens/optional/score/nQueensConstraints.drl");
-            case JAVA_EASY:
-                return scoreDirectorFactoryConfig
-                        .withEasyScoreCalculatorClass(NQueensMapBasedEasyScoreCalculator.class);
-            case JAVA_INCREMENTAL:
-                return scoreDirectorFactoryConfig
-                        .withIncrementalScoreCalculatorClass(NQueensAdvancedIncrementalScoreCalculator.class);
-            default:
-                throw new UnsupportedOperationException("Score director: " + scoreDirectorType);
-        }
+        return switch (scoreDirectorType) {
+            case CONSTRAINT_STREAMS_BAVET -> scoreDirectorFactoryConfig
+                    .withConstraintProviderClass(NQueensConstraintProvider.class)
+                    .withConstraintStreamImplType(ConstraintStreamImplType.BAVET);
+            case CONSTRAINT_STREAMS_DROOLS -> scoreDirectorFactoryConfig
+                    .withConstraintProviderClass(NQueensConstraintProvider.class)
+                    .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
+            case DRL -> scoreDirectorFactoryConfig
+                    .withScoreDrls("org/optaplanner/examples/nqueens/optional/score/nQueensConstraints.drl");
+            case JAVA_EASY -> scoreDirectorFactoryConfig
+                    .withEasyScoreCalculatorClass(NQueensMapBasedEasyScoreCalculator.class);
+            case JAVA_INCREMENTAL -> scoreDirectorFactoryConfig
+                    .withIncrementalScoreCalculatorClass(NQueensAdvancedIncrementalScoreCalculator.class);
+            default -> throw new UnsupportedOperationException("Score director: " + scoreDirectorType);
+        };
     }
 
     @Override
@@ -53,9 +48,8 @@ public final class NQueensProblem extends AbstractProblem<NQueens> {
 
     @Override
     protected NQueens readOriginalSolution() {
-        final XStreamSolutionFileIO<NQueens> solutionFileIO =
-                new XStreamSolutionFileIO<>(NQueens.class);
-        return solutionFileIO.read(new File("data/nqueens-256.xml"));
+        final SolutionFileIO<NQueens> solutionFileIO = new NQueensSolutionFileIO();
+        return solutionFileIO.read(new File("data/nqueens-256.json"));
     }
 
 }

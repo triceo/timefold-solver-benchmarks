@@ -21,21 +21,17 @@ public final class ConferenceSchedulingProblem extends AbstractProblem<Conferenc
     @Override
     protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirectorType scoreDirectorType) {
         ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();
-        switch (scoreDirectorType) {
-            case CONSTRAINT_STREAMS_BAVET:
-                return scoreDirectorFactoryConfig
-                        .withConstraintProviderClass(ConferenceSchedulingConstraintProvider.class)
-                        .withConstraintStreamImplType(ConstraintStreamImplType.BAVET);
-            case CONSTRAINT_STREAMS_DROOLS:
-                return scoreDirectorFactoryConfig
-                        .withConstraintProviderClass(ConferenceSchedulingConstraintProvider.class)
-                        .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
-            case DRL:
-                return scoreDirectorFactoryConfig
-                        .withScoreDrls("org/optaplanner/examples/conferencescheduling/optional/score/conferenceSchedulingConstraints.drl");
-            default:
-                throw new UnsupportedOperationException("Score director: " + scoreDirectorType);
-        }
+        return switch (scoreDirectorType) {
+            case CONSTRAINT_STREAMS_BAVET -> scoreDirectorFactoryConfig
+                    .withConstraintProviderClass(ConferenceSchedulingConstraintProvider.class)
+                    .withConstraintStreamImplType(ConstraintStreamImplType.BAVET);
+            case CONSTRAINT_STREAMS_DROOLS -> scoreDirectorFactoryConfig
+                    .withConstraintProviderClass(ConferenceSchedulingConstraintProvider.class)
+                    .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
+            case DRL -> scoreDirectorFactoryConfig
+                    .withScoreDrls("org/optaplanner/examples/conferencescheduling/optional/score/conferenceSchedulingConstraints.drl");
+            default -> throw new UnsupportedOperationException("Score director: " + scoreDirectorType);
+        };
     }
 
     @Override

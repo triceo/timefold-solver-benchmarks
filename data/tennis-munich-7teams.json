@@ -1,0 +1,563 @@
+{
+  "id" : 0,
+  "teamList" : [ {
+    "id" : 0,
+    "name" : "Micha"
+  }, {
+    "id" : 1,
+    "name" : "Angelika"
+  }, {
+    "id" : 2,
+    "name" : "Katrin"
+  }, {
+    "id" : 3,
+    "name" : "Susi"
+  }, {
+    "id" : 4,
+    "name" : "Irene"
+  }, {
+    "id" : 5,
+    "name" : "Kristina"
+  }, {
+    "id" : 6,
+    "name" : "Tobias"
+  } ],
+  "dayList" : [ {
+    "id" : 0,
+    "dateIndex" : 0
+  }, {
+    "id" : 1,
+    "dateIndex" : 1
+  }, {
+    "id" : 2,
+    "dateIndex" : 2
+  }, {
+    "id" : 3,
+    "dateIndex" : 3
+  }, {
+    "id" : 4,
+    "dateIndex" : 4
+  }, {
+    "id" : 5,
+    "dateIndex" : 5
+  }, {
+    "id" : 6,
+    "dateIndex" : 6
+  }, {
+    "id" : 7,
+    "dateIndex" : 7
+  }, {
+    "id" : 8,
+    "dateIndex" : 8
+  }, {
+    "id" : 9,
+    "dateIndex" : 9
+  }, {
+    "id" : 10,
+    "dateIndex" : 10
+  }, {
+    "id" : 11,
+    "dateIndex" : 11
+  }, {
+    "id" : 12,
+    "dateIndex" : 12
+  }, {
+    "id" : 13,
+    "dateIndex" : 13
+  }, {
+    "id" : 14,
+    "dateIndex" : 14
+  }, {
+    "id" : 15,
+    "dateIndex" : 15
+  }, {
+    "id" : 16,
+    "dateIndex" : 16
+  }, {
+    "id" : 17,
+    "dateIndex" : 17
+  } ],
+  "unavailabilityPenaltyList" : [ {
+    "id" : 0,
+    "team" : 4,
+    "day" : 0
+  }, {
+    "id" : 1,
+    "team" : 6,
+    "day" : 1
+  }, {
+    "id" : 2,
+    "team" : 2,
+    "day" : 2
+  }, {
+    "id" : 3,
+    "team" : 4,
+    "day" : 3
+  }, {
+    "id" : 4,
+    "team" : 4,
+    "day" : 5
+  }, {
+    "id" : 5,
+    "team" : 2,
+    "day" : 6
+  }, {
+    "id" : 6,
+    "team" : 1,
+    "day" : 8
+  }, {
+    "id" : 7,
+    "team" : 2,
+    "day" : 9
+  }, {
+    "id" : 8,
+    "team" : 4,
+    "day" : 10
+  }, {
+    "id" : 9,
+    "team" : 4,
+    "day" : 11
+  }, {
+    "id" : 10,
+    "team" : 6,
+    "day" : 12
+  }, {
+    "id" : 11,
+    "team" : 5,
+    "day" : 15
+  } ],
+  "teamAssignmentList" : [ {
+    "id" : 0,
+    "day" : 0,
+    "indexInDay" : 0,
+    "pinned" : false,
+    "team" : 0
+  }, {
+    "id" : 1,
+    "day" : 0,
+    "indexInDay" : 1,
+    "pinned" : false,
+    "team" : 1
+  }, {
+    "id" : 2,
+    "day" : 0,
+    "indexInDay" : 2,
+    "pinned" : false,
+    "team" : 2
+  }, {
+    "id" : 3,
+    "day" : 0,
+    "indexInDay" : 3,
+    "pinned" : false,
+    "team" : 3
+  }, {
+    "id" : 4,
+    "day" : 1,
+    "indexInDay" : 0,
+    "pinned" : false,
+    "team" : 4
+  }, {
+    "id" : 5,
+    "day" : 1,
+    "indexInDay" : 1,
+    "pinned" : false,
+    "team" : 5
+  }, {
+    "id" : 6,
+    "day" : 1,
+    "indexInDay" : 2,
+    "pinned" : false,
+    "team" : 0
+  }, {
+    "id" : 7,
+    "day" : 1,
+    "indexInDay" : 3,
+    "pinned" : false,
+    "team" : 1
+  }, {
+    "id" : 8,
+    "day" : 2,
+    "indexInDay" : 0,
+    "pinned" : false,
+    "team" : 6
+  }, {
+    "id" : 9,
+    "day" : 2,
+    "indexInDay" : 1,
+    "pinned" : false,
+    "team" : 3
+  }, {
+    "id" : 10,
+    "day" : 2,
+    "indexInDay" : 2,
+    "pinned" : false,
+    "team" : 4
+  }, {
+    "id" : 11,
+    "day" : 2,
+    "indexInDay" : 3,
+    "pinned" : false,
+    "team" : 5
+  }, {
+    "id" : 12,
+    "day" : 3,
+    "indexInDay" : 0,
+    "pinned" : false,
+    "team" : 2
+  }, {
+    "id" : 13,
+    "day" : 3,
+    "indexInDay" : 1,
+    "pinned" : false,
+    "team" : 6
+  }, {
+    "id" : 14,
+    "day" : 3,
+    "indexInDay" : 2,
+    "pinned" : false,
+    "team" : 0
+  }, {
+    "id" : 15,
+    "day" : 3,
+    "indexInDay" : 3,
+    "pinned" : false,
+    "team" : 5
+  }, {
+    "id" : 16,
+    "day" : 4,
+    "indexInDay" : 0,
+    "pinned" : false,
+    "team" : 1
+  }, {
+    "id" : 17,
+    "day" : 4,
+    "indexInDay" : 1,
+    "pinned" : false,
+    "team" : 6
+  }, {
+    "id" : 18,
+    "day" : 4,
+    "indexInDay" : 2,
+    "pinned" : false,
+    "team" : 2
+  }, {
+    "id" : 19,
+    "day" : 4,
+    "indexInDay" : 3,
+    "pinned" : false,
+    "team" : 4
+  }, {
+    "id" : 20,
+    "day" : 5,
+    "indexInDay" : 0,
+    "pinned" : false,
+    "team" : 3
+  }, {
+    "id" : 21,
+    "day" : 5,
+    "indexInDay" : 1,
+    "pinned" : false,
+    "team" : 0
+  }, {
+    "id" : 22,
+    "day" : 5,
+    "indexInDay" : 2,
+    "pinned" : false,
+    "team" : 6
+  }, {
+    "id" : 23,
+    "day" : 5,
+    "indexInDay" : 3,
+    "pinned" : false,
+    "team" : 1
+  }, {
+    "id" : 24,
+    "day" : 6,
+    "indexInDay" : 0,
+    "pinned" : false,
+    "team" : 3
+  }, {
+    "id" : 25,
+    "day" : 6,
+    "indexInDay" : 1,
+    "pinned" : false,
+    "team" : 4
+  }, {
+    "id" : 26,
+    "day" : 6,
+    "indexInDay" : 2,
+    "pinned" : false,
+    "team" : 5
+  }, {
+    "id" : 27,
+    "day" : 6,
+    "indexInDay" : 3,
+    "pinned" : false,
+    "team" : 0
+  }, {
+    "id" : 28,
+    "day" : 7,
+    "indexInDay" : 0,
+    "pinned" : false,
+    "team" : 2
+  }, {
+    "id" : 29,
+    "day" : 7,
+    "indexInDay" : 1,
+    "pinned" : false,
+    "team" : 3
+  }, {
+    "id" : 30,
+    "day" : 7,
+    "indexInDay" : 2,
+    "pinned" : false,
+    "team" : 4
+  }, {
+    "id" : 31,
+    "day" : 7,
+    "indexInDay" : 3,
+    "pinned" : false,
+    "team" : 1
+  }, {
+    "id" : 32,
+    "day" : 8,
+    "indexInDay" : 0,
+    "pinned" : false,
+    "team" : 2
+  }, {
+    "id" : 33,
+    "day" : 8,
+    "indexInDay" : 1,
+    "pinned" : false,
+    "team" : 5
+  }, {
+    "id" : 34,
+    "day" : 8,
+    "indexInDay" : 2,
+    "pinned" : false,
+    "team" : 6
+  }, {
+    "id" : 35,
+    "day" : 8,
+    "indexInDay" : 3,
+    "pinned" : false,
+    "team" : 3
+  }, {
+    "id" : 36,
+    "day" : 9,
+    "indexInDay" : 0,
+    "pinned" : false,
+    "team" : 0
+  }, {
+    "id" : 37,
+    "day" : 9,
+    "indexInDay" : 1,
+    "pinned" : false,
+    "team" : 4
+  }, {
+    "id" : 38,
+    "day" : 9,
+    "indexInDay" : 2,
+    "pinned" : false,
+    "team" : 6
+  }, {
+    "id" : 39,
+    "day" : 9,
+    "indexInDay" : 3,
+    "pinned" : false,
+    "team" : 1
+  }, {
+    "id" : 40,
+    "day" : 10,
+    "indexInDay" : 0,
+    "pinned" : false,
+    "team" : 2
+  }, {
+    "id" : 41,
+    "day" : 10,
+    "indexInDay" : 1,
+    "pinned" : false,
+    "team" : 5
+  }, {
+    "id" : 42,
+    "day" : 10,
+    "indexInDay" : 2,
+    "pinned" : false,
+    "team" : 1
+  }, {
+    "id" : 43,
+    "day" : 10,
+    "indexInDay" : 3,
+    "pinned" : false,
+    "team" : 0
+  }, {
+    "id" : 44,
+    "day" : 11,
+    "indexInDay" : 0,
+    "pinned" : false,
+    "team" : 2
+  }, {
+    "id" : 45,
+    "day" : 11,
+    "indexInDay" : 1,
+    "pinned" : false,
+    "team" : 3
+  }, {
+    "id" : 46,
+    "day" : 11,
+    "indexInDay" : 2,
+    "pinned" : false,
+    "team" : 5
+  }, {
+    "id" : 47,
+    "day" : 11,
+    "indexInDay" : 3,
+    "pinned" : false,
+    "team" : 6
+  }, {
+    "id" : 48,
+    "day" : 12,
+    "indexInDay" : 0,
+    "pinned" : false,
+    "team" : 4
+  }, {
+    "id" : 49,
+    "day" : 12,
+    "indexInDay" : 1,
+    "pinned" : false,
+    "team" : 2
+  }, {
+    "id" : 50,
+    "day" : 12,
+    "indexInDay" : 2,
+    "pinned" : false,
+    "team" : 0
+  }, {
+    "id" : 51,
+    "day" : 12,
+    "indexInDay" : 3,
+    "pinned" : false,
+    "team" : 3
+  }, {
+    "id" : 52,
+    "day" : 13,
+    "indexInDay" : 0,
+    "pinned" : false,
+    "team" : 1
+  }, {
+    "id" : 53,
+    "day" : 13,
+    "indexInDay" : 1,
+    "pinned" : false,
+    "team" : 5
+  }, {
+    "id" : 54,
+    "day" : 13,
+    "indexInDay" : 2,
+    "pinned" : false,
+    "team" : 4
+  }, {
+    "id" : 55,
+    "day" : 13,
+    "indexInDay" : 3,
+    "pinned" : false,
+    "team" : 6
+  }, {
+    "id" : 56,
+    "day" : 14,
+    "indexInDay" : 0,
+    "pinned" : false,
+    "team" : 0
+  }, {
+    "id" : 57,
+    "day" : 14,
+    "indexInDay" : 1,
+    "pinned" : false,
+    "team" : 6
+  }, {
+    "id" : 58,
+    "day" : 14,
+    "indexInDay" : 2,
+    "pinned" : false,
+    "team" : 2
+  }, {
+    "id" : 59,
+    "day" : 14,
+    "indexInDay" : 3,
+    "pinned" : false,
+    "team" : 4
+  }, {
+    "id" : 60,
+    "day" : 15,
+    "indexInDay" : 0,
+    "pinned" : false,
+    "team" : 1
+  }, {
+    "id" : 61,
+    "day" : 15,
+    "indexInDay" : 1,
+    "pinned" : false,
+    "team" : 3
+  }, {
+    "id" : 62,
+    "day" : 15,
+    "indexInDay" : 2,
+    "pinned" : false,
+    "team" : 6
+  }, {
+    "id" : 63,
+    "day" : 15,
+    "indexInDay" : 3,
+    "pinned" : false,
+    "team" : 0
+  }, {
+    "id" : 64,
+    "day" : 16,
+    "indexInDay" : 0,
+    "pinned" : false,
+    "team" : 5
+  }, {
+    "id" : 65,
+    "day" : 16,
+    "indexInDay" : 1,
+    "pinned" : false,
+    "team" : 1
+  }, {
+    "id" : 66,
+    "day" : 16,
+    "indexInDay" : 2,
+    "pinned" : false,
+    "team" : 2
+  }, {
+    "id" : 67,
+    "day" : 16,
+    "indexInDay" : 3,
+    "pinned" : false,
+    "team" : 3
+  }, {
+    "id" : 68,
+    "day" : 17,
+    "indexInDay" : 0,
+    "pinned" : false,
+    "team" : 4
+  }, {
+    "id" : 69,
+    "day" : 17,
+    "indexInDay" : 1,
+    "pinned" : false,
+    "team" : 5
+  }, {
+    "id" : 70,
+    "day" : 17,
+    "indexInDay" : 2,
+    "pinned" : false,
+    "team" : 0
+  }, {
+    "id" : 71,
+    "day" : 17,
+    "indexInDay" : 3,
+    "pinned" : false,
+    "team" : 2
+  } ],
+  "score" : "0hard/-27239medium/-23706soft"
+}

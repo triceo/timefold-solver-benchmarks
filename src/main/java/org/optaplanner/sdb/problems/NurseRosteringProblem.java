@@ -7,7 +7,7 @@ import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
 import org.optaplanner.examples.nurserostering.domain.NurseRoster;
 import org.optaplanner.examples.nurserostering.domain.ShiftAssignment;
-import org.optaplanner.examples.nurserostering.persistence.NurseRosterXmlSolutionFileIO;
+import org.optaplanner.examples.nurserostering.persistence.NurseRosterSolutionFileIO;
 import org.optaplanner.examples.nurserostering.score.NurseRosteringConstraintProvider;
 import org.optaplanner.sdb.Example;
 import org.optaplanner.sdb.ScoreDirectorType;
@@ -21,21 +21,17 @@ public final class NurseRosteringProblem extends AbstractProblem<NurseRoster> {
     @Override
     protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirectorType scoreDirectorType) {
         ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();
-        switch (scoreDirectorType) {
-            case CONSTRAINT_STREAMS_BAVET:
-                return scoreDirectorFactoryConfig
-                        .withConstraintProviderClass(NurseRosteringConstraintProvider.class)
-                        .withConstraintStreamImplType(ConstraintStreamImplType.BAVET);
-            case CONSTRAINT_STREAMS_DROOLS:
-                return scoreDirectorFactoryConfig
-                        .withConstraintProviderClass(NurseRosteringConstraintProvider.class)
-                        .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
-            case DRL:
-                return scoreDirectorFactoryConfig
-                        .withScoreDrls("org/optaplanner/examples/nurserostering/optional/score/nurseRosteringConstraints.drl");
-            default:
-                throw new UnsupportedOperationException("Score director: " + scoreDirectorType);
-        }
+        return switch (scoreDirectorType) {
+            case CONSTRAINT_STREAMS_BAVET -> scoreDirectorFactoryConfig
+                    .withConstraintProviderClass(NurseRosteringConstraintProvider.class)
+                    .withConstraintStreamImplType(ConstraintStreamImplType.BAVET);
+            case CONSTRAINT_STREAMS_DROOLS -> scoreDirectorFactoryConfig
+                    .withConstraintProviderClass(NurseRosteringConstraintProvider.class)
+                    .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
+            case DRL -> scoreDirectorFactoryConfig
+                    .withScoreDrls("org/optaplanner/examples/nurserostering/optional/score/nurseRosteringConstraints.drl");
+            default -> throw new UnsupportedOperationException("Score director: " + scoreDirectorType);
+        };
     }
 
     @Override
@@ -45,8 +41,8 @@ public final class NurseRosteringProblem extends AbstractProblem<NurseRoster> {
 
     @Override
     protected NurseRoster readOriginalSolution() {
-        return new NurseRosterXmlSolutionFileIO()
-                .read(new File("data/nurserostering-medium_late01.xml"));
+        return new NurseRosterSolutionFileIO()
+                .read(new File("data/nurserostering-medium_late01.json"));
     }
 
 }

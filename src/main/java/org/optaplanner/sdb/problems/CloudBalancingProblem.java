@@ -9,8 +9,9 @@ import org.optaplanner.examples.cloudbalancing.domain.CloudBalance;
 import org.optaplanner.examples.cloudbalancing.domain.CloudProcess;
 import org.optaplanner.examples.cloudbalancing.optional.score.CloudBalancingIncrementalScoreCalculator;
 import org.optaplanner.examples.cloudbalancing.optional.score.CloudBalancingMapBasedEasyScoreCalculator;
+import org.optaplanner.examples.cloudbalancing.persistence.CloudBalanceSolutionFileIO;
 import org.optaplanner.examples.cloudbalancing.score.CloudBalancingConstraintProvider;
-import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
+import org.optaplanner.persistence.common.api.domain.solution.SolutionFileIO;
 import org.optaplanner.sdb.Example;
 import org.optaplanner.sdb.ScoreDirectorType;
 
@@ -23,27 +24,21 @@ public final class CloudBalancingProblem extends AbstractProblem<CloudBalance> {
     @Override
     protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirectorType scoreDirectorType) {
         ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();
-        switch (scoreDirectorType) {
-            case CONSTRAINT_STREAMS_BAVET:
-                return scoreDirectorFactoryConfig
-                        .withConstraintProviderClass(CloudBalancingConstraintProvider.class)
-                        .withConstraintStreamImplType(ConstraintStreamImplType.BAVET);
-            case CONSTRAINT_STREAMS_DROOLS:
-                return scoreDirectorFactoryConfig
-                        .withConstraintProviderClass(CloudBalancingConstraintProvider.class)
-                        .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
-            case DRL:
-                return scoreDirectorFactoryConfig
-                        .withScoreDrls("org/optaplanner/examples/cloudbalancing/optional/score/cloudBalancingConstraints.drl");
-            case JAVA_EASY:
-                return scoreDirectorFactoryConfig
-                        .withEasyScoreCalculatorClass(CloudBalancingMapBasedEasyScoreCalculator.class);
-            case JAVA_INCREMENTAL:
-                return scoreDirectorFactoryConfig
-                        .withIncrementalScoreCalculatorClass(CloudBalancingIncrementalScoreCalculator.class);
-            default:
-                throw new UnsupportedOperationException("Score director: " + scoreDirectorType);
-        }
+        return switch (scoreDirectorType) {
+            case CONSTRAINT_STREAMS_BAVET -> scoreDirectorFactoryConfig
+                    .withConstraintProviderClass(CloudBalancingConstraintProvider.class)
+                    .withConstraintStreamImplType(ConstraintStreamImplType.BAVET);
+            case CONSTRAINT_STREAMS_DROOLS -> scoreDirectorFactoryConfig
+                    .withConstraintProviderClass(CloudBalancingConstraintProvider.class)
+                    .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
+            case DRL -> scoreDirectorFactoryConfig
+                    .withScoreDrls("org/optaplanner/examples/cloudbalancing/optional/score/cloudBalancingConstraints.drl");
+            case JAVA_EASY -> scoreDirectorFactoryConfig
+                    .withEasyScoreCalculatorClass(CloudBalancingMapBasedEasyScoreCalculator.class);
+            case JAVA_INCREMENTAL -> scoreDirectorFactoryConfig
+                    .withIncrementalScoreCalculatorClass(CloudBalancingIncrementalScoreCalculator.class);
+            default -> throw new UnsupportedOperationException("Score director: " + scoreDirectorType);
+        };
     }
 
     @Override
@@ -53,8 +48,8 @@ public final class CloudBalancingProblem extends AbstractProblem<CloudBalance> {
 
     @Override
     protected CloudBalance readOriginalSolution() {
-        final XStreamSolutionFileIO<CloudBalance> solutionFileIO = new XStreamSolutionFileIO<>(CloudBalance.class);
-        return solutionFileIO.read(new File("data/cloudbalancing-1600-4800.xml"));
+        final SolutionFileIO<CloudBalance> solutionFileIO = new CloudBalanceSolutionFileIO();
+        return solutionFileIO.read(new File("data/cloudbalancing-1600-4800.json"));
     }
 
 }

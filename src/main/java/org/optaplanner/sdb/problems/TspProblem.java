@@ -9,8 +9,9 @@ import org.optaplanner.examples.tsp.domain.TspSolution;
 import org.optaplanner.examples.tsp.domain.Visit;
 import org.optaplanner.examples.tsp.optional.score.TspEasyScoreCalculator;
 import org.optaplanner.examples.tsp.optional.score.TspIncrementalScoreCalculator;
+import org.optaplanner.examples.tsp.persistence.TspSolutionFileIO;
 import org.optaplanner.examples.tsp.score.TspConstraintProvider;
-import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
+import org.optaplanner.persistence.common.api.domain.solution.SolutionFileIO;
 import org.optaplanner.sdb.Example;
 import org.optaplanner.sdb.ScoreDirectorType;
 import org.slf4j.Logger;
@@ -59,11 +60,10 @@ public final class TspProblem extends AbstractProblem<TspSolution> {
     protected TspSolution readOriginalSolution() {
         while (true) {
             try {
-                final XStreamSolutionFileIO<TspSolution> solutionFileIO =
-                        new XStreamSolutionFileIO<>(TspSolution.class);
-                return solutionFileIO.read(new File("data/tsp-lu980.xml"));
-            } catch (StackOverflowError error) { // For some reason, XStream overflows here *once in a while*.
-                LOGGER.warn("XStream's thrown stack overflow, retrying.");
+                final SolutionFileIO<TspSolution> solutionFileIO = new TspSolutionFileIO();
+                return solutionFileIO.read(new File("data/tsp-lu980.json"));
+            } catch (StackOverflowError error) { // For some reason, deserialization overflows here *once in a while*.
+                LOGGER.warn("Jackson's thrown stack overflow, retrying.");
             }
         }
     }

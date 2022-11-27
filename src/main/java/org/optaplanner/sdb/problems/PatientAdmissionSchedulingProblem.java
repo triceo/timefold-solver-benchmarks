@@ -7,8 +7,9 @@ import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
 import org.optaplanner.core.impl.domain.solution.descriptor.SolutionDescriptor;
 import org.optaplanner.examples.pas.domain.BedDesignation;
 import org.optaplanner.examples.pas.domain.PatientAdmissionSchedule;
+import org.optaplanner.examples.pas.persistence.PatientAdmissionScheduleSolutionFileIO;
 import org.optaplanner.examples.pas.score.PatientAdmissionScheduleConstraintProvider;
-import org.optaplanner.persistence.xstream.impl.domain.solution.XStreamSolutionFileIO;
+import org.optaplanner.persistence.common.api.domain.solution.SolutionFileIO;
 import org.optaplanner.sdb.Example;
 import org.optaplanner.sdb.ScoreDirectorType;
 
@@ -22,21 +23,17 @@ public final class PatientAdmissionSchedulingProblem
     @Override
     protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirectorType scoreDirectorType) {
         ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();
-        switch (scoreDirectorType) {
-            case CONSTRAINT_STREAMS_BAVET:
-                return scoreDirectorFactoryConfig
-                        .withConstraintProviderClass(PatientAdmissionScheduleConstraintProvider.class)
-                        .withConstraintStreamImplType(ConstraintStreamImplType.BAVET);
-            case CONSTRAINT_STREAMS_DROOLS:
-                return scoreDirectorFactoryConfig
-                        .withConstraintProviderClass(PatientAdmissionScheduleConstraintProvider.class)
-                        .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
-            case DRL:
-                return scoreDirectorFactoryConfig
-                        .withScoreDrls("org/optaplanner/examples/pas/optional/score/patientAdmissionScheduleConstraints.drl");
-            default:
-                throw new UnsupportedOperationException("Score director: " + scoreDirectorType);
-        }
+        return switch (scoreDirectorType) {
+            case CONSTRAINT_STREAMS_BAVET -> scoreDirectorFactoryConfig
+                    .withConstraintProviderClass(PatientAdmissionScheduleConstraintProvider.class)
+                    .withConstraintStreamImplType(ConstraintStreamImplType.BAVET);
+            case CONSTRAINT_STREAMS_DROOLS -> scoreDirectorFactoryConfig
+                    .withConstraintProviderClass(PatientAdmissionScheduleConstraintProvider.class)
+                    .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
+            case DRL -> scoreDirectorFactoryConfig
+                    .withScoreDrls("org/optaplanner/examples/pas/optional/score/patientAdmissionScheduleConstraints.drl");
+            default -> throw new UnsupportedOperationException("Score director: " + scoreDirectorType);
+        };
     }
 
     @Override
@@ -46,9 +43,8 @@ public final class PatientAdmissionSchedulingProblem
 
     @Override
     protected PatientAdmissionSchedule readOriginalSolution() {
-        final XStreamSolutionFileIO<PatientAdmissionSchedule> solutionFileIO =
-                new XStreamSolutionFileIO<>(PatientAdmissionSchedule.class);
-        return solutionFileIO.read(new File("data/pas-12.xml"));
+        final SolutionFileIO<PatientAdmissionSchedule> solutionFileIO = new PatientAdmissionScheduleSolutionFileIO();
+        return solutionFileIO.read(new File("data/pas-12.json"));
     }
 
 }

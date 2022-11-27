@@ -106,11 +106,14 @@ public class Main {
                 .result(benchmarkResults.getAbsolutePath())
                 .resultFormat(ResultFormatType.CSV);
 
-        options = processBenchmark(options, ConstraintStreamsBavet.class, "csbExample", configuration, ScoreDirectorType.CONSTRAINT_STREAMS_BAVET);
-        options = processBenchmark(options, ConstraintStreamsDrools.class, "csdExample", configuration, ScoreDirectorType.CONSTRAINT_STREAMS_DROOLS);
+        options = processBenchmark(options, ConstraintStreamsBavet.class, "csbExample", configuration,
+                ScoreDirectorType.CONSTRAINT_STREAMS_BAVET);
+        options = processBenchmark(options, ConstraintStreamsDrools.class, "csdExample", configuration,
+                ScoreDirectorType.CONSTRAINT_STREAMS_DROOLS);
         options = processBenchmark(options, Drl.class, "drlExample", configuration, ScoreDirectorType.DRL);
         options = processBenchmark(options, JavaEasy.class, "easyExample", configuration, ScoreDirectorType.JAVA_EASY);
-        options = processBenchmark(options, JavaIncremental.class, "incrementalExample", configuration, ScoreDirectorType.JAVA_INCREMENTAL);
+        options = processBenchmark(options, JavaIncremental.class, "incrementalExample", configuration,
+                ScoreDirectorType.JAVA_INCREMENTAL);
 
         Path asyncProfilerPath = Path.of("async-profiler-2.8.3-linux-x64", "build", "libasyncProfiler.so")
                 .toAbsolutePath();
@@ -129,8 +132,9 @@ public class Main {
         new Runner(options.build()).run();
     }
 
-    private static ChainedOptionsBuilder processBenchmark(ChainedOptionsBuilder options, Class<? extends AbstractBenchmark> benchmarkClass,
-                                                          String benchmarkParamName, Configuration configuration, ScoreDirectorType scoreDirectorType) {
+    private static ChainedOptionsBuilder processBenchmark(ChainedOptionsBuilder options,
+            Class<? extends AbstractBenchmark> benchmarkClass, String benchmarkParamName, Configuration configuration,
+            ScoreDirectorType scoreDirectorType) {
         String[] supportedExampleNames = getSupportedExampleNames(configuration, scoreDirectorType);
         if (supportedExampleNames.length > 0) {
             options = options.include(benchmarkClass.getSimpleName())
