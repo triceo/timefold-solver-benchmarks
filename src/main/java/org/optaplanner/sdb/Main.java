@@ -58,6 +58,8 @@ import org.slf4j.LoggerFactory;
 public class Main {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
+    private static final Path ASYNC_PROFILER_DIR = Path.of("async-profiler-2.9-linux-x64", "build")
+            .toAbsolutePath();
 
     private static String leftPad(int input, int length) {
         return String.format("%1$" + length + "s", input)
@@ -91,7 +93,7 @@ public class Main {
         }
     }
 
-    public static void main(String[] args) throws RunnerException {
+    public static void main(String[] args) throws RunnerException, IOException {
         Configuration configuration = readConfiguration();
 
         File resultFolder = new File("results/" + getTimestamp());
@@ -115,21 +117,58 @@ public class Main {
         options = processBenchmark(options, JavaIncremental.class, "incrementalExample", configuration,
                 ScoreDirectorType.JAVA_INCREMENTAL);
 
-        Path asyncProfilerPath = Path.of("async-profiler-2.8.3-linux-x64", "build", "libasyncProfiler.so")
+        Path asyncProfilerPath = ASYNC_PROFILER_DIR.resolve("libasyncProfiler.so")
                 .toAbsolutePath();
         if (asyncProfilerPath.toFile().exists()) {
             LOGGER.info("Using Async profiler from {}.", asyncProfilerPath);
             options = options.addProfiler(AsyncProfiler.class,
-                    "event=cpu;" +
-                            "output=flamegraph,tree;" +
+                    "event=cpu;alloc;" +
+                            "output=jfr;" +
                             "dir=" + resultFolder.getAbsolutePath() + ";" +
-                            "libPath=" + asyncProfilerPath + ";" +
-                            "simple=true");
+                            "libPath=" + asyncProfilerPath);
         } else {
             LOGGER.warn("Async profiler not found in {}. Profiler disabled.", asyncProfilerPath);
         }
 
         new Runner(options.build()).run();
+
+        if (asyncProfilerPath.toFile().exists()) {
+            Files.walk(resultFolder.toPath())
+                    .filter(Files::isRegularFile)
+                    .filter(f -> f.toString().endsWith(".jfr"))
+                    .forEach(path -> {
+                        LOGGER.info("Found JFR file: {}.", path);
+                        generateFlameGraphsFromJfr(path, "cpu");
+                        generateFlameGraphsFromJfr(path, "alloc");
+                    });
+        } else {
+            LOGGER.warn("Skipping JFR conversion in '{}'.", resultFolder);
+        }
+    }
+
+    private static void generateFlameGraphsFromJfr(Path jfrFilePath, String type) {
+        Path converterJarPath = ASYNC_PROFILER_DIR.resolve("converter.jar");
+        Path targetPath = Path.of(jfrFilePath.toAbsolutePath().getParent().toString(), type + ".html");
+        ProcessBuilder processBuilder = new ProcessBuilder("java",
+                "-cp",
+                converterJarPath.toString(),
+                "jfr2flame",
+                "--simple",
+                "--" + type,
+                jfrFilePath.toString(),
+                targetPath.toString());
+        String command = String.join(" ", processBuilder.command());
+        try {
+            Process process = processBuilder.start();
+            int result = process.waitFor();
+            if (result == 0) {
+                LOGGER.info("Command succeeded: '{}'.", command);
+            } else {
+                LOGGER.error("Command failed with exit code {}: {} failed with exit code {}.", result, command);
+            }
+        } catch (Exception ex) {
+            LOGGER.error("Command failed: {}.", command, ex);
+        }
     }
 
     private static ChainedOptionsBuilder processBenchmark(ChainedOptionsBuilder options,
