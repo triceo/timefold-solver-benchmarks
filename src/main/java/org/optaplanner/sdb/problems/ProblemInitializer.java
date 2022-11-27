@@ -1,5 +1,13 @@
 package org.optaplanner.sdb.problems;
 
+import java.util.Arrays;
+import java.util.EnumMap;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
 import org.optaplanner.core.api.score.Score;
 import org.optaplanner.core.config.constructionheuristic.ConstructionHeuristicPhaseConfig;
 import org.optaplanner.core.config.constructionheuristic.ConstructionHeuristicType;
@@ -31,10 +39,6 @@ import org.optaplanner.sdb.ScoreDirectorType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
-import java.util.function.Function;
-import java.util.function.Supplier;
-
 /**
  * XLS-based examples can not read initialized solution from the file.
  * Therefore we have to initialize the solution ourselves, by running the CH on the fastest possible score director.
@@ -45,9 +49,9 @@ public final class ProblemInitializer {
 
     private static final Map<Example, Object> SOLUTIONS = new EnumMap<>(Example.class);
 
-    public static <Solution_> Solution_ getSolution(Example example, SolutionDescriptor<Solution_> solutionDescriptor,
-                                                    Function<ScoreDirectorType, ScoreDirectorFactoryConfig> configFunction,
-                                                    Supplier<Solution_> solutionSupplier) {
+    public static synchronized <Solution_> Solution_ getSolution(Example example,
+            SolutionDescriptor<Solution_> solutionDescriptor,
+            Function<ScoreDirectorType, ScoreDirectorFactoryConfig> configFunction, Supplier<Solution_> solutionSupplier) {
         final ScoreDirectorType fastestPossibleScoreDirectorType = Arrays.stream(ScoreDirectorType.values())
                 .filter(example::isSupportedOn)
                 .max(ScoreDirectorType::compareTo)
@@ -60,9 +64,9 @@ public final class ProblemInitializer {
     }
 
     private static <Solution_> Solution_ initialize(Example example, Solution_ uninitializedSolution,
-                                                    InnerScoreDirectorFactory<Solution_, ?> scoreDirectorFactory) {
+            InnerScoreDirectorFactory<Solution_, ?> scoreDirectorFactory) {
         try (final InnerScoreDirector<Solution_, ?> scoreDirector =
-                     scoreDirectorFactory.buildScoreDirector(false, false)) {
+                scoreDirectorFactory.buildScoreDirector(false, false)) {
             scoreDirector.setWorkingSolution(uninitializedSolution);
             scoreDirector.triggerVariableListeners();
             Score<?> score = scoreDirector.calculateScore();
@@ -74,19 +78,21 @@ public final class ProblemInitializer {
             // Configure the construction heuristic.
             ConstructionHeuristicPhaseConfig config = new ConstructionHeuristicPhaseConfig()
                     .withConstructionHeuristicType(ConstructionHeuristicType.FIRST_FIT);
-            DefaultConstructionHeuristicPhaseFactory<Solution_> factory = new DefaultConstructionHeuristicPhaseFactory<>(config);
+            DefaultConstructionHeuristicPhaseFactory<Solution_> factory =
+                    new DefaultConstructionHeuristicPhaseFactory<>(config);
 
             final HeuristicConfigPolicy<Solution_> policy = new HeuristicConfigPolicy.Builder<>(EnvironmentMode.REPRODUCIBLE,
                     null, null, null, scoreDirectorFactory.getInitializingScoreTrend(),
                     scoreDirectorFactory.getSolutionDescriptor())
-                    .build();
+                            .build();
             BestSolutionRecaller<Solution_> bestSolutionRecaller =
                     BestSolutionRecallerFactory.create().buildBestSolutionRecaller(EnvironmentMode.REPRODUCIBLE);
             bestSolutionRecaller.setSolverEventSupport(new SolverEventSupport<>(null));
-            Termination<Solution_> termination = TerminationFactory.<Solution_>create(new TerminationConfig())
+            Termination<Solution_> termination = TerminationFactory.<Solution_> create(new TerminationConfig())
                     .buildTermination(policy, new BasicPlumbingTermination<>(false));
             DefaultConstructionHeuristicPhase<Solution_> constructionHeuristicPhase =
-                    (DefaultConstructionHeuristicPhase<Solution_>) factory.buildPhase(0, policy, bestSolutionRecaller, termination);
+                    (DefaultConstructionHeuristicPhase<Solution_>) factory.buildPhase(0, policy, bestSolutionRecaller,
+                            termination);
 
             // Create solver; more or less a mock.
             SolverScope<Solution_> solverScope = new SolverScope<>();
