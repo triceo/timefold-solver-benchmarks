@@ -34,6 +34,7 @@ package org.optaplanner.sdb;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
@@ -147,27 +148,20 @@ public class Main {
     }
 
     private static void generateFlameGraphsFromJfr(Path jfrFilePath, String type) {
-        Path converterJarPath = ASYNC_PROFILER_DIR.resolve("converter.jar");
         Path targetPath = Path.of(jfrFilePath.toAbsolutePath().getParent().toString(), type + ".html");
-        ProcessBuilder processBuilder = new ProcessBuilder("java",
-                "-cp",
-                converterJarPath.toString(),
-                "jfr2flame",
+        String[] args = new String[] {
                 "--simple",
                 "--" + type,
                 jfrFilePath.toString(),
-                targetPath.toString());
-        String command = String.join(" ", processBuilder.command());
-        try {
-            Process process = processBuilder.start();
-            int result = process.waitFor();
-            if (result == 0) {
-                LOGGER.info("Command succeeded: '{}'.", command);
-            } else {
-                LOGGER.error("Command failed with exit code {}: {} failed with exit code {}.", result, command);
-            }
+                targetPath.toString()
+        };
+        try { // Converter is stupidly in an unnamed package.
+            Class fooClass = Class.forName("jfr2flame");
+            Method fooMethod = fooClass.getMethod("main", String[].class);
+            fooMethod.invoke(null, (Object) args);
+            LOGGER.info("Generating flame graph succeeded: {}.", args);
         } catch (Exception ex) {
-            LOGGER.error("Command failed: {}.", command, ex);
+            LOGGER.error("Generating flame graph failed: {}.", args, ex);
         }
     }
 

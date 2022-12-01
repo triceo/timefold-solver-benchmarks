@@ -21,6 +21,7 @@
         <version.org.optaplanner>8.32.0-SNAPSHOT</version.org.optaplanner>
         <version.org.junit>5.9.1</version.org.junit>
         <version.org.mockito>4.9.0</version.org.mockito>
+        <version.tools.profiler>2.9</version.tools.profiler>
         <formatter.skip>true</formatter.skip>
         <java.module.name>org.optaplanner.sdb</java.module.name>
         <java.release>17</java.release>
@@ -40,6 +41,11 @@
             <artifactId>jmh-generator-annprocess</artifactId>
             <version>${jmh.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>tools.profiler</groupId>
+            <artifactId>async-profiler-converter</artifactId>
+            <version>${version.tools.profiler}</version>
         </dependency>
         <dependency>
             <groupId>org.optaplanner</groupId>
