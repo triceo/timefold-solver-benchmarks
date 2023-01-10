@@ -30,8 +30,6 @@ public final class TaskAssigningProblem extends AbstractProblem<TaskAssigningSol
             case CONSTRAINT_STREAMS_DROOLS -> scoreDirectorFactoryConfig
                     .withConstraintProviderClass(TaskAssigningConstraintProvider.class)
                     .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
-            case DRL -> scoreDirectorFactoryConfig
-                    .withScoreDrls("org/optaplanner/examples/taskassigning/optional/score/taskAssigningConstraints.drl");
             default -> throw new UnsupportedOperationException("Score director: " + scoreDirectorType);
         };
     }

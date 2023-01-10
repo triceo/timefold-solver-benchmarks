@@ -33,8 +33,6 @@ public final class VehicleRoutingProblem extends AbstractProblem<VehicleRoutingS
             case CONSTRAINT_STREAMS_DROOLS -> scoreDirectorFactoryConfig
                     .withConstraintProviderClass(VehicleRoutingConstraintProvider.class)
                     .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
-            case DRL -> scoreDirectorFactoryConfig
-                    .withScoreDrls("org/optaplanner/examples/vehiclerouting/optional/score/vehicleRoutingConstraints.drl");
             case JAVA_EASY -> scoreDirectorFactoryConfig
                     .withEasyScoreCalculatorClass(VehicleRoutingEasyScoreCalculator.class);
             case JAVA_INCREMENTAL -> scoreDirectorFactoryConfig

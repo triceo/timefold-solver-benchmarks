@@ -28,8 +28,6 @@ public final class MeetingSchedulingProblem extends AbstractProblem<MeetingSched
             case CONSTRAINT_STREAMS_DROOLS -> scoreDirectorFactoryConfig
                     .withConstraintProviderClass(MeetingSchedulingConstraintProvider.class)
                     .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
-            case DRL -> scoreDirectorFactoryConfig
-                    .withScoreDrls("org/optaplanner/examples/meetingscheduling/optional/score/meetingSchedulingConstraints.drl");
             default -> throw new UnsupportedOperationException("Score director: " + scoreDirectorType);
         };
     }

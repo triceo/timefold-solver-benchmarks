@@ -37,9 +37,6 @@ public final class TspProblem extends AbstractProblem<TspSolution> {
                 return scoreDirectorFactoryConfig
                         .withConstraintProviderClass(TspConstraintProvider.class)
                         .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
-            case DRL:
-                return scoreDirectorFactoryConfig
-                        .withScoreDrls("org/optaplanner/examples/tsp/optional/score/tspConstraints.drl");
             case JAVA_EASY:
                 return scoreDirectorFactoryConfig
                         .withEasyScoreCalculatorClass(TspEasyScoreCalculator.class);

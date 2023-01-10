@@ -29,8 +29,6 @@ public final class TravelingTournamentProblem extends AbstractProblem<TravelingT
             case CONSTRAINT_STREAMS_DROOLS -> scoreDirectorFactoryConfig
                     .withConstraintProviderClass(TravelingTournamentConstraintProvider.class)
                     .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
-            case DRL -> scoreDirectorFactoryConfig
-                    .withScoreDrls("org/optaplanner/examples/travelingtournament/optional/score/travelingTournamentConstraints.drl");
             default -> throw new UnsupportedOperationException("Score director: " + scoreDirectorType);
         };
     }

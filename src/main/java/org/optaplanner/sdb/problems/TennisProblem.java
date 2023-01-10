@@ -29,8 +29,6 @@ public final class TennisProblem extends AbstractProblem<TennisSolution> {
             case CONSTRAINT_STREAMS_DROOLS -> scoreDirectorFactoryConfig
                     .withConstraintProviderClass(TennisConstraintProvider.class)
                     .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
-            case DRL -> scoreDirectorFactoryConfig
-                    .withScoreDrls("org/optaplanner/examples/tennis/optional/score/tennisConstraints.drl");
             default -> throw new UnsupportedOperationException("Score director: " + scoreDirectorType);
         };
     }

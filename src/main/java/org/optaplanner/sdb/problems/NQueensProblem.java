@@ -31,8 +31,6 @@ public final class NQueensProblem extends AbstractProblem<NQueens> {
             case CONSTRAINT_STREAMS_DROOLS -> scoreDirectorFactoryConfig
                     .withConstraintProviderClass(NQueensConstraintProvider.class)
                     .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
-            case DRL -> scoreDirectorFactoryConfig
-                    .withScoreDrls("org/optaplanner/examples/nqueens/optional/score/nQueensConstraints.drl");
             case JAVA_EASY -> scoreDirectorFactoryConfig
                     .withEasyScoreCalculatorClass(NQueensMapBasedEasyScoreCalculator.class);
             case JAVA_INCREMENTAL -> scoreDirectorFactoryConfig

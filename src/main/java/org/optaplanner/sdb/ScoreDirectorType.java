@@ -12,7 +12,6 @@ import org.optaplanner.core.impl.score.director.ScoreDirectorFactoryFactory;
 public enum ScoreDirectorType implements Comparable<ScoreDirectorType> {
 
     JAVA_EASY,
-    DRL,
     CONSTRAINT_STREAMS_DROOLS,
     CONSTRAINT_STREAMS_BAVET,
     JAVA_INCREMENTAL;

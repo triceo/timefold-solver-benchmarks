@@ -28,8 +28,6 @@ public final class NurseRosteringProblem extends AbstractProblem<NurseRoster> {
             case CONSTRAINT_STREAMS_DROOLS -> scoreDirectorFactoryConfig
                     .withConstraintProviderClass(NurseRosteringConstraintProvider.class)
                     .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
-            case DRL -> scoreDirectorFactoryConfig
-                    .withScoreDrls("org/optaplanner/examples/nurserostering/optional/score/nurseRosteringConstraints.drl");
             default -> throw new UnsupportedOperationException("Score director: " + scoreDirectorType);
         };
     }

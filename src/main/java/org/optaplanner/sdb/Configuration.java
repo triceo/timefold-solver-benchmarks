@@ -22,7 +22,6 @@ final class Configuration {
                     .map(sdt -> switch (sdt) {
                         case "csd" -> ScoreDirectorType.CONSTRAINT_STREAMS_DROOLS;
                         case "csb" -> ScoreDirectorType.CONSTRAINT_STREAMS_BAVET;
-                        case "drl" -> ScoreDirectorType.DRL;
                         case "easy" -> ScoreDirectorType.JAVA_EASY;
                         case "incremental" -> ScoreDirectorType.JAVA_INCREMENTAL;
                         default -> throw new IllegalArgumentException("Unknown score director type: " + sdt);

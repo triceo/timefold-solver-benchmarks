@@ -30,9 +30,6 @@ public final class ProjectJobSchedulingProblem extends AbstractProblem<Schedule>
             case CONSTRAINT_STREAMS_DROOLS -> scoreDirectorFactoryConfig
                     .withConstraintProviderClass(ProjectJobSchedulingConstraintProvider.class)
                     .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
-            case DRL -> scoreDirectorFactoryConfig
-                    .withScoreDrls(
-                            "org/optaplanner/examples/projectjobscheduling/optional/score/projectJobSchedulingConstraints.drl");
             case JAVA_INCREMENTAL -> scoreDirectorFactoryConfig
                     .withIncrementalScoreCalculatorClass(ProjectJobSchedulingIncrementalScoreCalculator.class);
             default -> throw new UnsupportedOperationException("Score director: " + scoreDirectorType);

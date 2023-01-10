@@ -29,8 +29,6 @@ public final class FlightCrewSchedulingProblem extends AbstractProblem<FlightCre
             case CONSTRAINT_STREAMS_DROOLS -> scoreDirectorFactoryConfig
                     .withConstraintProviderClass(FlightCrewSchedulingConstraintProvider.class)
                     .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
-            case DRL -> scoreDirectorFactoryConfig
-                    .withScoreDrls("org/optaplanner/examples/flightcrewscheduling/optional/score/flightCrewSchedulingConstraints.drl");
             default -> throw new UnsupportedOperationException("Score director: " + scoreDirectorType);
         };
     }

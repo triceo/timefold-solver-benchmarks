@@ -31,8 +31,6 @@ public final class CloudBalancingProblem extends AbstractProblem<CloudBalance> {
             case CONSTRAINT_STREAMS_DROOLS -> scoreDirectorFactoryConfig
                     .withConstraintProviderClass(CloudBalancingConstraintProvider.class)
                     .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
-            case DRL -> scoreDirectorFactoryConfig
-                    .withScoreDrls("org/optaplanner/examples/cloudbalancing/optional/score/cloudBalancingConstraints.drl");
             case JAVA_EASY -> scoreDirectorFactoryConfig
                     .withEasyScoreCalculatorClass(CloudBalancingMapBasedEasyScoreCalculator.class);
             case JAVA_INCREMENTAL -> scoreDirectorFactoryConfig

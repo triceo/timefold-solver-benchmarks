@@ -50,7 +50,6 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.optaplanner.sdb.benchmarks.AbstractBenchmark;
 import org.optaplanner.sdb.benchmarks.ConstraintStreamsBavet;
 import org.optaplanner.sdb.benchmarks.ConstraintStreamsDrools;
-import org.optaplanner.sdb.benchmarks.Drl;
 import org.optaplanner.sdb.benchmarks.JavaEasy;
 import org.optaplanner.sdb.benchmarks.JavaIncremental;
 import org.slf4j.Logger;
@@ -113,7 +112,6 @@ public class Main {
                 ScoreDirectorType.CONSTRAINT_STREAMS_BAVET);
         options = processBenchmark(options, ConstraintStreamsDrools.class, "csdExample", configuration,
                 ScoreDirectorType.CONSTRAINT_STREAMS_DROOLS);
-        options = processBenchmark(options, Drl.class, "drlExample", configuration, ScoreDirectorType.DRL);
         options = processBenchmark(options, JavaEasy.class, "easyExample", configuration, ScoreDirectorType.JAVA_EASY);
         options = processBenchmark(options, JavaIncremental.class, "incrementalExample", configuration,
                 ScoreDirectorType.JAVA_INCREMENTAL);

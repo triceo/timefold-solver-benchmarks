@@ -31,9 +31,6 @@ public final class MachineReassignmentProblem
             case CONSTRAINT_STREAMS_DROOLS -> scoreDirectorFactoryConfig
                     .withConstraintProviderClass(MachineReassignmentConstraintProvider.class)
                     .withConstraintStreamImplType(ConstraintStreamImplType.DROOLS);
-            case DRL -> scoreDirectorFactoryConfig
-                    .withScoreDrls(
-                            "org/optaplanner/examples/machinereassignment/optional/score/machineReassignmentConstraints.drl");
             case JAVA_INCREMENTAL -> scoreDirectorFactoryConfig
                     .withIncrementalScoreCalculatorClass(MachineReassignmentIncrementalScoreCalculator.class);
             default -> throw new UnsupportedOperationException("Score director: " + scoreDirectorType);
