@@ -2,28 +2,24 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.optaplanner</groupId>
-    <artifactId>optaplanner-score-director-benchmark</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
+    <groupId>ai.timefold.solver</groupId>
+    <artifactId>timefold-solver-score-director-benchmark</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>OptaPlanner ScoreDirector benchmark</name>
+    <name>Timefold Solver Score Director Benchmark</name>
     <description>
-        OptaPlanner solves planning problems.
-        This lightweight, embeddable planning engine implements powerful and scalable algorithms
-        to optimize business resource scheduling and planning.
-
-        This module builds a benchmark of all the various score directors over various examples.
+        This module builds a benchmark of all the various Timefold Solver score directors over various examples.
     </description>
-    <url>https://www.optaplanner.org</url>
+    <url>https://timefold.ai</url>
 
     <properties>
-        <version.org.optaplanner>8.33.0-SNAPSHOT</version.org.optaplanner>
+        <version.org.optaplanner>0.9.39-SNAPSHOT</version.org.optaplanner>
         <version.org.junit>5.9.1</version.org.junit>
         <version.org.mockito>4.9.0</version.org.mockito>
         <version.tools.profiler>2.9</version.tools.profiler>
         <formatter.skip>true</formatter.skip>
-        <java.module.name>org.optaplanner.sdb</java.module.name>
+        <java.module.name>ai.timefold.solver.sdb</java.module.name>
         <java.release>17</java.release>
         <jmh.version>1.36</jmh.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -48,8 +44,8 @@
             <version>${version.tools.profiler}</version>
         </dependency>
         <dependency>
-            <groupId>org.optaplanner</groupId>
-            <artifactId>optaplanner-examples</artifactId>
+            <groupId>ai.timefold.solver</groupId>
+            <artifactId>timefold-solver-examples</artifactId>
             <version>${version.org.optaplanner}</version>
         </dependency>
         <dependency>
@@ -100,7 +96,7 @@
                     </descriptors>
                     <archive>
                         <manifestEntries>
-                            <Main-Class>org.optaplanner.sdb.Main</Main-Class>
+                            <Main-Class>ai.timefold.solver.sdb.Main</Main-Class>
                             <Multi-Release>true</Multi-Release> <!-- Some of our dependencies are multi-release JARs. -->
                         </manifestEntries>
                     </archive>
@@ -117,7 +113,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M7</version>
+                <version>3.1.0</version>
             </plugin>
         </plugins>
     </build>

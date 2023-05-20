@@ -8,8 +8,6 @@
     </encoder>
   </appender>
 
-  <logger name="org.drools" level="${logback.level.org.drools:-warn}"/>
-
   <root level="info">
     <appender-ref ref="consoleAppender" />
     <!--<appender-ref ref="fileAppender" />-->
