@@ -21,6 +21,7 @@ final class Configuration {
             enabledScoreDirectorTypes = Arrays.stream(scoreDirectorTypes.split("\\Q,\\E"))
                     .map(sdt -> switch (sdt) {
                         case "csb" -> ScoreDirectorType.CONSTRAINT_STREAMS_BAVET;
+                        case "csb_justified" -> ScoreDirectorType.CONSTRAINT_STREAMS_BAVET_JUSTIFIED;
                         case "easy" -> ScoreDirectorType.JAVA_EASY;
                         case "incremental" -> ScoreDirectorType.JAVA_INCREMENTAL;
                         default -> throw new IllegalArgumentException("Unknown score director type: " + sdt);

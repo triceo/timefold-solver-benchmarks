@@ -24,7 +24,7 @@ public final class ProjectJobSchedulingProblem extends AbstractProblem<Schedule>
     protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirectorType scoreDirectorType) {
         ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();
         return switch (scoreDirectorType) {
-            case CONSTRAINT_STREAMS_BAVET -> scoreDirectorFactoryConfig
+            case CONSTRAINT_STREAMS_BAVET, CONSTRAINT_STREAMS_BAVET_JUSTIFIED -> scoreDirectorFactoryConfig
                     .withConstraintProviderClass(ProjectJobSchedulingConstraintProvider.class)
                     .withConstraintStreamImplType(ConstraintStreamImplType.BAVET);
             case JAVA_INCREMENTAL -> scoreDirectorFactoryConfig

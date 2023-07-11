@@ -27,7 +27,7 @@ public final class VehicleRoutingProblem extends AbstractProblem<VehicleRoutingS
     protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirectorType scoreDirectorType) {
         ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();
         return switch (scoreDirectorType) {
-            case CONSTRAINT_STREAMS_BAVET -> scoreDirectorFactoryConfig
+            case CONSTRAINT_STREAMS_BAVET, CONSTRAINT_STREAMS_BAVET_JUSTIFIED -> scoreDirectorFactoryConfig
                     .withConstraintProviderClass(VehicleRoutingConstraintProvider.class)
                     .withConstraintStreamImplType(ConstraintStreamImplType.BAVET);
             case JAVA_EASY -> scoreDirectorFactoryConfig

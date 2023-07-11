@@ -22,7 +22,9 @@ public final class ConferenceSchedulingProblem extends AbstractProblem<Conferenc
     @Override
     protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirectorType scoreDirectorType) {
         ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();
-        if (Objects.requireNonNull(scoreDirectorType) == ScoreDirectorType.CONSTRAINT_STREAMS_BAVET) {
+        ScoreDirectorType nonNullScoreDirectorType = Objects.requireNonNull(scoreDirectorType);
+        if (nonNullScoreDirectorType == ScoreDirectorType.CONSTRAINT_STREAMS_BAVET
+                || nonNullScoreDirectorType == ScoreDirectorType.CONSTRAINT_STREAMS_BAVET_JUSTIFIED) {
             return scoreDirectorFactoryConfig
                     .withConstraintProviderClass(ConferenceSchedulingConstraintProvider.class)
                     .withConstraintStreamImplType(ConstraintStreamImplType.BAVET);

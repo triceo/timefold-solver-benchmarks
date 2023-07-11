@@ -40,6 +40,7 @@ abstract class AbstractProblem<Solution_> implements Problem {
     private static final int RANDOM_SEED = (int) (Math.random() * 100);
     private static final double PROBABILITY_OF_UNDO = 0.9;
 
+    private final ScoreDirectorType scoreDirectorType;
     private final InnerScoreDirectorFactory<Solution_, ?> scoreDirectorFactory;
     private final Solution_ originalSolution;
     private final MoveSelectorFactory<Solution_> moveSelectorFactory;
@@ -53,8 +54,8 @@ abstract class AbstractProblem<Solution_> implements Problem {
     private boolean willUndo = true;
 
     protected AbstractProblem(final Example example, final ScoreDirectorType scoreDirectorType) {
-        final ScoreDirectorFactoryConfig scoreDirectorFactoryConfig =
-                buildScoreDirectorFactoryConfig(Objects.requireNonNull(scoreDirectorType));
+        this.scoreDirectorType = Objects.requireNonNull(scoreDirectorType);
+        final ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = buildScoreDirectorFactoryConfig(scoreDirectorType);
         scoreDirectorFactory =
                 ScoreDirectorType.buildScoreDirectorFactory(scoreDirectorFactoryConfig, buildSolutionDescriptor());
         originalSolution = ProblemInitializer.getSolution(example, scoreDirectorFactory.getSolutionDescriptor(),
@@ -113,7 +114,8 @@ abstract class AbstractProblem<Solution_> implements Problem {
     @Override
     public final void setupIteration() {
         // We only care about incremental performance; therefore calculate the entire solution outside of invocation.
-        scoreDirector = scoreDirectorFactory.buildScoreDirector(false, false);
+        scoreDirector = scoreDirectorFactory.buildScoreDirector(false,
+                scoreDirectorType == ScoreDirectorType.CONSTRAINT_STREAMS_BAVET_JUSTIFIED);
         scoreDirector.setWorkingSolution(scoreDirector.cloneSolution(originalSolution)); // Use fresh solution again.
         scoreDirector.triggerVariableListeners();
         scoreDirector.calculateScore();

@@ -43,6 +43,7 @@ import java.time.ZonedDateTime;
 
 import ai.timefold.solver.sdb.benchmarks.AbstractBenchmark;
 import ai.timefold.solver.sdb.benchmarks.ConstraintStreamsBavet;
+import ai.timefold.solver.sdb.benchmarks.ConstraintStreamsBavetJustified;
 import ai.timefold.solver.sdb.benchmarks.JavaEasy;
 import ai.timefold.solver.sdb.benchmarks.JavaIncremental;
 
@@ -110,6 +111,8 @@ public class Main {
 
         options = processBenchmark(options, ConstraintStreamsBavet.class, "csbExample", configuration,
                 ScoreDirectorType.CONSTRAINT_STREAMS_BAVET);
+        options = processBenchmark(options, ConstraintStreamsBavetJustified.class, "csbJustifiedExample", configuration,
+                ScoreDirectorType.CONSTRAINT_STREAMS_BAVET_JUSTIFIED);
         options = processBenchmark(options, JavaEasy.class, "easyExample", configuration, ScoreDirectorType.JAVA_EASY);
         options = processBenchmark(options, JavaIncremental.class, "incrementalExample", configuration,
                 ScoreDirectorType.JAVA_INCREMENTAL);

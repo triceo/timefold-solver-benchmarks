@@ -12,6 +12,7 @@ import ai.timefold.solver.core.impl.score.director.ScoreDirectorFactoryFactory;
 public enum ScoreDirectorType implements Comparable<ScoreDirectorType> {
 
     JAVA_EASY,
+    CONSTRAINT_STREAMS_BAVET_JUSTIFIED,
     CONSTRAINT_STREAMS_BAVET,
     JAVA_INCREMENTAL;
 
