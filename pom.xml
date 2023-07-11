@@ -14,7 +14,7 @@
     <url>https://timefold.ai</url>
 
     <properties>
-        <version.org.optaplanner>0.9.39-SNAPSHOT</version.org.optaplanner>
+        <version.org.optaplanner>1.1.0-SNAPSHOT</version.org.optaplanner>
         <version.org.junit>5.9.1</version.org.junit>
         <version.org.mockito>4.9.0</version.org.mockito>
         <version.tools.profiler>2.9</version.tools.profiler>
