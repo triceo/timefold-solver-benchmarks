@@ -1,6 +1,7 @@
 package ai.timefold.solver.sdb;
 
 import static ai.timefold.solver.sdb.ScoreDirectorType.CONSTRAINT_STREAMS_BAVET;
+import static ai.timefold.solver.sdb.ScoreDirectorType.CONSTRAINT_STREAMS_BAVET_JUSTIFIED;
 import static ai.timefold.solver.sdb.ScoreDirectorType.JAVA_INCREMENTAL;
 
 import java.util.Arrays;
@@ -16,7 +17,6 @@ import ai.timefold.solver.sdb.problems.ExaminationProblem;
 import ai.timefold.solver.sdb.problems.FlightCrewSchedulingProblem;
 import ai.timefold.solver.sdb.problems.MachineReassignmentProblem;
 import ai.timefold.solver.sdb.problems.MeetingSchedulingProblem;
-import ai.timefold.solver.sdb.problems.NQueensProblem;
 import ai.timefold.solver.sdb.problems.NurseRosteringProblem;
 import ai.timefold.solver.sdb.problems.PatientAdmissionSchedulingProblem;
 import ai.timefold.solver.sdb.problems.Problem;
@@ -30,19 +30,21 @@ import ai.timefold.solver.sdb.problems.VehicleRoutingProblem;
 public enum Example {
 
     CLOUD_BALANCING(CloudBalancingProblem::new),
-    CONFERENCE_SCHEDULING(ConferenceSchedulingProblem::new, CONSTRAINT_STREAMS_BAVET),
-    CURRICULUM_COURSE(CurriculumCourseProblem::new, CONSTRAINT_STREAMS_BAVET),
-    EXAMINATION(ExaminationProblem::new, CONSTRAINT_STREAMS_BAVET),
-    FLIGHT_CREW_SCHEDULING(FlightCrewSchedulingProblem::new, CONSTRAINT_STREAMS_BAVET),
-    MACHINE_REASSIGNMENT(MachineReassignmentProblem::new, JAVA_INCREMENTAL, CONSTRAINT_STREAMS_BAVET),
-    MEETING_SCHEDULING(MeetingSchedulingProblem::new, CONSTRAINT_STREAMS_BAVET),
-    NQUEENS(NQueensProblem::new),
-    NURSE_ROSTERING(NurseRosteringProblem::new, CONSTRAINT_STREAMS_BAVET),
-    PATIENT_ADMISSION_SCHEDULING(PatientAdmissionSchedulingProblem::new, CONSTRAINT_STREAMS_BAVET),
-    PROJECT_JOB_SCHEDULING(ProjectJobSchedulingProblem::new, JAVA_INCREMENTAL, CONSTRAINT_STREAMS_BAVET),
-    TASK_ASSIGNING(TaskAssigningProblem::new, CONSTRAINT_STREAMS_BAVET),
-    TENNIS(TennisProblem::new, CONSTRAINT_STREAMS_BAVET),
-    TRAVELING_TOURNAMENT(TravelingTournamentProblem::new, CONSTRAINT_STREAMS_BAVET),
+    CONFERENCE_SCHEDULING(ConferenceSchedulingProblem::new, CONSTRAINT_STREAMS_BAVET, CONSTRAINT_STREAMS_BAVET_JUSTIFIED),
+    CURRICULUM_COURSE(CurriculumCourseProblem::new, CONSTRAINT_STREAMS_BAVET, CONSTRAINT_STREAMS_BAVET_JUSTIFIED),
+    EXAMINATION(ExaminationProblem::new, CONSTRAINT_STREAMS_BAVET, CONSTRAINT_STREAMS_BAVET_JUSTIFIED),
+    FLIGHT_CREW_SCHEDULING(FlightCrewSchedulingProblem::new, CONSTRAINT_STREAMS_BAVET, CONSTRAINT_STREAMS_BAVET_JUSTIFIED),
+    MACHINE_REASSIGNMENT(MachineReassignmentProblem::new, JAVA_INCREMENTAL, CONSTRAINT_STREAMS_BAVET,
+            CONSTRAINT_STREAMS_BAVET_JUSTIFIED),
+    MEETING_SCHEDULING(MeetingSchedulingProblem::new, CONSTRAINT_STREAMS_BAVET, CONSTRAINT_STREAMS_BAVET_JUSTIFIED),
+    NURSE_ROSTERING(NurseRosteringProblem::new, CONSTRAINT_STREAMS_BAVET, CONSTRAINT_STREAMS_BAVET_JUSTIFIED),
+    PATIENT_ADMISSION_SCHEDULING(PatientAdmissionSchedulingProblem::new, CONSTRAINT_STREAMS_BAVET,
+            CONSTRAINT_STREAMS_BAVET_JUSTIFIED),
+    PROJECT_JOB_SCHEDULING(ProjectJobSchedulingProblem::new, JAVA_INCREMENTAL, CONSTRAINT_STREAMS_BAVET,
+            CONSTRAINT_STREAMS_BAVET_JUSTIFIED),
+    TASK_ASSIGNING(TaskAssigningProblem::new, CONSTRAINT_STREAMS_BAVET, CONSTRAINT_STREAMS_BAVET_JUSTIFIED),
+    TENNIS(TennisProblem::new, CONSTRAINT_STREAMS_BAVET, CONSTRAINT_STREAMS_BAVET_JUSTIFIED),
+    TRAVELING_TOURNAMENT(TravelingTournamentProblem::new, CONSTRAINT_STREAMS_BAVET, CONSTRAINT_STREAMS_BAVET_JUSTIFIED),
     TSP(TspProblem::new),
     VEHICLE_ROUTING(VehicleRoutingProblem::new);
 

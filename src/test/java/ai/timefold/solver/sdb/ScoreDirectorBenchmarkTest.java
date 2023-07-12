@@ -5,6 +5,7 @@ import java.util.stream.Stream;
 import ai.timefold.solver.sdb.problems.Problem;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -20,6 +21,8 @@ final class ScoreDirectorBenchmarkTest {
     @ParameterizedTest
     @MethodSource("scoreDirectorTypeAndExampleProvider")
     void runTest(ScoreDirectorType scoreDirectorType, Example example) {
+        Assumptions.assumeTrue(example.isSupportedOn(scoreDirectorType),
+                "Example " + example + " not supported on " + scoreDirectorType + ".");
         LOGGER.info("Testing {} for {}.", scoreDirectorType, example);
         Assertions.assertDoesNotThrow(() -> {
             final Problem problem = example.create(scoreDirectorType);
@@ -36,7 +39,6 @@ final class ScoreDirectorBenchmarkTest {
     public static Stream<Arguments> scoreDirectorTypeAndExampleProvider() {
         return Stream.of(ScoreDirectorType.values())
                 .flatMap(scoreDirectorType -> Stream.of(Example.values())
-                        .filter(example -> example.isSupportedOn(scoreDirectorType))
                         .map(example -> Arguments.arguments(scoreDirectorType, example)));
     }
 
