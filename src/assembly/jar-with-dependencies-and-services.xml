@@ -16,7 +16,7 @@
             <outputDirectory>/</outputDirectory>
             <useProjectArtifact>true</useProjectArtifact>
             <unpack>true</unpack>
-            <unpackOptions> <!-- Do not inherit Logback config from optaplanner-examples. -->
+            <unpackOptions> <!-- Do not inherit Logback config from timefold-solver-examples. -->
                 <excludes>
                     <exclude>**/logback.xml</exclude>
                 </excludes>
