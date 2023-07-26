@@ -25,12 +25,12 @@ public final class CloudBalancingProblem extends AbstractProblem<CloudBalance> {
     protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirectorType scoreDirectorType) {
         ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();
         return switch (scoreDirectorType) {
-            case CONSTRAINT_STREAMS_BAVET, CONSTRAINT_STREAMS_BAVET_JUSTIFIED -> scoreDirectorFactoryConfig
+            case CONSTRAINT_STREAMS, CONSTRAINT_STREAMS_JUSTIFIED -> scoreDirectorFactoryConfig
                     .withConstraintProviderClass(CloudBalancingConstraintProvider.class)
                     .withConstraintStreamImplType(ConstraintStreamImplType.BAVET);
-            case JAVA_EASY -> scoreDirectorFactoryConfig
+            case EASY -> scoreDirectorFactoryConfig
                     .withEasyScoreCalculatorClass(CloudBalancingMapBasedEasyScoreCalculator.class);
-            case JAVA_INCREMENTAL -> scoreDirectorFactoryConfig
+            case INCREMENTAL -> scoreDirectorFactoryConfig
                     .withIncrementalScoreCalculatorClass(CloudBalancingIncrementalScoreCalculator.class);
         };
     }

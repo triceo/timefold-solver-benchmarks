@@ -27,12 +27,12 @@ public final class VehicleRoutingProblem extends AbstractProblem<VehicleRoutingS
     protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirectorType scoreDirectorType) {
         ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();
         return switch (scoreDirectorType) {
-            case CONSTRAINT_STREAMS_BAVET, CONSTRAINT_STREAMS_BAVET_JUSTIFIED -> scoreDirectorFactoryConfig
+            case CONSTRAINT_STREAMS, CONSTRAINT_STREAMS_JUSTIFIED -> scoreDirectorFactoryConfig
                     .withConstraintProviderClass(VehicleRoutingConstraintProvider.class)
                     .withConstraintStreamImplType(ConstraintStreamImplType.BAVET);
-            case JAVA_EASY -> scoreDirectorFactoryConfig
+            case EASY -> scoreDirectorFactoryConfig
                     .withEasyScoreCalculatorClass(VehicleRoutingEasyScoreCalculator.class);
-            case JAVA_INCREMENTAL -> scoreDirectorFactoryConfig
+            case INCREMENTAL -> scoreDirectorFactoryConfig
                     .withIncrementalScoreCalculatorClass(VehicleRoutingIncrementalScoreCalculator.class);
         };
     }

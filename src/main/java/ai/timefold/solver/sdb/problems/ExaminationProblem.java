@@ -26,8 +26,8 @@ public final class ExaminationProblem extends AbstractProblem<Examination> {
     protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirectorType scoreDirectorType) {
         ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();
         ScoreDirectorType nonNullScoreDirectorType = Objects.requireNonNull(scoreDirectorType);
-        if (nonNullScoreDirectorType == ScoreDirectorType.CONSTRAINT_STREAMS_BAVET
-                || nonNullScoreDirectorType == ScoreDirectorType.CONSTRAINT_STREAMS_BAVET_JUSTIFIED) {
+        if (nonNullScoreDirectorType == ScoreDirectorType.CONSTRAINT_STREAMS
+                || nonNullScoreDirectorType == ScoreDirectorType.CONSTRAINT_STREAMS_JUSTIFIED) {
             return scoreDirectorFactoryConfig
                     .withConstraintProviderClass(ExaminationConstraintProvider.class)
                     .withConstraintStreamImplType(ConstraintStreamImplType.BAVET);

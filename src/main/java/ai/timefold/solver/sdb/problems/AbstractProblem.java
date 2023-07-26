@@ -115,7 +115,7 @@ abstract class AbstractProblem<Solution_> implements Problem {
     public final void setupIteration() {
         // We only care about incremental performance; therefore calculate the entire solution outside of invocation.
         scoreDirector = scoreDirectorFactory.buildScoreDirector(false,
-                scoreDirectorType == ScoreDirectorType.CONSTRAINT_STREAMS_BAVET_JUSTIFIED);
+                scoreDirectorType == ScoreDirectorType.CONSTRAINT_STREAMS_JUSTIFIED);
         scoreDirector.setWorkingSolution(scoreDirector.cloneSolution(originalSolution)); // Use fresh solution again.
         scoreDirector.triggerVariableListeners();
         scoreDirector.calculateScore();

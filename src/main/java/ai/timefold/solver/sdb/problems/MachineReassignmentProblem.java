@@ -25,10 +25,10 @@ public final class MachineReassignmentProblem
     protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirectorType scoreDirectorType) {
         ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();
         return switch (scoreDirectorType) {
-            case CONSTRAINT_STREAMS_BAVET, CONSTRAINT_STREAMS_BAVET_JUSTIFIED -> scoreDirectorFactoryConfig
+            case CONSTRAINT_STREAMS, CONSTRAINT_STREAMS_JUSTIFIED -> scoreDirectorFactoryConfig
                     .withConstraintProviderClass(MachineReassignmentConstraintProvider.class)
                     .withConstraintStreamImplType(ConstraintStreamImplType.BAVET);
-            case JAVA_INCREMENTAL -> scoreDirectorFactoryConfig
+            case INCREMENTAL -> scoreDirectorFactoryConfig
                     .withIncrementalScoreCalculatorClass(MachineReassignmentIncrementalScoreCalculator.class);
             default -> throw new UnsupportedOperationException("Score director: " + scoreDirectorType);
         };

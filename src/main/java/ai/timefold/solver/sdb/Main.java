@@ -41,12 +41,6 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-import ai.timefold.solver.sdb.benchmarks.AbstractBenchmark;
-import ai.timefold.solver.sdb.benchmarks.ConstraintStreamsBavet;
-import ai.timefold.solver.sdb.benchmarks.ConstraintStreamsBavetJustified;
-import ai.timefold.solver.sdb.benchmarks.JavaEasy;
-import ai.timefold.solver.sdb.benchmarks.JavaIncremental;
-
 import org.openjdk.jmh.profile.AsyncProfiler;
 import org.openjdk.jmh.results.format.ResultFormatType;
 import org.openjdk.jmh.runner.Runner;
@@ -107,15 +101,13 @@ public class Main {
                 .measurementIterations(5)
                 .jvmArgs("-XX:+UseParallelGC", "-Xms1g", "-Xmx1g") // Minimize GC overhead.
                 .result(benchmarkResults.getAbsolutePath())
-                .resultFormat(ResultFormatType.CSV);
+                .resultFormat(ResultFormatType.CSV)
+                .shouldDoGC(true);
 
-        options = processBenchmark(options, ConstraintStreamsBavet.class, "csbExample", configuration,
-                ScoreDirectorType.CONSTRAINT_STREAMS_BAVET);
-        options = processBenchmark(options, ConstraintStreamsBavetJustified.class, "csbJustifiedExample", configuration,
-                ScoreDirectorType.CONSTRAINT_STREAMS_BAVET_JUSTIFIED);
-        options = processBenchmark(options, JavaEasy.class, "easyExample", configuration, ScoreDirectorType.JAVA_EASY);
-        options = processBenchmark(options, JavaIncremental.class, "incrementalExample", configuration,
-                ScoreDirectorType.JAVA_INCREMENTAL);
+        options = processBenchmark(options, configuration, ScoreDirectorType.CONSTRAINT_STREAMS);
+        options = processBenchmark(options, configuration, ScoreDirectorType.CONSTRAINT_STREAMS_JUSTIFIED);
+        options = processBenchmark(options, configuration, ScoreDirectorType.EASY);
+        options = processBenchmark(options, configuration, ScoreDirectorType.INCREMENTAL);
 
         Path asyncProfilerPath = ASYNC_PROFILER_DIR.resolve("libasyncProfiler.so")
                 .toAbsolutePath();
@@ -164,14 +156,12 @@ public class Main {
         }
     }
 
-    private static ChainedOptionsBuilder processBenchmark(ChainedOptionsBuilder options,
-            Class<? extends AbstractBenchmark> benchmarkClass, String benchmarkParamName, Configuration configuration,
+    private static ChainedOptionsBuilder processBenchmark(ChainedOptionsBuilder options, Configuration configuration,
             ScoreDirectorType scoreDirectorType) {
         String[] supportedExampleNames = getSupportedExampleNames(configuration, scoreDirectorType);
         if (supportedExampleNames.length > 0) {
-            options = options.include(benchmarkClass.getSimpleName())
-                    .param(benchmarkParamName, supportedExampleNames);
-
+            options = options.include(scoreDirectorType.getBenchmarkClass().getSimpleName())
+                    .param(scoreDirectorType.getBenchmarkParamName(), supportedExampleNames);
         }
         return options;
     }

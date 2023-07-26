@@ -5,18 +5,18 @@ import ai.timefold.solver.sdb.ScoreDirectorType;
 
 import org.openjdk.jmh.annotations.Param;
 
-public class JavaEasy extends AbstractBenchmark {
+public class ConstraintStreamsBenchmark extends AbstractBenchmark {
 
     @Param
-    public Example easyExample;
+    public Example csExample;
 
     @Override
-    protected ScoreDirectorType getScoreDirector() {
-        return ScoreDirectorType.JAVA_EASY;
+    protected ScoreDirectorType getScoreDirectorType() {
+        return ScoreDirectorType.CONSTRAINT_STREAMS;
     }
 
     @Override
     protected Example getExample() {
-        return easyExample;
+        return csExample;
     }
 }

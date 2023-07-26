@@ -5,18 +5,18 @@ import ai.timefold.solver.sdb.ScoreDirectorType;
 
 import org.openjdk.jmh.annotations.Param;
 
-public class ConstraintStreamsBavet extends AbstractBenchmark {
+public class IncrementalBenchmark extends AbstractBenchmark {
 
     @Param
-    public Example csbExample;
+    public Example incrementalExample;
 
     @Override
-    protected ScoreDirectorType getScoreDirector() {
-        return ScoreDirectorType.CONSTRAINT_STREAMS_BAVET;
+    protected ScoreDirectorType getScoreDirectorType() {
+        return ScoreDirectorType.INCREMENTAL;
     }
 
     @Override
     protected Example getExample() {
-        return csbExample;
+        return incrementalExample;
     }
 }

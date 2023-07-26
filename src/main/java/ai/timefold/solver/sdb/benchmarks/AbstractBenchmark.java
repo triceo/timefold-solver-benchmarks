@@ -20,13 +20,13 @@ public abstract class AbstractBenchmark {
 
     public Problem problem;
 
-    abstract protected ScoreDirectorType getScoreDirector();
+    abstract protected ScoreDirectorType getScoreDirectorType();
 
     abstract protected Example getExample();
 
     @Setup(Level.Trial)
     public void setupTrial() {
-        problem = getExample().create(getScoreDirector());
+        problem = getExample().create(getScoreDirectorType());
         problem.setupTrial();
     }
 
