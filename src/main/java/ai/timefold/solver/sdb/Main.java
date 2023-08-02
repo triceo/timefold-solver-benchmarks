@@ -40,8 +40,10 @@ import java.nio.file.Path;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Collection;
 
 import org.openjdk.jmh.profile.AsyncProfiler;
+import org.openjdk.jmh.results.RunResult;
 import org.openjdk.jmh.results.format.ResultFormatType;
 import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
@@ -122,7 +124,7 @@ public class Main {
             LOGGER.warn("Async profiler not found in {}. Profiler disabled.", asyncProfilerPath);
         }
 
-        new Runner(options.build()).run();
+        Collection<RunResult> runResults = new Runner(options.build()).run();
 
         if (asyncProfilerPath.toFile().exists()) {
             Files.walk(resultFolder.toPath())
@@ -136,6 +138,24 @@ public class Main {
         } else {
             LOGGER.warn("Skipping JFR conversion in '{}'.", resultFolder);
         }
+
+        double relativeScoreErrorThreshold = configuration.getRelativeScoreErrorThreshold();
+        double thresholdForPrint = ((int) Math.round(relativeScoreErrorThreshold * 10_000)) / 100.0D;
+        runResults.forEach(result -> {
+            double score = result.getPrimaryResult().getScore();
+            double scoreError = result.getPrimaryResult().getScoreError();
+            double relativeScoreError = scoreError / score;
+
+            String benchmarkName = result.getParams().getBenchmark();
+            double relativeScoreErrorForPrint = ((int) Math.round(relativeScoreError * 10_000)) / 100.0D;
+            if (relativeScoreError > relativeScoreErrorThreshold) {
+                LOGGER.warn("Score error for '{}' is too high: ± {} % (threshold: ± {} %).", benchmarkName,
+                        relativeScoreErrorForPrint, thresholdForPrint);
+            } else if (relativeScoreError > (relativeScoreErrorThreshold * 0.9)) {
+                LOGGER.info("Score error for '{}' approaching threshold: ± {} % (threshold: ± {} %).", benchmarkName,
+                        relativeScoreErrorForPrint, thresholdForPrint);
+            }
+        });
     }
 
     private static void generateFlameGraphsFromJfr(Path jfrFilePath, String type) {
