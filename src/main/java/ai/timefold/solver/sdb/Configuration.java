@@ -9,6 +9,11 @@ import java.util.stream.Collectors;
 
 final class Configuration {
 
+    private static final int DEFAULT_FORK_COUNT = 10;
+    private static final int DEFAULT_WARMUP_ITERATIONS = 5;
+    private static final int DEFAULT_MEASUREMENT_ITERATIONS = 5;
+    private static final double DEFAULT_RELATIVE_SCORE_ERROR_THRESHOLD = 0.02;
+
     public static Configuration read(InputStream inputStream) throws IOException {
         Properties properties = new Properties();
         properties.load(inputStream);
@@ -44,26 +49,44 @@ final class Configuration {
                     })
                     .collect(Collectors.toList());
         }
-        double relativeScoreErrorThreshold;
+        int forkCount = (int) parseDouble(properties, "forks", Integer.toString(DEFAULT_FORK_COUNT));
+        int warmupIterations = (int) parseDouble(properties, "warmup_iterations", Integer.toString(DEFAULT_WARMUP_ITERATIONS));
+        int measurementIterations =
+                (int) parseDouble(properties, "measurement_iterations", Integer.toString(DEFAULT_MEASUREMENT_ITERATIONS));
+        double relativeScoreErrorThreshold = parseDouble(properties, "relative_score_error_threshold",
+                Double.toString(DEFAULT_RELATIVE_SCORE_ERROR_THRESHOLD));
+        return new Configuration(enabledScoreDirectorTypes, enabledExamples, forkCount, warmupIterations, measurementIterations,
+                relativeScoreErrorThreshold);
+    }
+
+    private static double parseDouble(Properties properties, String property, String def) {
+        String propertyValue = properties.getProperty(property, def);
         try {
-            relativeScoreErrorThreshold = Double.parseDouble(properties.getProperty("relative_score_error_threshold", "0.02"));
+            return Double.parseDouble(propertyValue);
         } catch (Exception ex) {
-            throw new IllegalArgumentException("Failed parsing relative_score_error_threshold.", ex);
+            throw new IllegalArgumentException("Failed parsing " + property + " " + propertyValue, ex);
         }
-        return new Configuration(enabledScoreDirectorTypes, enabledExamples, relativeScoreErrorThreshold);
     }
 
     public static Configuration getDefault() {
-        return new Configuration(Arrays.asList(ScoreDirectorType.values()), Arrays.asList(Example.values()), 0.02);
+        return new Configuration(Arrays.asList(ScoreDirectorType.values()), Arrays.asList(Example.values()), DEFAULT_FORK_COUNT,
+                DEFAULT_WARMUP_ITERATIONS, DEFAULT_MEASUREMENT_ITERATIONS, DEFAULT_RELATIVE_SCORE_ERROR_THRESHOLD);
     }
 
     private final List<ScoreDirectorType> enabledScoreDirectorTypes;
     private final List<Example> enabledExamples;
+    private final int forkCount;
+    private final int warmupIterations;
+    private final int measurementIterations;
     private final double relativeScoreErrorThreshold;
 
-    private Configuration(List<ScoreDirectorType> enabledScoreDirectorTypes, List<Example> enabledExamples, double relativeScoreErrorThreshold) {
+    private Configuration(List<ScoreDirectorType> enabledScoreDirectorTypes, List<Example> enabledExamples,
+            int forkCount, int warmupIterations, int measurementIterations, double relativeScoreErrorThreshold) {
         this.enabledScoreDirectorTypes = enabledScoreDirectorTypes;
         this.enabledExamples = enabledExamples;
+        this.forkCount = forkCount;
+        this.warmupIterations = warmupIterations;
+        this.measurementIterations = measurementIterations;
         this.relativeScoreErrorThreshold = relativeScoreErrorThreshold;
     }
 
@@ -73,6 +96,18 @@ final class Configuration {
 
     public List<Example> getEnabledExamples() {
         return enabledExamples;
+    }
+
+    public int getForkCount() {
+        return forkCount;
+    }
+
+    public int getWarmupIterations() {
+        return warmupIterations;
+    }
+
+    public int getMeasurementIterations() {
+        return measurementIterations;
     }
 
     public double getRelativeScoreErrorThreshold() {

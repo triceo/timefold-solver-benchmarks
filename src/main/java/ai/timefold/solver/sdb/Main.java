@@ -98,9 +98,9 @@ public class Main {
         resultFolder.mkdirs();
 
         ChainedOptionsBuilder options = new OptionsBuilder()
-                .forks(10)
-                .warmupIterations(5)
-                .measurementIterations(5)
+                .forks(configuration.getForkCount())
+                .warmupIterations(configuration.getWarmupIterations())
+                .measurementIterations(configuration.getMeasurementIterations())
                 .jvmArgs("-XX:+UseParallelGC", "-Xms1g", "-Xmx1g") // Minimize GC overhead.
                 .result(benchmarkResults.getAbsolutePath())
                 .resultFormat(ResultFormatType.CSV)
