@@ -108,7 +108,7 @@ abstract class AbstractProblem<Solution_> implements Problem {
                 scoreDirectorFactory.getSolutionDescriptor(), ClassInstanceCache.create())
                 .build();
         moveSelector = moveSelectorFactory.buildMoveSelector(policy, SelectionCacheType.JUST_IN_TIME,
-                SelectionOrder.RANDOM);
+                SelectionOrder.RANDOM, true);
     }
 
     @Override
@@ -136,9 +136,7 @@ abstract class AbstractProblem<Solution_> implements Problem {
             moveIterator = moveSelector.iterator();
         }
         willUndo = Math.random() <= PROBABILITY_OF_UNDO;
-        do { // Find the first doable move.
-            move = moveIterator.next();
-        } while (!move.isMoveDoable(scoreDirector));
+        move = moveIterator.next();
     }
 
     /**
