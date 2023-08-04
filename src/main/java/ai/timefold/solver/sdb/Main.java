@@ -42,7 +42,9 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Collection;
 
+import org.openjdk.jmh.infra.BenchmarkParams;
 import org.openjdk.jmh.profile.AsyncProfiler;
+import org.openjdk.jmh.results.Result;
 import org.openjdk.jmh.results.RunResult;
 import org.openjdk.jmh.results.format.ResultFormatType;
 import org.openjdk.jmh.runner.Runner;
@@ -142,11 +144,13 @@ public class Main {
         double relativeScoreErrorThreshold = configuration.getRelativeScoreErrorThreshold();
         double thresholdForPrint = ((int) Math.round(relativeScoreErrorThreshold * 10_000)) / 100.0D;
         runResults.forEach(result -> {
-            double score = result.getPrimaryResult().getScore();
-            double scoreError = result.getPrimaryResult().getScoreError();
+            Result<?> primaryResult = result.getPrimaryResult();
+            double score = primaryResult.getScore();
+            double scoreError = primaryResult.getScoreError();
             double relativeScoreError = scoreError / score;
 
-            String benchmarkName = result.getParams().getBenchmark();
+            BenchmarkParams benchParams = result.getParams();
+            String benchmarkName = benchParams.getBenchmark() + " " + benchParams.getParam("csExample");
             double relativeScoreErrorForPrint = ((int) Math.round(relativeScoreError * 10_000)) / 100.0D;
             if (relativeScoreError > relativeScoreErrorThreshold) {
                 LOGGER.warn("Score error for '{}' is too high: ± {} % (threshold: ± {} %).", benchmarkName,
