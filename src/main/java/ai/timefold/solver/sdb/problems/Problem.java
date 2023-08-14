@@ -1,7 +1,5 @@
 package ai.timefold.solver.sdb.problems;
 
-import org.openjdk.jmh.infra.Blackhole;
-
 public interface Problem {
 
     void setupTrial();
@@ -10,7 +8,7 @@ public interface Problem {
 
     void setupInvocation();
 
-    Object runInvocation(Blackhole blackhole);
+    Object runInvocation();
 
     void tearDownInvocation();
 

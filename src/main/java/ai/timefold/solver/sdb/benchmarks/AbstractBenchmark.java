@@ -42,7 +42,7 @@ public abstract class AbstractBenchmark {
 
     @Benchmark
     public Object run(Blackhole blackhole) {
-        return problem.runInvocation(blackhole);
+        return problem.runInvocation();
     }
 
     @TearDown(Level.Invocation)

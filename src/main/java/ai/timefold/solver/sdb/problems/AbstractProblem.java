@@ -32,12 +32,8 @@ import ai.timefold.solver.core.impl.solver.scope.SolverScope;
 import ai.timefold.solver.sdb.Example;
 import ai.timefold.solver.sdb.ScoreDirectorType;
 
-import org.openjdk.jmh.infra.Blackhole;
-
 abstract class AbstractProblem<Solution_> implements Problem {
 
-    // Each fork starts from a different place.
-    private static final int RANDOM_SEED = (int) (Math.random() * 100);
     private static final double PROBABILITY_OF_UNDO = 0.9;
 
     private final ScoreDirectorType scoreDirectorType;
@@ -122,7 +118,7 @@ abstract class AbstractProblem<Solution_> implements Problem {
         // Prepare the lifecycle.
         SolverScope<Solution_> solverScope = new SolverScope<>();
         solverScope.setScoreDirector(scoreDirector);
-        solverScope.setWorkingRandom(new Random(RANDOM_SEED)); // Each iteration in a fork starts from the same place.
+        solverScope.setWorkingRandom(new Random(0)); // Fully reproducible random selection.
         phaseScope = new LocalSearchPhaseScope<>(solverScope);
         moveSelector.solvingStarted(solverScope);
         moveSelector.phaseStarted(phaseScope);
@@ -157,19 +153,15 @@ abstract class AbstractProblem<Solution_> implements Problem {
      * Unfortunately, we also benchmark a bit of the overhead of the move. Hopefully, that is not too much.
      * More importantly, it is a constant overhead and therefore should not affect the results.
      *
-     * @param blackHole use to prevent byproducts from being optimized away
      * @return in order to prevent results from being optimized away
      */
     @Override
-    public final Object runInvocation(Blackhole blackHole) {
-        Move<Solution_> undo = move.doMove(scoreDirector);
-        if (willUndo) { // The solver first calculates the score and then undoes it...
-            blackHole.consume(scoreDirector.calculateScore());
-            return undo.doMove(scoreDirector);
-        } else { // ... except occasionally, it does not undo.
-            blackHole.consume(undo);
-            return scoreDirector.calculateScore();
+    public final Object runInvocation() {
+        if (willUndo) {
+            move = move.doMove(scoreDirector); // Do the move and prepare undo.
         }
+        move.doMoveOnly(scoreDirector); // Run either the original move, or the undo.
+        return scoreDirector.calculateScore();
     }
 
     @Override

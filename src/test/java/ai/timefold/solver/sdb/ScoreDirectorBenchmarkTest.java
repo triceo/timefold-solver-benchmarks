@@ -9,8 +9,6 @@ import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.Mockito;
-import org.openjdk.jmh.infra.Blackhole;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +27,7 @@ final class ScoreDirectorBenchmarkTest {
             problem.setupTrial();
             problem.setupIteration();
             problem.setupInvocation();
-            problem.runInvocation(Mockito.mock(Blackhole.class));
+            problem.runInvocation();
             problem.tearDownInvocation();
             problem.tearDownIteration();
             problem.teardownTrial();
