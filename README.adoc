@@ -1,7 +1,8 @@
 = ScoreDirectorFactory Benchmark for select Timefold Solver examples
 
-This is not an official @TimefoldAI product.
-Rather it is my (@triceo) personal work for benchmarking of the Constraint Streams subsystem of https://github.com/TimefoldAI/timefold-solver/[Timefold Solver].
+This is not an official https://github.com/TimefoldAI/[Timefold] product.
+Rather it is my (https://github.com/triceo/[@triceo]) personal work
+for benchmarking of the Constraint Streams subsystem of https://github.com/TimefoldAI/timefold-solver/[Timefold Solver].
 I do not provide any backwards or forwards compatibility guarantees,
 and I do not guarantee that this benchmark will work with any particular version of Timefold Solver.
 
