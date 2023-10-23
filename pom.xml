@@ -21,7 +21,7 @@
         <formatter.skip>true</formatter.skip>
         <java.module.name>ai.timefold.solver.sdb</java.module.name>
         <java.release>17</java.release>
-        <jmh.version>1.36</jmh.version>
+        <jmh.version>1.37</jmh.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <uberjar.name>benchmarks</uberjar.name>
     </properties>
