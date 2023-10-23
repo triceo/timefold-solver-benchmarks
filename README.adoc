@@ -1,0 +1,51 @@
+= ScoreDirectorFactory Benchmark for select Timefold Solver examples
+
+This is not an official @TimefoldAI product.
+Rather it is my (@triceo) personal work for benchmarking of the Constraint Streams subsystem of https://github.com/TimefoldAI/timefold-solver/[Timefold Solver].
+I do not provide any backwards or forwards compatibility guarantees,
+and I do not guarantee that this benchmark will work with any particular version of Timefold Solver.
+
+This repository is a continuous work in progress which will change as needs change.
+Your feedback is welcome, but I do not guarantee that I will be able to respond to it in a timely manner, or at all.
+
+== Usage
+
+First, build the Timefold Solver using Maven:
+
+[source,shell]
+----
+git clone git@github.com:TimefoldAI/timefold-solver.git
+cd timefold-solver
+mvn clean install -Dquickly
+----
+
+Then, build this benchmark:
+
+[source,shell]
+----
+git clone git@github.com:triceo/timefold-solver-score-director-benchmark.git
+cd timefold-solver-score-director-benchmark
+mvn clean install
+----
+
+Finally, run the benchmark:
+
+[source,shell]
+----
+./run.sh
+----
+
+In the default configuration, the benchmark will run for many hours and fully occupy 1 CPU.
+Only run the benchmark on a quiet machine, otherwise results will be skewed.
+
+=== Async profiler
+
+The benchmark can optionally produce flame graphs using https://github.com/async-profiler/async-profiler[Async Profiler].
+On the first run, if Async Profiler is not found, a message will be logged.
+Let the message point you in the right direction.
+
+== Configuring the benchmark
+
+The benchmark is configured using the `benchmark.properties` file.
+The file is well-commented, and should be self-explanatory.
+Modify it to suit your needs.
