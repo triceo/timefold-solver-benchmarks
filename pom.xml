@@ -16,7 +16,7 @@
     <properties>
         <version.ai.timefold.solver>999-SNAPSHOT</version.ai.timefold.solver>
         <version.org.junit>5.10.1</version.org.junit>
-        <version.org.mockito>5.8.0</version.org.mockito>
+        <version.org.mockito>5.9.0</version.org.mockito>
         <version.tools.profiler>2.9</version.tools.profiler>
         <formatter.skip>true</formatter.skip>
         <java.module.name>ai.timefold.solver.sdb</java.module.name>
