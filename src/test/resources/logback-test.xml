@@ -22,7 +22,8 @@
     <!--</encoder>-->
   <!--</appender>-->
 
-  <logger name="ai.timefold.solver" level="${logback.level.ai.timefold.solver:-info}"/>
+  <logger name="ai.timefold.solver" level="${logback.level.ai.timefold.solver:-warn}"/>
+  <logger name="ai.timefold.solver.jmh" level="${logback.level.ai.timefold.solver:-info}"/>
 
   <root level="INFO">
     <appender-ref ref="consoleAppender" />

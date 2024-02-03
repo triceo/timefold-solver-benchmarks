@@ -14,14 +14,14 @@
     <url>https://timefold.ai</url>
 
     <properties>
-        <version.ai.timefold.solver>1.2.0-SNAPSHOT</version.ai.timefold.solver>
-        <version.org.junit>5.9.1</version.org.junit>
-        <version.org.mockito>4.9.0</version.org.mockito>
-        <version.tools.profiler>2.9</version.tools.profiler>
+        <version.ai.timefold.solver>999-SNAPSHOT</version.ai.timefold.solver>
+        <version.org.junit>5.10.1</version.org.junit>
+        <version.org.mockito>5.10.0</version.org.mockito>
+        <version.tools.profiler>3.0</version.tools.profiler>
         <formatter.skip>true</formatter.skip>
         <java.module.name>ai.timefold.solver.sdb</java.module.name>
-        <java.release>17</java.release>
-        <jmh.version>1.36</jmh.version>
+        <java.release>21</java.release>
+        <jmh.version>1.37</jmh.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <uberjar.name>benchmarks</uberjar.name>
     </properties>
@@ -42,6 +42,8 @@
             <groupId>tools.profiler</groupId>
             <artifactId>async-profiler-converter</artifactId>
             <version>${version.tools.profiler}</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/async-profiler-${version.tools.profiler}-linux-x64/lib/converter.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>ai.timefold.solver</groupId>
@@ -79,7 +81,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.10.1</version>
+                <version>3.12.1</version>
                 <configuration>
                     <release>${java.release}</release>
                 </configuration>
@@ -87,7 +89,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.4.2</version>
+                <version>3.6.0</version>
                 <configuration>
                     <finalName>${uberjar.name}</finalName>
                     <appendAssemblyId>false</appendAssemblyId>
@@ -96,7 +98,6 @@
                     </descriptors>
                     <archive>
                         <manifestEntries>
-                            <Main-Class>ai.timefold.solver.sdb.Main</Main-Class>
                             <Multi-Release>true</Multi-Release> <!-- Some of our dependencies are multi-release JARs. -->
                         </manifestEntries>
                     </archive>
@@ -113,7 +114,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>3.2.5</version>
             </plugin>
         </plugins>
     </build>

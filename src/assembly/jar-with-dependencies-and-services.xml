@@ -23,6 +23,11 @@
             </unpackOptions>
             <scope>runtime</scope>
         </dependencySet>
+        <dependencySet> <!-- Include the converter JAR. -->
+            <outputDirectory>/</outputDirectory>
+            <unpack>true</unpack>
+            <scope>system</scope>
+        </dependencySet>
     </dependencySets>
     <fileSets>
         <fileSet> <!-- But make sure we include the logback.xml from this project. -->

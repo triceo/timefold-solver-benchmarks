@@ -8,6 +8,9 @@
     </encoder>
   </appender>
 
+  <logger name="ai.timefold.solver" level="${logback.level.ai.timefold.solver:-warn}"/>
+  <logger name="ai.timefold.solver.jmh" level="${logback.level.ai.timefold.solver.jmh:-info}"/>
+
   <root level="info">
     <appender-ref ref="consoleAppender" />
     <!--<appender-ref ref="fileAppender" />-->
