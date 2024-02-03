@@ -33,14 +33,13 @@ package ai.timefold.solver.jmh.common;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.Properties;
 
 import org.openjdk.jmh.profile.AsyncProfiler;
 import org.openjdk.jmh.results.format.ResultFormatType;
@@ -52,14 +51,12 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractMain<C extends AbstractConfiguration> {
 
     private static final Logger STATIC_LOGGER = LoggerFactory.getLogger(AbstractMain.class);
-    protected static final Path ASYNC_PROFILER_DIR = Path.of("async-profiler-3.0-linux-x64", "lib")
-            .toAbsolutePath();
 
     protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
     private final String subpackage;
     private final Path resultsDirectory;
 
-    public AbstractMain(String subpackage) {
+    protected AbstractMain(String subpackage) {
         this.subpackage = subpackage;
         this.resultsDirectory = Path.of("results", subpackage, getTimestamp());
         resultsDirectory.toFile().mkdirs();
@@ -80,14 +77,25 @@ public abstract class AbstractMain<C extends AbstractConfiguration> {
         var second = leftPad(now.getSecond(), 2);
         return year + month + day + "_" + hour + minute + second;
     }
-    
+
     protected static Optional<Path> getAsyncProfilerPath() {
-        var asyncProfilerPath = ASYNC_PROFILER_DIR.resolve("libasyncProfiler.so")
-                .toAbsolutePath();
-        if (!asyncProfilerPath.toFile().exists()) {
+        try {
+            var properties = new Properties();
+            properties.load(AbstractMain.class.getResourceAsStream("/buildtime.properties"));
+            var asyncProfilerPath = Path.of(
+                    properties.getProperty("async.profiler.path").trim(),
+                    "lib",
+                    "libasyncProfiler.so")
+                    .toAbsolutePath();
+            System.out.println(asyncProfilerPath);
+            if (!asyncProfilerPath.toFile().exists()) {
+                return Optional.empty();
+            }
+            return Optional.of(asyncProfilerPath);
+        } catch (IOException e) {
+            STATIC_LOGGER.error("Failed reading buildtime.properties from the benchmarks JAR.", e);
             return Optional.empty();
         }
-        return Optional.of(asyncProfilerPath);
     }
 
     protected ChainedOptionsBuilder initAsyncProfiler(ChainedOptionsBuilder options) {
@@ -100,10 +108,7 @@ public abstract class AbstractMain<C extends AbstractConfiguration> {
                                     "dir=" + resultsDirectory.toAbsolutePath() + ";" +
                                     "libPath=" + asyncProfilerPath);
                 })
-                .orElseGet(() -> {
-                    LOGGER.warn("Async profiler not found in {}. Profiler disabled.", ASYNC_PROFILER_DIR);
-                    return options;
-                });
+                .orElseThrow(() -> new IllegalStateException("Impossible state: Async profiler not found."));
     }
 
     protected void convertJfrToFlameGraphs() {
@@ -126,16 +131,17 @@ public abstract class AbstractMain<C extends AbstractConfiguration> {
     }
 
     private static void generateFlameGraphsFromJfr(Path jfrFilePath, String type) {
-        var args = type == null ? new String[]{
+        var args = type == null ? new String[] {
                 "--simple",
                 jfrFilePath.toString(),
                 Path.of(jfrFilePath.toAbsolutePath().getParent().toString(), "cpu.html").toString()
-        } : new String[]{
-                "--simple",
-                "--" + type,
-                jfrFilePath.toString(),
-                Path.of(jfrFilePath.toAbsolutePath().getParent().toString(), type + ".html").toString()
-        };
+        }
+                : new String[] {
+                        "--simple",
+                        "--" + type,
+                        jfrFilePath.toString(),
+                        Path.of(jfrFilePath.toAbsolutePath().getParent().toString(), type + ".html").toString()
+                };
         try { // Converter is stupidly in the default package.
             var fooClass = Class.forName("jfr2flame");
             var fooMethod = fooClass.getMethod("main", String[].class);
@@ -145,6 +151,7 @@ public abstract class AbstractMain<C extends AbstractConfiguration> {
             STATIC_LOGGER.error("Generating flame graph failed: {}.", Arrays.toString(args), ex);
         }
     }
+
     protected C readConfiguration() {
         var configPath = Path.of(subpackage).toAbsolutePath();
         if (configPath.toFile().exists()) {
@@ -163,7 +170,7 @@ public abstract class AbstractMain<C extends AbstractConfiguration> {
     abstract protected C readConfiguration(InputStream inputStream) throws IOException;
 
     abstract protected C getDefaultConfiguration();
-    
+
     public ChainedOptionsBuilder getBaseJmhConfig(C configuration) {
         return new OptionsBuilder()
                 .forks(configuration.getForkCount())

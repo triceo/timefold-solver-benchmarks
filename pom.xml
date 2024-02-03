@@ -24,6 +24,7 @@
         <jmh.version>1.37</jmh.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <uberjar.name>benchmarks</uberjar.name>
+        <async.profiler.directory>async-profiler-${version.tools.profiler}-linux-x64</async.profiler.directory>
     </properties>
 
     <dependencies>
@@ -43,7 +44,7 @@
             <artifactId>async-profiler-converter</artifactId>
             <version>${version.tools.profiler}</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/async-profiler-${version.tools.profiler}-linux-x64/lib/converter.jar</systemPath>
+            <systemPath>${project.basedir}/${async.profiler.directory}/lib/converter.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>ai.timefold.solver</groupId>
