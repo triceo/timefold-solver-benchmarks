@@ -24,12 +24,12 @@ Then, build this benchmark:
 
 [source,shell]
 ----
-git clone git@github.com:triceo/timefold-solver-score-director-benchmark.git
-cd timefold-solver-score-director-benchmark
+git clone git@github.com:triceo/timefold-solver-benchmarks.git
+cd timefold-solver-benchmarks
 mvn clean install
 ----
 
-Finally, run the benchmark:
+Finally, run any of the benchmarks:
 
 [source,shell]
 ----
