@@ -153,7 +153,7 @@ public abstract class AbstractMain<C extends AbstractConfiguration> {
     }
 
     protected C readConfiguration() {
-        var configPath = Path.of(subpackage).toAbsolutePath();
+        var configPath = Path.of(subpackage + "-benchmark.properties").toAbsolutePath();
         if (configPath.toFile().exists()) {
             LOGGER.info("Using benchmark configuration file: {}.", configPath);
             try (var inputStream = Files.newInputStream(configPath)) {
