@@ -87,7 +87,6 @@ public abstract class AbstractMain<C extends AbstractConfiguration> {
                     "lib",
                     "libasyncProfiler.so")
                     .toAbsolutePath();
-            System.out.println(asyncProfilerPath);
             if (!asyncProfilerPath.toFile().exists()) {
                 return Optional.empty();
             }

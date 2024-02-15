@@ -31,7 +31,7 @@ final class Configuration extends AbstractConfiguration {
                     .collect(Collectors.toList());
         }
 
-        var enabledExamples = parseExamples(properties.getProperty("examples"), Example.values());
+        var enabledExamples = parseExamples(properties.getProperty("example"), Example.values());
         var benchmarkProperties = readBenchmarkProperties(properties, getDefault());
         return new Configuration(enabledScoreDirectorTypes, enabledExamples, benchmarkProperties.forkCount(),
                 benchmarkProperties.warmupIterations(), benchmarkProperties.measurementIterations(),
