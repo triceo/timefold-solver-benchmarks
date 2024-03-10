@@ -22,8 +22,8 @@ public final class TravelingTournamentProblem extends AbstractProblem<TravelingT
 
     @Override
     protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirectorType scoreDirectorType) {
-        ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();
-        ScoreDirectorType nonNullScoreDirectorType = Objects.requireNonNull(scoreDirectorType);
+        var scoreDirectorFactoryConfig = buildInitialScoreDirectorFactoryConfig();
+        var nonNullScoreDirectorType = Objects.requireNonNull(scoreDirectorType);
         if (nonNullScoreDirectorType == ScoreDirectorType.CONSTRAINT_STREAMS
                 || nonNullScoreDirectorType == ScoreDirectorType.CONSTRAINT_STREAMS_JUSTIFIED) {
             return scoreDirectorFactoryConfig
