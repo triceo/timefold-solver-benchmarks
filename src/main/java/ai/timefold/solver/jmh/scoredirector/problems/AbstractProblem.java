@@ -51,7 +51,7 @@ abstract class AbstractProblem<Solution_> implements Problem {
 
     protected AbstractProblem(final Example example, final ScoreDirectorType scoreDirectorType) {
         this.scoreDirectorType = Objects.requireNonNull(scoreDirectorType);
-        final ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = buildScoreDirectorFactoryConfig(scoreDirectorType);
+        final var scoreDirectorFactoryConfig = buildScoreDirectorFactoryConfig(scoreDirectorType);
         scoreDirectorFactory =
                 ScoreDirectorType.buildScoreDirectorFactory(scoreDirectorFactoryConfig, buildSolutionDescriptor());
         originalSolution = ProblemInitializer.getSolution(example, scoreDirectorFactory.getSolutionDescriptor(),
@@ -70,26 +70,24 @@ abstract class AbstractProblem<Solution_> implements Problem {
         // We go via move config, so we don't have to worry about differences between chained and non-chained problems.
         List<MoveSelectorConfig> moveSelectorConfigs = solutionDescriptor.getGenuineEntityDescriptors().stream()
                 .flatMap(entityDescriptor -> {
-                            EntitySelectorConfig entitySelectorConfig =
-                                    new EntitySelectorConfig(entityDescriptor.getEntityClass());
-                            return entityDescriptor.getGenuineVariableDescriptorList().stream()
-                                    .flatMap(variableDescriptor -> {
-                                        String variableName = variableDescriptor.getVariableName();
+                    var entitySelectorConfig = new EntitySelectorConfig(entityDescriptor.getEntityClass());
+                    return entityDescriptor.getGenuineVariableDescriptorList().stream()
+                            .flatMap(variableDescriptor -> {
+                                var variableName = variableDescriptor.getVariableName();
 
-                                        ValueSelectorConfig valueSelectorConfig = new ValueSelectorConfig(variableName);
-                                        ChangeMoveSelectorConfig changeMoveSelectorConfig = new ChangeMoveSelectorConfig();
-                                        changeMoveSelectorConfig.setValueSelectorConfig(valueSelectorConfig);
+                                var valueSelectorConfig = new ValueSelectorConfig(variableName);
+                                var changeMoveSelectorConfig = new ChangeMoveSelectorConfig();
+                                changeMoveSelectorConfig.setValueSelectorConfig(valueSelectorConfig);
 
-                                        SwapMoveSelectorConfig swapMoveSelectorConfig = new SwapMoveSelectorConfig();
-                                        swapMoveSelectorConfig.setVariableNameIncludeList(Collections.singletonList(variableName));
-                                        return Stream.of(changeMoveSelectorConfig, changeMoveSelectorConfig);
-                                    }).peek(config -> config.setEntitySelectorConfig(entitySelectorConfig));
-                        }
-                ).collect(Collectors.toList());
+                                var swapMoveSelectorConfig = new SwapMoveSelectorConfig();
+                                swapMoveSelectorConfig.setVariableNameIncludeList(Collections.singletonList(variableName));
+                                return Stream.of(changeMoveSelectorConfig, changeMoveSelectorConfig);
+                            }).peek(config -> config.setEntitySelectorConfig(entitySelectorConfig));
+                }).collect(Collectors.toList());
         if (moveSelectorConfigs.size() == 1) {
             return MoveSelectorFactory.create(moveSelectorConfigs.get(0));
         } else {
-            UnionMoveSelectorConfig unionMoveSelectorConfig = new UnionMoveSelectorConfig();
+            var unionMoveSelectorConfig = new UnionMoveSelectorConfig();
             unionMoveSelectorConfig.setMoveSelectorList(moveSelectorConfigs);
             return MoveSelectorFactory.create(unionMoveSelectorConfig);
         }
@@ -99,8 +97,8 @@ abstract class AbstractProblem<Solution_> implements Problem {
     public final void setupTrial() {
         // Prepare the move selector that will pick different move for each invocation.
         // Reproducible random selection without caching; we need the selection to never end.
-        final HeuristicConfigPolicy<Solution_> policy = new HeuristicConfigPolicy.Builder<>(EnvironmentMode.REPRODUCIBLE,
-                null, null, null, scoreDirectorFactory.getInitializingScoreTrend(),
+        final var policy = new HeuristicConfigPolicy.Builder<>(EnvironmentMode.REPRODUCIBLE,
+                null, null, null, null, new Random(0), scoreDirectorFactory.getInitializingScoreTrend(),
                 scoreDirectorFactory.getSolutionDescriptor(), ClassInstanceCache.create())
                 .build();
         moveSelector = moveSelectorFactory.buildMoveSelector(policy, SelectionCacheType.JUST_IN_TIME,
@@ -116,7 +114,7 @@ abstract class AbstractProblem<Solution_> implements Problem {
         scoreDirector.triggerVariableListeners();
         scoreDirector.calculateScore();
         // Prepare the lifecycle.
-        SolverScope<Solution_> solverScope = new SolverScope<>();
+        var solverScope = new SolverScope<Solution_>();
         solverScope.setScoreDirector(scoreDirector);
         solverScope.setWorkingRandom(new Random(0)); // Fully reproducible random selection.
         phaseScope = new LocalSearchPhaseScope<>(solverScope);
@@ -145,8 +143,8 @@ abstract class AbstractProblem<Solution_> implements Problem {
      * We're benchmarking the actual operations inside the score director:
      *
      * <ul>
-     *     <li>Speed of variable updates.</li>
-     *     <li>Speed of score calculation on those updates.</li>
+     * <li>Speed of variable updates.</li>
+     * <li>Speed of score calculation on those updates.</li>
      * </ul>
      *
      * <p>
