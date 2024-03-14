@@ -11,9 +11,9 @@ import ai.timefold.solver.examples.cloudbalancing.optional.score.CloudBalancingI
 import ai.timefold.solver.examples.cloudbalancing.optional.score.CloudBalancingMapBasedEasyScoreCalculator;
 import ai.timefold.solver.examples.cloudbalancing.persistence.CloudBalanceSolutionFileIO;
 import ai.timefold.solver.examples.cloudbalancing.score.CloudBalancingConstraintProvider;
-import ai.timefold.solver.persistence.common.api.domain.solution.SolutionFileIO;
 import ai.timefold.solver.jmh.scoredirector.Example;
 import ai.timefold.solver.jmh.scoredirector.ScoreDirectorType;
+import ai.timefold.solver.persistence.common.api.domain.solution.SolutionFileIO;
 
 public final class CloudBalancingProblem extends AbstractProblem<CloudBalance> {
 
@@ -23,7 +23,7 @@ public final class CloudBalancingProblem extends AbstractProblem<CloudBalance> {
 
     @Override
     protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirectorType scoreDirectorType) {
-        ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();
+        var scoreDirectorFactoryConfig = buildInitialScoreDirectorFactoryConfig();
         return switch (scoreDirectorType) {
             case CONSTRAINT_STREAMS, CONSTRAINT_STREAMS_JUSTIFIED -> scoreDirectorFactoryConfig
                     .withConstraintProviderClass(CloudBalancingConstraintProvider.class)

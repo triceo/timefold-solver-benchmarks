@@ -25,7 +25,7 @@ public final class VehicleRoutingProblem extends AbstractProblem<VehicleRoutingS
 
     @Override
     protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirectorType scoreDirectorType) {
-        ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();
+        var scoreDirectorFactoryConfig = buildInitialScoreDirectorFactoryConfig();
         return switch (scoreDirectorType) {
             case CONSTRAINT_STREAMS, CONSTRAINT_STREAMS_JUSTIFIED -> scoreDirectorFactoryConfig
                     .withConstraintProviderClass(VehicleRoutingConstraintProvider.class)

@@ -7,11 +7,11 @@ import ai.timefold.solver.core.config.solver.EnvironmentMode;
 import ai.timefold.solver.core.impl.domain.solution.descriptor.SolutionDescriptor;
 import ai.timefold.solver.core.impl.score.director.InnerScoreDirectorFactory;
 import ai.timefold.solver.core.impl.score.director.ScoreDirectorFactoryFactory;
-import ai.timefold.solver.jmh.scoredirector.benchmarks.IncrementalBenchmark;
 import ai.timefold.solver.jmh.scoredirector.benchmarks.AbstractBenchmark;
 import ai.timefold.solver.jmh.scoredirector.benchmarks.ConstraintStreamsBenchmark;
 import ai.timefold.solver.jmh.scoredirector.benchmarks.ConstraintStreamsJustifiedBenchmark;
 import ai.timefold.solver.jmh.scoredirector.benchmarks.EasyBenchmark;
+import ai.timefold.solver.jmh.scoredirector.benchmarks.IncrementalBenchmark;
 
 /**
  * Order by expected speed increase.
@@ -46,7 +46,5 @@ public enum ScoreDirectorType implements Comparable<ScoreDirectorType> {
         return scoreDirectorFactoryFactory.buildScoreDirectorFactory(ScoreDirectorType.class.getClassLoader(),
                 EnvironmentMode.REPRODUCIBLE, solutionDescriptor);
     }
-
-
 
 }

@@ -22,7 +22,7 @@ public final class ProjectJobSchedulingProblem extends AbstractProblem<Schedule>
 
     @Override
     protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirectorType scoreDirectorType) {
-        ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();
+        var scoreDirectorFactoryConfig = buildInitialScoreDirectorFactoryConfig();
         return switch (scoreDirectorType) {
             case CONSTRAINT_STREAMS, CONSTRAINT_STREAMS_JUSTIFIED -> scoreDirectorFactoryConfig
                     .withConstraintProviderClass(ProjectJobSchedulingConstraintProvider.class)

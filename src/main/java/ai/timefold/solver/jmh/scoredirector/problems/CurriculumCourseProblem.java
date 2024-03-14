@@ -10,9 +10,9 @@ import ai.timefold.solver.examples.curriculumcourse.domain.CourseSchedule;
 import ai.timefold.solver.examples.curriculumcourse.domain.Lecture;
 import ai.timefold.solver.examples.curriculumcourse.persistence.CurriculumCourseSolutionFileIO;
 import ai.timefold.solver.examples.curriculumcourse.score.CurriculumCourseConstraintProvider;
+import ai.timefold.solver.jmh.scoredirector.Example;
 import ai.timefold.solver.jmh.scoredirector.ScoreDirectorType;
 import ai.timefold.solver.persistence.common.api.domain.solution.SolutionFileIO;
-import ai.timefold.solver.jmh.scoredirector.Example;
 
 public final class CurriculumCourseProblem extends AbstractProblem<CourseSchedule> {
 
@@ -22,8 +22,8 @@ public final class CurriculumCourseProblem extends AbstractProblem<CourseSchedul
 
     @Override
     protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirectorType scoreDirectorType) {
-        ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();
-        ScoreDirectorType nonNullScoreDirectorType = Objects.requireNonNull(scoreDirectorType);
+        var scoreDirectorFactoryConfig = buildInitialScoreDirectorFactoryConfig();
+        var nonNullScoreDirectorType = Objects.requireNonNull(scoreDirectorType);
         if (nonNullScoreDirectorType == ScoreDirectorType.CONSTRAINT_STREAMS
                 || nonNullScoreDirectorType == ScoreDirectorType.CONSTRAINT_STREAMS_JUSTIFIED) {
             return scoreDirectorFactoryConfig

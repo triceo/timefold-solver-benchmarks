@@ -1,33 +1,26 @@
 package ai.timefold.solver.jmh.scoredirector.problems;
 
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Objects;
 import java.util.Random;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import ai.timefold.solver.core.config.heuristic.selector.common.SelectionCacheType;
-import ai.timefold.solver.core.config.heuristic.selector.common.SelectionOrder;
-import ai.timefold.solver.core.config.heuristic.selector.entity.EntitySelectorConfig;
-import ai.timefold.solver.core.config.heuristic.selector.move.MoveSelectorConfig;
-import ai.timefold.solver.core.config.heuristic.selector.move.composite.UnionMoveSelectorConfig;
-import ai.timefold.solver.core.config.heuristic.selector.move.generic.ChangeMoveSelectorConfig;
-import ai.timefold.solver.core.config.heuristic.selector.move.generic.SwapMoveSelectorConfig;
-import ai.timefold.solver.core.config.heuristic.selector.value.ValueSelectorConfig;
+import ai.timefold.solver.core.api.score.buildin.simple.SimpleScore;
+import ai.timefold.solver.core.api.score.calculator.EasyScoreCalculator;
+import ai.timefold.solver.core.api.solver.SolverFactory;
 import ai.timefold.solver.core.config.score.director.ScoreDirectorFactoryConfig;
 import ai.timefold.solver.core.config.solver.EnvironmentMode;
+import ai.timefold.solver.core.config.solver.SolverConfig;
 import ai.timefold.solver.core.impl.domain.solution.descriptor.SolutionDescriptor;
-import ai.timefold.solver.core.impl.heuristic.HeuristicConfigPolicy;
 import ai.timefold.solver.core.impl.heuristic.move.Move;
 import ai.timefold.solver.core.impl.heuristic.selector.move.MoveSelector;
-import ai.timefold.solver.core.impl.heuristic.selector.move.MoveSelectorFactory;
+import ai.timefold.solver.core.impl.localsearch.DefaultLocalSearchPhase;
+import ai.timefold.solver.core.impl.localsearch.decider.LocalSearchDecider;
 import ai.timefold.solver.core.impl.localsearch.scope.LocalSearchPhaseScope;
 import ai.timefold.solver.core.impl.localsearch.scope.LocalSearchStepScope;
 import ai.timefold.solver.core.impl.score.director.InnerScoreDirector;
 import ai.timefold.solver.core.impl.score.director.InnerScoreDirectorFactory;
-import ai.timefold.solver.core.impl.solver.ClassInstanceCache;
+import ai.timefold.solver.core.impl.solver.DefaultSolver;
 import ai.timefold.solver.core.impl.solver.scope.SolverScope;
 import ai.timefold.solver.jmh.scoredirector.Example;
 import ai.timefold.solver.jmh.scoredirector.ScoreDirectorType;
@@ -36,10 +29,11 @@ abstract class AbstractProblem<Solution_> implements Problem {
 
     private static final double PROBABILITY_OF_UNDO = 0.9;
 
+    private final Example example;
+    private final SolutionDescriptor<Solution_> solutionDescriptor;
     private final ScoreDirectorType scoreDirectorType;
     private final InnerScoreDirectorFactory<Solution_, ?> scoreDirectorFactory;
     private final Solution_ originalSolution;
-    private final MoveSelectorFactory<Solution_> moveSelectorFactory;
 
     private InnerScoreDirector<Solution_, ?> scoreDirector;
     private MoveSelector<Solution_> moveSelector;
@@ -50,13 +44,17 @@ abstract class AbstractProblem<Solution_> implements Problem {
     private boolean willUndo = true;
 
     protected AbstractProblem(final Example example, final ScoreDirectorType scoreDirectorType) {
+        this.example = Objects.requireNonNull(example);
         this.scoreDirectorType = Objects.requireNonNull(scoreDirectorType);
-        final var scoreDirectorFactoryConfig = buildScoreDirectorFactoryConfig(scoreDirectorType);
-        scoreDirectorFactory =
-                ScoreDirectorType.buildScoreDirectorFactory(scoreDirectorFactoryConfig, buildSolutionDescriptor());
-        originalSolution = ProblemInitializer.getSolution(example, scoreDirectorFactory.getSolutionDescriptor(),
+        this.solutionDescriptor = buildSolutionDescriptor();
+        var scoreDirectorFactoryConfig = buildScoreDirectorFactoryConfig(scoreDirectorType);
+        this.scoreDirectorFactory = ScoreDirectorType.buildScoreDirectorFactory(scoreDirectorFactoryConfig, solutionDescriptor);
+        this.originalSolution = ProblemInitializer.getSolution(example, solutionDescriptor,
                 this::buildScoreDirectorFactoryConfig, this::readOriginalSolution); // Expensive.
-        moveSelectorFactory = buildMoveSelectorFactory(scoreDirectorFactory.getSolutionDescriptor());
+    }
+
+    protected final ScoreDirectorFactoryConfig buildInitialScoreDirectorFactoryConfig() {
+        return new ScoreDirectorFactoryConfig();
     }
 
     abstract protected ScoreDirectorFactoryConfig buildScoreDirectorFactoryConfig(ScoreDirectorType scoreDirectorType);
@@ -65,44 +63,32 @@ abstract class AbstractProblem<Solution_> implements Problem {
 
     abstract protected Solution_ readOriginalSolution();
 
-    protected MoveSelectorFactory<Solution_> buildMoveSelectorFactory(SolutionDescriptor<Solution_> solutionDescriptor) {
-        // Create a union move selector over all entities and variables.
-        // We go via move config, so we don't have to worry about differences between chained and non-chained problems.
-        List<MoveSelectorConfig> moveSelectorConfigs = solutionDescriptor.getGenuineEntityDescriptors().stream()
-                .flatMap(entityDescriptor -> {
-                    var entitySelectorConfig = new EntitySelectorConfig(entityDescriptor.getEntityClass());
-                    return entityDescriptor.getGenuineVariableDescriptorList().stream()
-                            .flatMap(variableDescriptor -> {
-                                var variableName = variableDescriptor.getVariableName();
-
-                                var valueSelectorConfig = new ValueSelectorConfig(variableName);
-                                var changeMoveSelectorConfig = new ChangeMoveSelectorConfig();
-                                changeMoveSelectorConfig.setValueSelectorConfig(valueSelectorConfig);
-
-                                var swapMoveSelectorConfig = new SwapMoveSelectorConfig();
-                                swapMoveSelectorConfig.setVariableNameIncludeList(Collections.singletonList(variableName));
-                                return Stream.of(changeMoveSelectorConfig, changeMoveSelectorConfig);
-                            }).peek(config -> config.setEntitySelectorConfig(entitySelectorConfig));
-                }).collect(Collectors.toList());
-        if (moveSelectorConfigs.size() == 1) {
-            return MoveSelectorFactory.create(moveSelectorConfigs.get(0));
-        } else {
-            var unionMoveSelectorConfig = new UnionMoveSelectorConfig();
-            unionMoveSelectorConfig.setMoveSelectorList(moveSelectorConfigs);
-            return MoveSelectorFactory.create(unionMoveSelectorConfig);
+    protected MoveSelector<Solution_> buildMoveSelector(SolutionDescriptor<Solution_> solutionDescriptor) {
+        // Build the top-level local search move selector as the solver would've built it.
+        var solverConfig = new SolverConfig()
+                .withEnvironmentMode(EnvironmentMode.REPRODUCIBLE)
+                .withSolutionClass(solutionDescriptor.getSolutionClass())
+                .withEntityClasses(solutionDescriptor.getEntityClassSet().toArray(new Class[0]))
+                .withEasyScoreCalculatorClass(DummyEasyScoreCalculator.class);
+        var solver = (DefaultSolver<Solution_>) SolverFactory.create(solverConfig)
+                .buildSolver();
+        var localSearchPhase = (DefaultLocalSearchPhase<Solution_>) solver.getPhaseList().getLast();
+        try { // Decider is not accessible. Hack our way in.
+            var deciderField = Stream.of(DefaultLocalSearchPhase.class.getDeclaredFields())
+                    .filter(f -> f.getName().equals("decider"))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalStateException("MoveSelectorFactory field not found"));
+            deciderField.setAccessible(true);
+            var decider = (LocalSearchDecider<Solution_>) deciderField.get(localSearchPhase);
+            return decider.getMoveSelector();
+        } catch (Exception e) {
+            throw new IllegalStateException("Failed to extract MoveSelector from LocalSearchPhase", e);
         }
     }
 
     @Override
     public final void setupTrial() {
-        // Prepare the move selector that will pick different move for each invocation.
-        // Reproducible random selection without caching; we need the selection to never end.
-        final var policy = new HeuristicConfigPolicy.Builder<>(EnvironmentMode.REPRODUCIBLE,
-                null, null, null, null, new Random(0), scoreDirectorFactory.getInitializingScoreTrend(),
-                scoreDirectorFactory.getSolutionDescriptor(), ClassInstanceCache.create())
-                .build();
-        moveSelector = moveSelectorFactory.buildMoveSelector(policy, SelectionCacheType.JUST_IN_TIME,
-                SelectionOrder.RANDOM, true);
+        moveSelector = buildMoveSelector(solutionDescriptor);
     }
 
     @Override
@@ -185,6 +171,17 @@ abstract class AbstractProblem<Solution_> implements Problem {
     @Override
     public final void teardownTrial() {
         // No need to do anything.
+    }
+
+    public static final class DummyEasyScoreCalculator<Solution_> implements EasyScoreCalculator<Solution_, SimpleScore> {
+
+        public DummyEasyScoreCalculator() { // No-arg constructor required.
+        }
+
+        @Override
+        public SimpleScore calculateScore(Solution_ solution) {
+            return SimpleScore.ZERO;
+        }
     }
 
 }
